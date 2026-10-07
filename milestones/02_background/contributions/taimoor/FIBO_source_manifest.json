@@ -1,0 +1,32 @@
+[
+  {
+    "filename": "CollectiveInvestmentVehicles.rdf",
+    "revision": "9a7b90ccc64ef9df0762121ff058c9d27fd46037",
+    "sha256": "260f00ee9d48ab7b2963970ea9095cf45b017e75c6c9686a3084f8aaf3c53992",
+    "byte_count": 115070
+  },
+  {
+    "filename": "FinancialProductsAndServices.rdf",
+    "revision": "9a7b90ccc64ef9df0762121ff058c9d27fd46037",
+    "sha256": "84cfba5ccf3a9074027fd001fcfda12ef91a5a2aa7c5d9e976e7a68ee2014321",
+    "byte_count": 90893
+  },
+  {
+    "filename": "FinancialDates.rdf",
+    "revision": "9a7b90ccc64ef9df0762121ff058c9d27fd46037",
+    "sha256": "9a7ad36032eca33df0c49cd592b344abd5b8f3660a69a51f24899cebfcca0531",
+    "byte_count": 45044
+  },
+  {
+    "filename": "Ownership.rdf",
+    "revision": "9a7b90ccc64ef9df0762121ff058c9d27fd46037",
+    "sha256": "52a60e23377e440160c33d9a7ab2f24a882ceec879ac0a3fed331e738baff43e",
+    "byte_count": 37977
+  },
+  {
+    "filename": "Publishers.rdf",
+    "revision": "9a7b90ccc64ef9df0762121ff058c9d27fd46037",
+    "sha256": "52dc4fa3121b945675a09d16cf2ac667857ea974e3e8d588be8576218b9a93d6",
+    "byte_count": 14672
+  }
+]
