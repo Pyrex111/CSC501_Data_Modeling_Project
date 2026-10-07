@@ -7,8 +7,8 @@ This directory contains Taimoor Shahzad's supplied contribution material for CSC
 ## Files
 
 - `CSC501_M2_Taimoor_Contribution_Draft.docx`: contribution draft, model explanation, relationship notes, modelling rules, competency questions and references.
-- `CSC501_M2_Taimoor_ERD.drawio`: editable conceptual ER diagram.
-- `CSC501_M2_Taimoor_ERD.pdf`: one-page ER diagram export.
+- `CSC501_M2_Taimoor_ERD_Connectors.drawio`: editable conceptual ER diagram with the revised attached connectors.
+- `CSC501_M2_Taimoor_ERD_Connectors.pdf`: one-page ER diagram export.
 - `Abstract_and_Introduction.docx`: supplied abstract and introduction draft for integration into the team report.
 - `taimoor_m2_contribution.tex`: LaTeX fragment for the team ACM report; not a standalone document.
 - `taimoor_m2_references.bib`: bibliography entries used by that fragment.
