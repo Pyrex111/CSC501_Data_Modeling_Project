@@ -1,0 +1,208 @@
+\documentclass[sigconf]{acmart}
+% Cleaning
+\usepackage{pifont}
+\pagestyle{fancy} % removes running headers
+\settopmatter{printacmref=false} % Removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+\pagestyle{plain} % removes running headers
+\fancyhead{}
+\settopmatter{printacmref=false, printfolios=false}
+% Copyright
+\setcopyright{none}
+% \setcopyright{acmcopyright}
+% \setcopyright{acmlicensed}
+% \setcopyright{rightsretained}
+% \setcopyright{usgov}
+% \setcopyright{usgovmixed}
+% \setcopyright{cagov}
+% \setcopyright{cagovmixed}
+\settopmatter{printacmref=false} % Removes citation information below abstract
+\acmDOI{}
+
+
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\setlength{\headsep}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\topmargin}{0pt}
+\setlength{\topsep}{0pt}
+\setlength{\partopsep}{0pt}
+%\linespread{0.95}
+\usepackage{mdwlist}
+\usepackage{amsmath}
+\usepackage{booktabs} % professional table rules (\toprule etc.)
+\usepackage{xurl}     % allow URLs to break anywhere (avoids overfull lines)
+
+\begin{document}
+\title{Representations of ETF and Fund Allocation Information:\\
+A Historical Review and Comparative Analysis}
+
+% TODO: replace with the real author list (all team members;
+% the graduate student goes last). Team members known from the
+% group chat: Mengchen Li, Shahmeer Ather Kakwan, Taimoor.
+\author{Author One}
+\affiliation{
+  \institution{University of Victoria}
+}
+\email{author1@example.com}
+\author{Author Two}
+\affiliation{
+ \institution{University of Victoria}
+}\email{author2@example.com}
+\author{Author Three}
+\affiliation{
+ \institution{University of Victoria}
+}\email{author3@example.com}
+
+\section{A Historical Review:}
+
+Fund portfolio allocation data is a core information asset in global
+financial markets. Its recording and representation have evolved from
+unstructured paper narratives to standardized structured data and semantic
+models, driven by regulatory transparency mandates, market efficiency
+demands, and computer technology.
+
+\subsection{Brief History}
+
+In the past 90 years, fund allocation disclosure has evolved from
+unstructured narrative reports to standardized, machine-readable formats.
+Under U.S. regulation, the Investment Company Act of 1940 required
+registered funds to disclose portfolio holdings in periodic shareholder
+reports and prospectuses [7], and from 2004 in quarterly Form N-Q filings
+[8]; for decades these records were plain-text tables designed for human
+reading. The first U.S. ETF (SPDR S\&P 500 ETF Trust, SPY, 1993)
+introduced daily portfolio transparency [1], formalized for U.S. ETFs in
+2019 by SEC Rule 6c-11 [12], while the SEC's EDGAR system (fully phased in
+by 1996) moved filings online [6]. Regulators then added machine-readable
+formats: XBRL-tagged prospectus summaries in 2009 [9] and, in 2016, Forms
+N-PORT and N-CEN, which replaced text-based reports with XML filings ---
+N-PORT reports monthly position-level holdings data filed quarterly, and
+N-CEN is an annual fund census [10, 11]. In parallel, the Financial
+Industry Business Ontology (FIBO) standardized fund and security semantics
+[2, 3], and Browne et al.\ demonstrated FIBO-based reporting of dated
+fund-level information and allocation summaries; commercial databases such
+as Morningstar aggregate these disclosures for cross-fund research [4, 5].
+Because our sample ETFs are Canadian, the U.S. regulatory examples serve
+as background: they establish the disclosure patterns --- dated,
+structured, provider-published allocation percentages --- that motivate
+our model.
+
+\subsection{Summary}
+
+Table 1 compares the representations most relevant to our model.
+Throughout, we keep two concepts distinct: Holding, a customer's
+investment in an ETF at a portfolio observation date, and AllocationEntry,
+a disclosed percentage (e.g., ``technology: 30\%'') within a dated
+AllocationSnapshot published by the ETF provider.
+
+\begin{table*}[!t]
+\caption{Comparison of fund allocation representation paradigms}
+\label{tab:paradigms}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{p{0.14\columnwidth}p{0.18\columnwidth}p{0.18\columnwidth}p{0.24\columnwidth}p{0.20\columnwidth}}
+\toprule
+Representation & What It Captures & What It Leaves Out & What We Can Learn for Our Design & Related ERD Entities\\
+\midrule
+Regulatory narrative filings (U.S.; N-SAR / N-Q [7, 8])
+& Audited holdings at reporting dates; the fund--security relationship
+& Unstructured; manual extraction; holdings not linked to allocation categories
+& Keep a disclosure separate from its entries; our model records disclosed percentages, not full holdings
+& ETF; AllocationSnapshot (dated disclosure)\\
+Daily ETF website disclosures (Rule 6c-11 [12, 1])
+& Provider-published daily basket: securities, weights, publication date
+& No uniform schema; no category or classification links; source versions not tracked
+& Model each disclosure as AllocationSnapshot (ETF + date + dimension); preserve the source in SourceDocument
+& ETFProvider, AllocationSnapshot, AllocationEntry, AllocationDimension, SourceDocument\\
+Structured regulatory filings (U.S.; N-PORT / N-CEN [10, 11])
+& N-PORT: standardized monthly position-level holdings; N-CEN: annual fund census
+& Regulatory schedules and a 60-day lag; not daily provider disclosures
+& Structured, dated disclosure is feasible; we model provider-published percentages, not filing schedules
+& ETF; AllocationSnapshot (structured, dated)\\
+FIBO semantic ontology (incl. Browne et al.\ [2, 3])
+& Formal fund and security semantics; Browne et al.: dated fund information and allocation summaries
+& Conceptual only; no instance-level allocation entries
+& Reuse core semantics; add an explicit pattern linking ETF, date, entries, categories, classification context, source
+& ETF, ETFIdentifier, ClassificationScheme, AllocationCategory\\
+Commercial aggregated databases (e.g., Morningstar [4, 5])
+& Normalized holdings and category data across funds
+& Proprietary classification logic; limited per-entry source and date traceability
+& Model ClassificationScheme as a separate entity and keep source links
+& ETFProvider, ClassificationScheme, AllocationCategory, SourceDocument\\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Summary: Implications for Our Model}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{p{0.95\columnwidth}}
+\toprule
+The comparison informs our ERD in three ways:\\
+\midrule
+(1) Holding (a customer's ETF weight at a holding date) and
+AllocationEntry (a disclosed percentage within a dated AllocationSnapshot)
+are modeled as distinct entities;\\
+(2) each AllocationSnapshot links an ETF to an allocation date, dimension,
+entries, and --- where the source provides it --- a classification scheme,
+with SourceDocument preserving the captured source;\\
+(3) existing representations cover parts of this pattern (e.g., Browne et
+al.'s FIBO-based reporting of dated fund information), so our contribution
+is an explicit integration pattern rather than a claim that prior work
+lacks dates or weights.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{References}
+
+% The numbering below is Mason's own list [1]--[12] and is kept verbatim.
+% The final team assembly may renumber or switch to \bibliography{bibliography}.
+
+[1] State Street Global Advisors. SPDR S\&P 500 ETF Trust (SPY). Available
+at \url{https://www.ssga.com/us/en/individual/capabilities/spdr-core-equity-etfs/spy-sp-500}
+
+[2] EDM Council. FIBO --- Financial Industry Business Ontology. Available
+at \url{https://edmcouncil.org/frameworks/industry-models/fibo/}
+
+[3] Object Management Group. 2017. Financial Industry Business Ontology
+(FIBO): Fund Business Concepts (FBC) Specification. Available at
+\url{https://www.omg.org/spec/EDMC-FIBO/FBC/}
+
+[4] Morningstar, Inc. Morningstar Category Classification Methodology.
+Available at
+\url{https://morningstardirect.morningstar.com/clientcomm/Morningstar_Category_Classification.pdf}
+
+[5] Morningstar, Inc. Morningstar Data: Fund Holdings. Available at
+\url{https://docs-analyticslab.morningstar.com/1.7.1/morningstar_data/holdings.html}
+
+[6] U.S. Securities and Exchange Commission. Electronic Data Gathering,
+Analysis, and Retrieval (EDGAR) System --- Regulatory Overview. Available
+at \url{https://www.sec.gov/info/edgar/regoverview.htm}
+
+[7] U.S. Securities and Exchange Commission. 1940. Investment Company Act
+of 1940. Available at \url{https://www.sec.gov/about/about-securities-laws}
+
+[8] U.S. Securities and Exchange Commission. 2004. Shareholder Reports and
+Quarterly Portfolio Disclosure of Registered Management Investment
+Companies (Final Rule; Form N-Q). Available at
+\url{https://www.sec.gov/rules/2004/02/shareholder-reports-and-quarterly-portfolio-disclosure-registered-management}
+
+[9] U.S. Securities and Exchange Commission. 2009. Interactive Data for
+Mutual Fund Risk/Return Summary (Final Rule; XBRL tagging). Available at
+\url{https://www.federalregister.gov/documents/2009/02/19/E9-3359/interactive-data-for-mutual-fund-riskreturn-summary}
+
+[10] U.S. Securities and Exchange Commission. 2016. Investment Company
+Reporting Modernization (Final Rule; Forms N-PORT and N-CEN). Available at
+\url{https://www.federalregister.gov/documents/2016/11/18/2016-25349/investment-company-reporting-modernization}
+
+[11] U.S. Securities and Exchange Commission. 2016. Investment Company
+Reporting Modernization Rules --- Small Entity Compliance Guide. Available
+at
+\url{https://www.sec.gov/divisions/investment/guidance/secg-investment-company-reporting-modernization-rules}
+
+[12] U.S. Securities and Exchange Commission. 2019. Exchange-Traded Funds
+(Final Rule; Rule 6c-11). Available at
+\url{https://www.federalregister.gov/documents/2019/10/24/2019-21250/exchange-traded-funds}
+
+\end{document}
