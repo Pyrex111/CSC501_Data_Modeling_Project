@@ -1,0 +1,18 @@
+graph TD
+    Root["Representations of ETF<br>& Fund Allocations"]
+    
+    %% Regulatory Branch
+    Root --> Reg["Regulatory &<br>Compliance Models"]
+    Reg --> Reg1["U.S. SEC Narrative Filings<br>(N-SAR, N-Q)"]
+    Reg --> Reg2["Structured XML Holdings (N-PORT)<br>& Census (N-CEN)"]
+    Reg --> Reg3["Tagged Taxonomies<br>(XBRL)"]
+    
+    %% Operational Branch
+    Root --> Ops["Operational & Commercial<br>Aggregators"]
+    Ops --> Ops1["Dated ETF Disclosures<br>(Factsheets, Product Pages)"]
+    Ops --> Ops2["Aggregated Databases<br>(Morningstar)"]
+    
+    %% Semantic Branch
+    Root --> Sem["Semantic & Knowledge<br>Representations"]
+    Sem --> Sem1["Industry Ontologies<br>(FIBO)"]
+    Sem --> Sem2["Academic Extensions<br>(e.g., GFRO)"]
