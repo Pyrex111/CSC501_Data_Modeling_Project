@@ -10,7 +10,10 @@ Presenters: Taimoor Shahzad and M. Shahmeer Ather Kakwan. Team member: Mason Li.
 | --- | --- | --- |
 | One-slide PDF assembled and revised by Mason | [slides/3_3MT.pdf](slides/3_3MT.pdf) | Reviewed revision supplied on 14 October 2026 |
 | Taimoor's supplied original opening | [contributions/taimoor/opening_original.md](contributions/taimoor/opening_original.md) | Preserved as supplied |
-| Taimoor's edited opening | [contributions/taimoor/opening_edited.md](contributions/taimoor/opening_edited.md) | 159 spoken words |
+| Taimoor's current opening | [contributions/taimoor/opening_edited.md](contributions/taimoor/opening_edited.md) | 198 spoken words, excluding question headings |
+| Taimoor's uploaded Word draft | [contributions/taimoor/Taimoor_3MT_Spoken_Draft.docx](contributions/taimoor/Taimoor_3MT_Spoken_Draft.docx) | Exact Word copy supplied on 14 October 2026 |
+| Shahmeer's original and revised scripts | [contributions/shahmeer/](contributions/shahmeer/) | Available in his contribution folder |
+| Mason's editable slide files | [contributions/Mason/](contributions/Mason/) | Original and revised PowerPoint files available |
 | Taimoor's contribution notes | [contributions/taimoor/README.md](contributions/taimoor/README.md) | Original and editing provenance |
 | Full model behind the simplified slide | [Milestone 2 ERD](../02_background/figures/etf_allocation_erd.pdf) | Current Milestone 2 draft |
 
@@ -21,8 +24,8 @@ The PDF is the reviewed slide, not proof of portal submission. The edited openin
 | Member | Work | Repository handoff |
 | --- | --- | --- |
 | Taimoor | Opening, simplified model visualization, shared package coordination | Original and edited opening committed here |
-| Shahmeer | Gap, proposed model and knowledge-graph explanation | Commit original and edited spoken drafts through his account under `contributions/shahmeer/` |
-| Mason | Background verification and slide assembly/revision | Commit current editable slide through his account under `contributions/mason/`; the shared reviewed PDF is already in `slides/` |
+| Shahmeer | Gap, proposed model and knowledge-graph explanation | [Original and revised spoken drafts](contributions/shahmeer/) are available |
+| Mason | Background verification and slide assembly/revision | [Original and revised editable slides](contributions/Mason/) are available; the shared reviewed PDF is in `slides/` |
 
 No credit for another member's writing is assigned to the coordinator by uploading a shared artifact.
 

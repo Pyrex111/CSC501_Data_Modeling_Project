@@ -43,4 +43,4 @@ Supplied original drafts and AI-assisted edited versions are labelled separately
 
 ## Current status
 
-Milestone 2 artifacts are available above. The reviewed Milestone 3 slide and Taimoor's opening are available. Shahmeer's spoken contribution and Mason's current editable slide should be committed through their own accounts. The final Milestone 3 submission ZIP and editing appendix are not yet recorded here.
+Milestone 2 artifacts are available above. The reviewed Milestone 3 slide and Taimoor's opening are available. [Shahmeer's original and revised scripts](milestones/03_3mt/contributions/shahmeer/) and [Mason's editable slides](milestones/03_3mt/contributions/Mason/) are available in their contribution folders. Taimoor's current Word draft and matching Markdown script are in his Milestone 3 contribution folder. The final Milestone 3 submission ZIP and editing appendix are not yet recorded here.
