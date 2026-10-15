@@ -1,0 +1,9 @@
+Earlier models, including the Global Fund Reporting Ontology, already represent fund information at a specific time. However, the material we reviewed does not explicitly describe our particular combination of a dated provider disclosure, its allocation entries, classification context and captured source. Our project focuses on making those connections explicit.
+
+Looking at our model, we start with the ETF and record a dated allocation disclosure. That disclosure contains entries, such as a reported 30 percent weight, linked to categories such as Technology or Canada.
+
+Each category retains its classification context: the scheme and version when stated, or the provider context when the scheme is unknown. The disclosure also connects to the captured webpage or factsheet supporting the reported percentages.
+
+We plan to represent these connections as a knowledge graph, where funds, disclosures and categories become connected records that computers can query and navigate.
+
+The goal is to keep the fund, date, category meaning and evidence together, so each percentage remains understandable and traceable to its source.

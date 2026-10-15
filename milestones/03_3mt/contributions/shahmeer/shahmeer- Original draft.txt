@@ -1,0 +1,5 @@
+While earlier models like the Global Fund Reporting Ontology successfully capture a fund's status at a specific time, they miss an essential piece of the puzzle. There is currently no simple, lightweight way to directly connect a daily web update to its exact source document and the specific rules used to define its categories.
+
+Looking at our proposed model on the slide, we solve this by starting with the ETF and recording a specific dated disclosure. This disclosure contains individual allocation entries—like a 30 percent weight—which point to specific categories such as Technology or Canada. To ensure we truly understand what those labels mean, each category is linked to its classification context. Finally, the entire disclosure is securely anchored by its source, capturing the exact webpage or factsheet as evidence.
+
+Eventually, these connections will form a knowledge graph. By keeping the fund, date, meaning, and evidence tied together, computers will be able to automatically link and navigate these trustworthy facts across global financial systems
