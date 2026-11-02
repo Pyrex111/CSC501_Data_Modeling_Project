@@ -1,0 +1,10 @@
+SYNTHETIC TEST FIXTURE. Not a real provider factsheet or an investment observation.
+
+Example Provider Ltd. / Example ETF A
+Allocation date: 2026-10-31
+Basis: synthetic test weights, not market values.
+Sector table: Technology 30%, Other 70%.
+Geography table: Canada 60%, Other 40%.
+
+This file exists only to exercise captured-source references in schema tests.
+The corresponding example.invalid URL deliberately does not identify a real source.
