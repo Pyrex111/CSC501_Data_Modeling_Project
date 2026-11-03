@@ -8,7 +8,7 @@ Team: Taimoor Shahzad, Mason Li, and M. Shahmeer Ather Kakwan.
 
 ## Project scope
 
-We model dated sector and geographic allocation percentages published by ETF providers. The conceptual model separates a customer's dated ETF holding from a provider's dated allocation disclosure, and connects that disclosure to its entries, category meanings and captured source. FIBO and prior GFRO work inform the design. The relational schema is implemented and tested for Milestone 4; application/data integration is pending. Knowledge-graph implementation and evaluation follow in later project stages.
+We model dated sector and geographic allocation percentages published by ETF providers. The conceptual model separates a customer's dated ETF holding from a provider's dated allocation disclosure, and connects that disclosure to its entries, category meanings and captured source. FIBO and prior GFRO work inform the design. The relational schema is implemented and tested for Milestone 4, together with the data-access layer and a validated demonstration dataset; the Flask UI and final team report remain pending. Knowledge-graph implementation and evaluation follow in later project stages.
 
 ## Start here
 
@@ -20,6 +20,10 @@ We model dated sector and geographic allocation percentages published by ETF pro
 | Relational mapping and column dictionary | [Model dictionary](milestones/04_relational/docs/relational_mapping.md) |
 | Schema integration and transaction rules | [Integration contract](milestones/04_relational/docs/schema_integration.md) |
 | Milestone 4 model changes, responsibilities and implementation plan | [Team handoff](milestones/04_relational/docs/milestone4_handoff.md) |
+| One-command build and seed | [quickstart.py](quickstart.py) |
+| Demonstration seed data | [seed.sql](src/dal/sql/seed.sql) |
+| Analytical queries | [analysis_queries.sql](src/dal/sql/analysis_queries.sql) |
+| Mason contribution and AI-use record | [Mason contribution](milestones/04_relational/contributions/mason/README.md) |
 | Historical Milestone 2 conceptual ERD | [Milestone 2 ERD](milestones/02_background/figures/etf_allocation_erd.pdf) |
 | Milestone 2 compiled report and appendix | [Report PDF](milestones/02_background/submission/2_Background.pdf) |
 | Milestone 2 source and submission package | [Source ZIP](milestones/02_background/submission/2_Background_Taimoor_Mason_Shahmeer.zip) |
@@ -27,7 +31,7 @@ We model dated sector and geographic allocation percentages published by ETF pro
 | Taimoor's Milestone 3 opening | [Edited spoken draft](milestones/03_3mt/contributions/taimoor/opening_edited.md) |
 | Milestone descriptions and navigation | [Milestones index](milestones/README.md) |
 
-The current ERD was revised on 30 October 2026 for Milestone 4 preparation. Its second page/tab documents business identity, scoped uniqueness and prototype assumptions. The Milestone 2 ERD remains available as the historical model; the Milestone 3 slide is a simplified view of that earlier design. The current ERD maps to a tested twelve-relation schema with thirteen foreign keys. The runnable application and demonstration dataset still need to be integrated.
+The current ERD was revised on 30 October 2026 for Milestone 4 preparation. Its second page/tab documents business identity, scoped uniqueness and prototype assumptions. The Milestone 2 ERD remains available as the historical model; the Milestone 3 slide is a simplified view of that earlier design. The current ERD maps to a tested twelve-relation schema with thirteen foreign keys. The data-access layer and demonstration dataset are now integrated; the Flask UI and the final team report remain to be completed.
 
 ## Repository organization
 
@@ -36,7 +40,8 @@ The current ERD was revised on 30 October 2026 for Milestone 4 preparation. Its 
 | [milestones/02_background](milestones/02_background/README.md) | Literature review, full ERD, compiled report, source package and member contributions |
 | [milestones/03_3mt](milestones/03_3mt/README.md) | One-slide talk, spoken drafts and contribution records |
 | [milestones/04_relational](milestones/04_relational/README.md) | Revised ERD, relational dictionary, integration/validation evidence and report fragments |
-| [src/dal](src/dal/) | Executable SQL schema and shared transaction-level model validator |
+| [src/dal](src/dal/) | SQL schema, transaction validator, connection manager and parameterized CRUD |
+| [data/raw](data/) | Captured issuer documents (currently placeholders to be replaced) |
 | [scripts](scripts/) | Non-destructive schema initializer |
 | [tests](tests/) | Synthetic schema/transaction tests |
 
@@ -54,16 +59,30 @@ Supplied original drafts and AI-assisted edited versions are labelled separately
 
 Milestone 2 artifacts are available above. The reviewed Milestone 3 slide and Taimoor's opening are available. [Shahmeer's original and revised scripts](milestones/03_3mt/contributions/shahmeer/) and [Mason's editable slides](milestones/03_3mt/contributions/Mason/) are available in their contribution folders. Taimoor's current Word draft and matching Markdown script are in his Milestone 3 contribution folder. The final Milestone 3 submission ZIP and editing appendix are not yet recorded here.
 
-Milestone 4 preparation now includes the [revised ERD and business identity rules](milestones/04_relational/figures/etf_allocation_erd_revised.pdf), [editable Draw.io source](milestones/04_relational/figures/etf_allocation_erd.drawio), and [team handoff](milestones/04_relational/docs/milestone4_handoff.md). The [schema contribution](milestones/04_relational/contributions/taimoor/README.md) now includes DDL, transaction validation, a schema initializer and 33 passing behavioral tests. Application CRUD/query functions, demonstration data and the final team report remain pending.
+Milestone 4 preparation now includes the [revised ERD and business identity rules](milestones/04_relational/figures/etf_allocation_erd_revised.pdf), [editable Draw.io source](milestones/04_relational/figures/etf_allocation_erd.drawio), and [team handoff](milestones/04_relational/docs/milestone4_handoff.md). The [schema contribution](milestones/04_relational/contributions/taimoor/README.md) now includes DDL, transaction validation, a schema initializer and 33 passing behavioral tests. The [data-access contribution](milestones/04_relational/contributions/mason/README.md) adds the connection manager, parameterized CRUD functions, a validated seed dataset, six analytical queries and a one-command quickstart. The final team report remains pending.
 
-## Run the schema checks
+## Run the application
 
 Requires Python 3.10+ linked to SQLite 3.37.0+. From the repository root:
 
 ```sh
 python -c "import sqlite3; print(sqlite3.sqlite_version)"
-python scripts/create_schema.py --database data/etf_allocations.sqlite3
+# One command: build a fresh database, load the validated seed data and report row counts
+python quickstart.py
+# Also run the six analytical queries
+python quickstart.py --queries
+# Run the behavioral test suite
 python -m unittest discover -s tests -v
 ```
 
-The initializer creates a new empty database and refuses to overwrite an existing file. These commands validate the schema contribution; the full application quickstart will be added with the remaining team implementation. See the [integration contract](milestones/04_relational/docs/schema_integration.md) before adding seed data or write operations.
+The quickstart rebuilds the database from `schema.sql` and loads the seed data inside a validated transaction, so the database file itself is not committed (see `.gitignore`). The step-by-step build below remains available for schema-only validation. See the [integration contract](milestones/04_relational/docs/schema_integration.md) before adding write operations.
+
+### Step-by-step schema build
+
+```sh
+python scripts/create_schema.py --database data/etf_allocations.sqlite3
+PYTHONPATH=src python -m dal.seed_data --database data/etf_allocations.sqlite3
+PYTHONPATH=src python -m dal.run_analysis_queries data/etf_allocations.sqlite3
+```
+
+The initializer creates a new empty database and refuses to overwrite an existing file. All `WeightFraction` values in the seed data are synthetic; identifying facts are real and traceable, and the placeholder files in `data/raw/` must be replaced with the real captured documents before any real analysis.

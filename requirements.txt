@@ -1,0 +1,4 @@
+# Runtime dependencies. SQLite is part of the Python standard library.
+# Requires Python 3.10+ and SQLite 3.37.0+ (STRICT tables).
+Flask>=3.0
+pypdf>=4.0
