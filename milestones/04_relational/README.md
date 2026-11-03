@@ -13,6 +13,7 @@ Status: schema contribution implemented and tested on 2 November 2026; applicati
 | Relation/column dictionary | [docs/relational_mapping.md](docs/relational_mapping.md) |
 | Teammate integration contract | [docs/schema_integration.md](docs/schema_integration.md) |
 | Observed schema validation results | [docs/schema_validation_results.md](docs/schema_validation_results.md) |
+| Taimoor's supplied design evaluation, 3 November | [docs/taimoor_design_evaluation.md](docs/taimoor_design_evaluation.md) |
 | Taimoor's contribution and review guide | [contributions/taimoor/README.md](contributions/taimoor/README.md) |
 | Report fragments and relation-list preview | [report/README.md](report/README.md) |
 | Historical Milestone 2 model | [Milestone 2 figures](../02_background/figures/) |

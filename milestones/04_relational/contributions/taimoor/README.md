@@ -1,6 +1,6 @@
 # Taimoor: Milestone 4 relational model and schema
 
-Prepared 2 November 2026 from the revised 30 October ERD. Responsibility: model, relational mapping, column dictionary, schema constraints and the relation/constraint report listing. This is an AI-assisted contribution for Taimoor's evaluation and ownership; it does not claim that human review has already occurred.
+Prepared 2 November 2026 from the revised 30 October ERD. Responsibility: model, relational mapping, column dictionary, schema constraints and the relation/constraint report listing. This is an AI-assisted contribution owned by Taimoor. On 3 November 2026, Taimoor supplied six design-evaluation conclusions, recorded in the linked evaluation below. Design evaluation and automated test execution are documented separately.
 
 ## Deliverables
 
@@ -20,9 +20,11 @@ Prepared 2 November 2026 from the revised 30 October ERD. Responsibility: model,
 4. **SQL checks and transaction checks serve different rules.** SQL protects references, mandatory fields, uniqueness, fractions and matching dimensions. A validated transaction checks the whole proposed saved state, including that a snapshot has entries, an ETF has identifiers and a Complete disclosure has a plausible total. Deleting or editing records can therefore fail even if an individual SQL statement looks valid.
 5. **Evidence and observation dates are distinct.** HoldingAsOfDate describes the customer's position; AllocationAsOfDate describes the provider's allocation; RetrievedAt describes the retained source capture. None should silently replace another.
 
-## Taimoor's review before calling this contribution complete
+## Evaluation status
 
-Confirm the proposed business assumptions, country/currency/identifier conventions, canonical timestamp format, context construction and 0.005 rounding tolerance. Read the schema and run the tests locally. Check that the explanatory report text matches your understanding. Record any accepted/corrected decisions and your own evaluation in a follow-up commit; do not merely claim that machine-run tests are human validation.
+Taimoor's [supplied design evaluation](../../docs/taimoor_design_evaluation.md) retains the identification, dated-observation, captured-source and classification-context structure. Category uniqueness is retained with explicit assumptions, including care for residual labels such as Other. The 0.005 complete-total tolerance is retained **provisionally**, pending justification from genuine source precision.
+
+The assistant compared the decisions to the current schema/validator and reran the 33 tests on 3 November; all passed. This does not claim that Taimoor personally ran those checks. Integrated query/UI behavior, source evidence and the final report still need their separate checks. The evaluation record explains exactly what was evaluated against what and what remains conditional.
 
 The proposed schema does not rename or overwrite the committed ERD. The dictionary records the mapping and implementation choices explicitly.
 
@@ -33,3 +35,5 @@ Mason should implement seed data, database connections, parameterized CRUD/query
 ## AI-use and evaluation record
 
 On 2 November 2026, AI assisted with translating the ERD into SQL, documenting fields/rules, implementing the transaction validator, constructing synthetic behavioral tests, drafting report fragments and checking the generated listing. Automated checks were actually executed and their observed results are documented. The manual permits AI task completion with human evaluation; Taimoor and the team must critically review, correct where necessary and disclose/cite the assistance in the final submission. Instructor approval of the project-specific choices is not asserted.
+
+On 3 November, AI assisted with checking and recording Taimoor's supplied design judgments against repository commit 56a4bbe6671ec489ac03c0b976c5fcfe06a144d6. The tolerance remains provisional. No personal local execution or genuine-source review is inferred from the supplied evaluation table.

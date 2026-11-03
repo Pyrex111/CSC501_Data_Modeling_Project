@@ -24,8 +24,8 @@ fractions and allowed values. Foreign-key enforcement is enabled per
 connection~\cite{sqliteStrict,sqliteForeignKeys}. Four triggers prevent category
 and snapshot dimensions from disagreeing, including after parent edits.
 A validated transaction additionally checks required child records, category
-contexts and complete-disclosure totals within a documented 0.005 rounding
-tolerance. These transaction rules require the supplied application boundary;
+contexts and complete-disclosure totals within a provisional 0.005 rounding
+tolerance, pending justification from genuine source precision. These transaction rules require the supplied application boundary;
 they are not database-level deferred assertions.
 
 The schema passed 33 behavioral tests using explicitly synthetic fixtures,
