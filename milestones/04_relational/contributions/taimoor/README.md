@@ -11,6 +11,7 @@ Prepared 2 November 2026 from the revised 30 October ERD. Responsibility: model,
 - [Schema initializer](../../../../scripts/create_schema.py): creates a new empty database without overwriting existing files.
 - [Behavioral tests](../../../../tests/test_relational_schema.py) and [observed results](../../docs/schema_validation_results.md): 33 passing tests and additional mapping/initializer checks.
 - [Report material](../../report/README.md): main-relations explanation, references and a one-page relation/constraint listing with preview.
+- [Integration evaluation and corrections](../../docs/taimoor_evaluation.md): follow-up against main `290b9ca`, eleven integration regressions and 44 passing tests in total.
 
 ## How to understand and review the design
 
@@ -24,7 +25,7 @@ Prepared 2 November 2026 from the revised 30 October ERD. Responsibility: model,
 
 Taimoor's [supplied design evaluation](../../docs/taimoor_design_evaluation.md) retains the identification, dated-observation, captured-source and classification-context structure. Category uniqueness is retained with explicit assumptions, including care for residual labels such as Other. The 0.005 complete-total tolerance is retained **provisionally**, pending justification from genuine source precision.
 
-The assistant compared the decisions to the current schema/validator and reran the 33 tests on 3 November; all passed. This does not claim that Taimoor personally ran those checks. Integrated query/UI behavior, source evidence and the final report still need their separate checks. The evaluation record explains exactly what was evaluated against what and what remains conditional.
+The assistant compared the decisions to the current schema/validator and reran the 33 tests on 3 November; all passed. The refreshed integration correction set adds eleven regression tests: all 44 pass. See the separate [technical integration evaluation](../../docs/taimoor_evaluation.md) for fixes and verification against main `290b9ca`. These automated results do not claim that Taimoor personally ran the checks. The supplied design evaluation is preserved; UI behavior, genuine source evidence and the final report require their separate checks.
 
 The proposed schema does not rename or overwrite the committed ERD. The dictionary records the mapping and implementation choices explicitly.
 
@@ -37,3 +38,8 @@ Mason should implement seed data, database connections, parameterized CRUD/query
 On 2 November 2026, AI assisted with translating the ERD into SQL, documenting fields/rules, implementing the transaction validator, constructing synthetic behavioral tests, drafting report fragments and checking the generated listing. Automated checks were actually executed and their observed results are documented. The manual permits AI task completion with human evaluation; Taimoor and the team must critically review, correct where necessary and disclose/cite the assistance in the final submission. Instructor approval of the project-specific choices is not asserted.
 
 On 3 November, AI assisted with checking and recording Taimoor's supplied design judgments against repository commit 56a4bbe6671ec489ac03c0b976c5fcfe06a144d6. The tolerance remains provisional. No personal local execution or genuine-source review is inferred from the supplied evaluation table.
+
+The integration patch was subsequently refreshed against `290b9ca`, preserving
+the supplied design evaluation and provisional tolerance decision. AI prepared
+the integration fixes, added eleven regression tests and ran the 44-test suite.
+Mason's and Shahmeer's approval of interface changes is not asserted.

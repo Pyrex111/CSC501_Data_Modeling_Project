@@ -103,6 +103,17 @@ An edit to one weight in a Complete disclosure may require adjusting another wei
 
 ## Schema change procedure
 
+The 3 November local review keeps the schema and all table/column names unchanged.
+`search_disclosures` adds keyword-only `etf_id` and `allocation_dimension_id`,
+and returns source identity/locator and representative ticker exchange.
+Disclosure details now include the publisher and optional scheme metadata.
+`get_customer_portfolio` accepts keyword-only `portfolio_id` and
+`holding_as_of_date`. Customer-only calls work when there is one unambiguous
+portfolio/date; multiple choices require explicit input or raise `ValidationError`.
+Batch edits reject missing IDs before commit. Quickstart reuses existing data;
+`--reset` explicitly replaces it after a successful rebuild. The in-memory query
+demo uses the validated Python seed loader. See [the evaluation](taimoor_evaluation.md).
+
 Treat these table/column names as the initial implementation contract. Discuss changes with both teammates before renaming them, update schema/dictionary/report fragments together, and rerun the behavioral tests. No database migration or existing application is supplied by this contribution.
 
 ## Sources

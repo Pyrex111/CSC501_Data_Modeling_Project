@@ -11,12 +11,12 @@ import sqlite3
 import sys
 from pathlib import Path
 
-from dal.database import DEFAULT_DB_PATH
+from dal.seed_data import seed
 
 SRC_ROOT = Path(__file__).resolve().parent
 QUERIES_FILE = SRC_ROOT / "sql" / "analysis_queries.sql"
 SCHEMA_FILE = SRC_ROOT / "sql" / "schema.sql"
-SEED_FILE = SRC_ROOT / "sql" / "seed.sql"
+PROJECT_ROOT = SRC_ROOT.parents[1]
 
 
 def _strip_comments(sql: str) -> str:
@@ -32,11 +32,15 @@ def _split(sql: str) -> list[str]:
 
 
 def _build_in_memory() -> sqlite3.Connection:
-    conn = sqlite3.connect(":memory:")
+    conn = sqlite3.connect(":memory:", isolation_level=None)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.executescript(SCHEMA_FILE.read_text())
-    conn.executescript(SEED_FILE.read_text())
+    try:
+        seed(conn, PROJECT_ROOT)
+    except BaseException:
+        conn.close()
+        raise
     return conn
 
 

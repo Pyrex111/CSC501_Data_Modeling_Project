@@ -1,5 +1,11 @@
 # Schema validation evidence
 
+Update, 3 November 2026: the original 33 tests were rerun successfully. Eleven
+integration regression tests now also pass (44 total, zero failures/errors).
+See [the evaluation record](taimoor_evaluation.md) for comparisons, corrections,
+observed commands and unresolved evidence/UI dependencies. The results below
+remain the historical schema-only evaluation of 2 November.
+
 Run date: 2 November 2026. Scope: Taimoor's relational model/schema contribution. This is not an application, UI or real-source data evaluation.
 
 ## Environment and commands

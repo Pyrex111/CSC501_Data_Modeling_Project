@@ -19,6 +19,8 @@ We model dated sector and geographic allocation percentages published by ETF pro
 | Executable relational schema | [schema.sql](src/dal/sql/schema.sql) |
 | Relational mapping and column dictionary | [Model dictionary](milestones/04_relational/docs/relational_mapping.md) |
 | Schema integration and transaction rules | [Integration contract](milestones/04_relational/docs/schema_integration.md) |
+| Model, implementation and integration evaluation | [3 November evaluation](milestones/04_relational/docs/taimoor_evaluation.md) |
+| Taimoor's supplied design decisions | [Design evaluation](milestones/04_relational/docs/taimoor_design_evaluation.md) |
 | Milestone 4 model changes, responsibilities and implementation plan | [Team handoff](milestones/04_relational/docs/milestone4_handoff.md) |
 | One-command build and seed | [quickstart.py](quickstart.py) |
 | Demonstration seed data | [seed.sql](src/dal/sql/seed.sql) |
@@ -67,15 +69,19 @@ Requires Python 3.10+ linked to SQLite 3.37.0+. From the repository root:
 
 ```sh
 python -c "import sqlite3; print(sqlite3.sqlite_version)"
-# One command: build a fresh database, load the validated seed data and report row counts
+# Create the demo database if missing; otherwise validate and reuse it
 python quickstart.py
 # Also run the six analytical queries
 python quickstart.py --queries
+# Explicitly replace existing data with a freshly validated demo seed
+python quickstart.py --reset
 # Run the behavioral test suite
 python -m unittest discover -s tests -v
 ```
 
-The quickstart rebuilds the database from `schema.sql` and loads the seed data inside a validated transaction, so the database file itself is not committed (see `.gitignore`). The step-by-step build below remains available for schema-only validation. See the [integration contract](milestones/04_relational/docs/schema_integration.md) before adding write operations.
+The quickstart creates the database from `schema.sql` when missing and loads seed data inside a validated transaction. Later runs validate and reuse it. Only `--reset` replaces existing data; a failed rebuild preserves the existing file. The database file is not committed (see `.gitignore`). See the [integration contract](milestones/04_relational/docs/schema_integration.md) before adding write operations.
+
+The [3 November evaluation](milestones/04_relational/docs/taimoor_evaluation.md) reran the original 33 tests and added 11 integration regression tests: **44 passed**. It records local corrections and the remaining source-evidence, UI and final-report dependencies. Structural validation of seed data does not verify real provider observations.
 
 ### Step-by-step schema build
 
@@ -85,4 +91,4 @@ PYTHONPATH=src python -m dal.seed_data --database data/etf_allocations.sqlite3
 PYTHONPATH=src python -m dal.run_analysis_queries data/etf_allocations.sqlite3
 ```
 
-The initializer creates a new empty database and refuses to overwrite an existing file. All `WeightFraction` values in the seed data are synthetic; identifying facts are real and traceable, and the placeholder files in `data/raw/` must be replaced with the real captured documents before any real analysis.
+The initializer creates a new empty database and refuses to overwrite an existing file. All seed weights are synthetic. The three `.pdf` files in `data/raw/` are text placeholders, so the current records do not verify real observations, dates, identifiers or classification editions. For sourced demonstrations, replace them with genuine retained captures and load evidence-supported values. Alternatively, isolate a fully synthetic demonstration with clearly synthetic source identities; do not cite a real provider capture as evidence for fabricated allocations.

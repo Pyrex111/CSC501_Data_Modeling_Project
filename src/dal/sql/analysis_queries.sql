@@ -1,6 +1,6 @@
 -- CSC501 Milestone 4 - analytical SELECT/JOIN/aggregate queries.
--- All queries keep observation date, dimension and classification context.
--- Weights are synthetic; identifiers and dates are real and sourced.
+-- Synthetic demonstration only; retained files are placeholders, not evidence.
+-- Label matches are search results, not assertions of equivalent categories.
 
 -- Q1. Geographic exposure across issuers, with observation date.
 -- VFV/VUN are observed 2026-05-31, XIC 2026-06-30: not directly summable.
@@ -25,8 +25,11 @@ ORDER BY s.AllocationAsOfDate, Ticker, e.WeightFraction DESC;
 -- Q2. Which ETFs have exposure to a specified sector (Financials)?
 SELECT t.IdentifierValue AS Ticker,
        c.Label           AS Sector,
+       c.ContextKey,
        e.WeightFraction,
-       s.AllocationAsOfDate
+       s.Id AS SnapshotId,
+       s.AllocationAsOfDate,
+       s.SourceDocumentId, s.SourceLocator, s.BasisNote
 FROM AllocationEntry e
 JOIN AllocationSnapshot  s   ON s.Id = e.AllocationSnapshotId
 JOIN AllocationCategory  c   ON c.Id = e.AllocationCategoryId
@@ -40,6 +43,7 @@ ORDER BY e.WeightFraction DESC;
 -- Q3. Aggregate: number of categories and total weight per snapshot.
 SELECT s.Id AS SnapshotId,
        dim.DimensionName,
+       s.AllocationAsOfDate, s.CoverageStatus,
        COUNT(e.Id) AS NumberOfCategories,
        ROUND(SUM(e.WeightFraction), 4) AS TotalWeight
 FROM AllocationSnapshot s
@@ -61,13 +65,19 @@ JOIN AllocationDimension dim ON dim.Id = s.AllocationDimensionId
 JOIN SourceDocument      d   ON d.Id = s.SourceDocumentId
 ORDER BY Ticker, dim.DimensionName;
 
--- Q5. Portfolio look-through to United States (holding * fund U.S. allocation).
--- Holding and observation dates are returned so compatibility is judged, not assumed.
+-- Q5. Diagnostic candidate pairs for an optional portfolio look-through.
+-- This intentionally lists historical candidates, including different contexts.
+-- It does NOT select an applicable disclosure or produce a portfolio total.
+-- A real calculation needs an explicit holding date, disclosure selection,
+-- coverage/basis checks, and evidence of compatible category meanings.
 SELECT port.PortfolioReference,
        t.IdentifierValue AS Ticker,
        h.WeightFraction AS HoldingWeight,
        geo.WeightFraction AS FundUSAllocation,
-       ROUND(h.WeightFraction * geo.WeightFraction, 4) AS PortfolioUSExposure,
+       ROUND(h.WeightFraction * geo.WeightFraction, 4) AS CandidateWeightedFraction,
+       h.Id AS HoldingId, s.Id AS SnapshotId,
+       cat.ContextKey, s.CoverageStatus, s.BasisNote,
+       s.SourceDocumentId, s.SourceLocator,
        h.HoldingAsOfDate,
        s.AllocationAsOfDate
 FROM Holding h
@@ -86,7 +96,11 @@ ORDER BY port.PortfolioReference, Ticker;
 SELECT e.Id AS EntryId,
        t.IdentifierValue AS Ticker,
        c.Label,
+       c.ContextKey,
        e.WeightFraction,
+       s.Id AS SnapshotId, s.AllocationAsOfDate,
+       s.SourceLocator, s.BasisNote,
+       s.SourceDocumentId, d.RetrievedAt,
        d.Url,
        d.CapturedFileRef
 FROM AllocationEntry e

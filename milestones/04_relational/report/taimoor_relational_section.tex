@@ -31,5 +31,10 @@ they are not database-level deferred assertions.
 The schema passed 33 behavioral tests using explicitly synthetic fixtures,
 including duplicate-key rejection, invalid dates/weights, dimension conflicts,
 context isolation and rollback of invalid final states. These results validate
-the schema contribution; application integration and sourced demonstration data
-require separate evaluation.
+the schema contribution. Eleven additional integration regression tests passed
+after correcting batch-update rollback, dated portfolio selection and missing
+classification/source outputs. The quickstart now preserves existing data unless
+reset is explicitly requested, and both setup paths use the validated seed loader.
+All 44 tests passed; the UI and sourced demonstration evidence still require
+separate evaluation. Retained demo source files are currently text placeholders,
+so file existence does not verify provider observations.

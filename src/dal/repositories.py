@@ -56,6 +56,9 @@ def search_disclosures(
     ticker: str | None = None,
     dimension_name: str | None = None,
     as_of_date: str | None = None,
+    *,
+    etf_id: int | None = None,
+    allocation_dimension_id: int | None = None,
 ) -> list[dict]:
     """Search snapshots by ticker, dimension and/or observation date.
 
@@ -66,12 +69,16 @@ def search_disclosures(
                e.Id AS ETFId,
                (SELECT i.IdentifierValue FROM ETFIdentifier i
                   WHERE i.ETFId = e.Id AND i.IdentifierScheme = 'Ticker'
-                  LIMIT 1) AS Ticker,
+                  ORDER BY i.ExchangeContext, i.IdentifierValue LIMIT 1) AS Ticker,
+               (SELECT i.ExchangeContext FROM ETFIdentifier i
+                  WHERE i.ETFId = e.Id AND i.IdentifierScheme = 'Ticker'
+                  ORDER BY i.ExchangeContext, i.IdentifierValue LIMIT 1) AS ExchangeContext,
                e.FundName,
                d.DimensionName,
                s.AllocationAsOfDate,
                s.CoverageStatus,
                p.LegalName AS ProviderName,
+               doc.Id AS SourceDocumentId, s.SourceLocator,
                doc.Url
         FROM AllocationSnapshot s
         JOIN ETF                 e   ON e.Id = s.ETFId
@@ -81,6 +88,12 @@ def search_disclosures(
         WHERE 1 = 1
     """
     params: list[Any] = []
+    if etf_id is not None:
+        sql += " AND e.Id = ?"
+        params.append(etf_id)
+    if allocation_dimension_id is not None:
+        sql += " AND d.Id = ?"
+        params.append(allocation_dimension_id)
     if ticker:
         sql += """
             AND EXISTS (
@@ -107,9 +120,12 @@ def get_allocation_entries(conn: sqlite3.Connection, snapshot_id: int) -> list[d
             """
             SELECT e.Id AS EntryId, e.WeightFraction,
                    c.Label, c.ContextKey, c.Code AS CategoryCode,
-                   c.Id AS AllocationCategoryId
+                   c.Id AS AllocationCategoryId,
+                   cs.Id AS ClassificationSchemeId,
+                   cs.SchemeAuthority, cs.SchemeName, cs.Version, cs.DefinitionUrl
             FROM AllocationEntry e
             JOIN AllocationCategory c ON c.Id = e.AllocationCategoryId
+            LEFT JOIN ClassificationScheme cs ON cs.Id = c.ClassificationSchemeId
             WHERE e.AllocationSnapshotId = ?
             ORDER BY e.WeightFraction DESC, c.Label
             """,
@@ -125,11 +141,15 @@ def get_disclosure_detail(conn: sqlite3.Connection, snapshot_id: int) -> dict:
                s.CoverageStatus, s.SourceLocator,
                e.Id AS ETFId, e.FundName,
                d.DimensionName,
-               doc.Url, doc.CapturedFileRef, doc.RetrievedAt
+               doc.Id AS SourceDocumentId, doc.ETFProviderId AS PublisherId,
+               publisher.LegalName AS PublisherName,
+               doc.Url, doc.CapturedFileRef, doc.RetrievedAt,
+               doc.PublishedAt, doc.DocumentTitle
         FROM AllocationSnapshot s
         JOIN ETF                 e   ON e.Id = s.ETFId
         JOIN AllocationDimension d   ON d.Id = s.AllocationDimensionId
         JOIN SourceDocument      doc ON doc.Id = s.SourceDocumentId
+        JOIN ETFProvider publisher ON publisher.Id = doc.ETFProviderId
         WHERE s.Id = ?
         """,
         (snapshot_id,),
@@ -141,7 +161,18 @@ def get_disclosure_detail(conn: sqlite3.Connection, snapshot_id: int) -> dict:
     return result
 
 
-def get_customer_portfolio(conn: sqlite3.Connection, customer_number: str) -> dict:
+def get_customer_portfolio(
+    conn: sqlite3.Connection,
+    customer_number: str,
+    *,
+    portfolio_id: int | None = None,
+    holding_as_of_date: str | None = None,
+) -> dict:
+    """Return one portfolio at one holding date; require ambiguous choices.
+
+    The original customer-only call still works when there is exactly one
+    portfolio and at most one holding date. New callers should pass both keys.
+    """
     customer = conn.execute(
         "SELECT Id, CustomerNumber, GivenName, FamilyName, Email "
         "FROM Customer WHERE CustomerNumber = ?",
@@ -150,35 +181,53 @@ def get_customer_portfolio(conn: sqlite3.Connection, customer_number: str) -> di
     if customer is None:
         raise NotFoundError(f"Customer {customer_number} not found.")
 
-    portfolio = conn.execute(
+    portfolios = conn.execute(
         """
         SELECT Id, PortfolioReference, PortfolioName, BaseCurrency
         FROM Portfolio WHERE CustomerId = ?
         """,
         (customer["Id"],),
-    ).fetchone()
-    if portfolio is None:
+    ).fetchall()
+    if not portfolios:
         raise BusinessRuleError(f"Customer {customer_number} has no portfolio.")
+    if portfolio_id is None:
+        if len(portfolios) > 1:
+            raise ValidationError("Choose a portfolio using portfolio_id.")
+        portfolio = portfolios[0]
+    else:
+        portfolio = next((p for p in portfolios if p['Id'] == portfolio_id), None)
+        if portfolio is None:
+            raise NotFoundError(f"Portfolio {portfolio_id} does not belong to this customer.")
+
+    if holding_as_of_date is None:
+        dates = conn.execute(
+            'SELECT DISTINCT HoldingAsOfDate FROM Holding WHERE PortfolioId = ?',
+            (portfolio['Id'],),
+        ).fetchall()
+        if len(dates) > 1:
+            raise ValidationError("Choose a holding date using holding_as_of_date.")
+        holding_as_of_date = dates[0][0] if dates else None
 
     holdings = [
         dict(r)
         for r in conn.execute(
             """
-            SELECT h.Id AS HoldingId, h.WeightFraction, h.HoldingAsOfDate,
+            SELECT h.Id AS HoldingId, h.ETFId, h.WeightFraction, h.HoldingAsOfDate,
                    (SELECT i.IdentifierValue FROM ETFIdentifier i
                       WHERE i.ETFId = h.ETFId AND i.IdentifierScheme = 'Ticker'
-                      LIMIT 1) AS Ticker,
+                      ORDER BY i.ExchangeContext, i.IdentifierValue LIMIT 1) AS Ticker,
                    e.FundName
             FROM Holding h
             JOIN ETF e ON e.Id = h.ETFId
-            WHERE h.PortfolioId = ?
+            WHERE h.PortfolioId = ? AND h.HoldingAsOfDate = ?
             ORDER BY h.WeightFraction DESC
             """,
-            (portfolio["Id"],),
+            (portfolio["Id"], holding_as_of_date),
         ).fetchall()
     ]
     result = dict(customer)
     result["Portfolio"] = dict(portfolio)
+    result["HoldingAsOfDate"] = holding_as_of_date
     result["Holdings"] = holdings
     return result
 
@@ -291,10 +340,12 @@ def update_weights_batch(
     try:
         with validated_transaction(conn):
             for entry_id, weight in normalized:
-                conn.execute(
+                cursor = conn.execute(
                     "UPDATE AllocationEntry SET WeightFraction = ? WHERE Id = ?",
                     (weight, entry_id),
                 )
+                if cursor.rowcount != 1:
+                    raise NotFoundError(f"Entry {entry_id} not found.")
     except ModelIntegrityError as exc:
         raise BusinessRuleError(str(exc)) from exc
 
