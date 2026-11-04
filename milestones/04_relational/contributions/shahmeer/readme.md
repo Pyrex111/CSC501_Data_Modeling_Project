@@ -58,7 +58,16 @@ Routes catch every error and show it through `friendly_error`, which turns repos
 - **Running application:** the real server was started with `python src/ui/app.py` and driven with HTTP requests through search, detail, portfolio, create, rejected create, rejected and saved batch updates, rejected delete and successful delete. The pages were rendered to the screenshots listed below with wkhtmltoimage.
 - **Clean checkout:** from a fresh unzip of the repository with this contribution copied in, `python quickstart.py --serve` built the database, started the application, and `/`, `/portfolio` and `/disclosure/new` returned 200. The 74 tests passed there too.
 
+## Personally tested (Shahmeer, 4 November 2026)
 
+Browser: <name and version>. Command: python quickstart.py --serve.
+- Search and filters: worked. Ticker search, the dimension and as-of date filters, and the invalid-date message behaved as expected.
+- Disclosure detail: worked. The ticker heading, source details, classification and percentages displayed correctly.
+- Create form dropdowns: worked. The category list changed with dimension, source and locator, and the running total updated.
+- Valid / invalid weight update: worked. A coherent multi-entry update saved, and an invalid total was rejected with a clear message and my typed values kept.
+- Delete in Partial / last-entry rule / Complete rejection: worked. Deletion succeeded in a Partial disclosure, the last entry was protected, and deletion from a Complete disclosure was rejected.
+- Portfolio selection and date separation: worked. Customer, portfolio and holding date could be selected, and holding and allocation dates were shown separately.
+Problems found: none.
 
 ## Screenshots
 
