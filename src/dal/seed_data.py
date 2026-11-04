@@ -1,4 +1,8 @@
-"""Reproducible seed loader for the demonstration dataset.
+"""Reproducible seed loader for the fully synthetic demonstration dataset.
+
+Every record is fictional: customers, providers, source identities, captured
+files, classification examples, labels and all weights. Source URLs use the
+reserved ``example.invalid`` domain and are not real addresses.
 
 All writes are parameterized (execute/executemany) and run inside Taimoor's
 ``validated_transaction``, so the whole dataset is rejected and rolled back if
@@ -23,21 +27,22 @@ from dal.schema_validation import (
 
 ROOT = Path(__file__).resolve().parents[2]
 
-# Canonical UTC capture timestamps (27 characters, six fractional digits).
-RET_VFV = "2026-09-23T09:15:00.000000Z"
-RET_VUN = "2026-09-23T09:20:00.000000Z"
-RET_XIC = "2026-09-23T09:25:00.000000Z"
+# Fictional UTC capture timestamps (27 characters, six fractional digits).
+RET_SYA = "2026-09-23T09:15:00.000000Z"
+RET_SYB = "2026-09-23T09:20:00.000000Z"
+RET_SYC = "2026-09-23T09:25:00.000000Z"
 
-URL_VFV = ("https://www.vanguard.ca/en/product/etf/equity/9563/"
-           "vanguard-sp-500-index-etf")
-URL_VUN = ("https://www.vanguard.ca/en/product/etf/equity/9511/"
-           "vanguard-us-total-market-index-etf")
-URL_XIC = ("https://www.blackrock.com/ca/investors/en/products/239837/"
-           "ishares-sptsx-capped-composite-index-etf")
+# Fictional source URLs on the reserved example.invalid domain.
+URL_SYA = "https://provider.example.invalid/funds/sya/facts"
+URL_SYB = "https://provider.example.invalid/funds/syb/facts"
+URL_SYC = "https://manager.example.invalid/funds/syc/facts"
+
+# One basis note reused by every snapshot.
+BASIS = "Fully synthetic demonstration: all identities and weights are fictional."
 
 
 def seed(connection: sqlite3.Connection, capture_root: Path) -> None:
-    """Insert the full demonstration dataset inside one validated transaction."""
+    """Insert the full fictional dataset inside one validated transaction."""
     with validated_transaction(connection, capture_root=capture_root):
         # 1. Customers -----------------------------------------------------
         connection.executemany(
@@ -48,16 +53,16 @@ def seed(connection: sqlite3.Connection, capture_root: Path) -> None:
             ],
         )
 
-        # 2. Providers (registration numbers are labelled placeholders) ----
+        # 2. Providers (fictional registration details) -------------------
         connection.executemany(
             "INSERT INTO ETFProvider VALUES (?, ?, ?, ?, ?)",
             [
-                (1, "Vanguard Investments Canada Inc.",
-                 "REG-PLACEHOLDER-VAN", "CA-FEDERAL",
-                 "https://www.vanguard.ca"),
-                (2, "BlackRock Asset Management Canada Limited",
-                 "REG-PLACEHOLDER-BLK", "CA-FEDERAL",
-                 "https://www.blackrock.com/ca"),
+                (1, "Example Fund Management Ltd.",
+                 "SYN-REG-001", "SYNTHETIC",
+                 "https://provider.example.invalid"),
+                (2, "Demonstration Asset Managers Inc.",
+                 "SYN-REG-002", "SYNTHETIC",
+                 "https://manager.example.invalid"),
             ],
         )
 
@@ -71,9 +76,9 @@ def seed(connection: sqlite3.Connection, capture_root: Path) -> None:
         connection.executemany(
             "INSERT INTO ClassificationScheme VALUES (?, ?, ?, ?, ?)",
             [
-                (1, "S&P Dow Jones Indices", "GICS", "2025", None),
-                (2, "Vanguard Investments Canada",
-                 "Regional Classification", None, None),
+                (1, "Example Standards Body", "Demo Sector Scheme", "v1", None),
+                (2, "Example Fund Management Ltd.",
+                 "Demo Regional Scheme", None, None),
             ],
         )
 
@@ -90,27 +95,27 @@ def seed(connection: sqlite3.Connection, capture_root: Path) -> None:
         connection.executemany(
             "INSERT INTO ETF VALUES (?, ?, ?, ?, ?, ?)",
             [
-                (1, 1, "Vanguard S&P 500 Index ETF", "CA", "CAD", None),
-                (2, 1, "Vanguard U.S. Total Market Index ETF", "CA", "CAD", None),
-                (3, 2, "iShares Core S&P/TSX Capped Composite Index ETF",
+                (1, 1, "Example Large-Cap Equity ETF", "CA", "CAD", None),
+                (2, 1, "Example Broad Market Equity ETF", "CA", "CAD", None),
+                (3, 2, "Demonstration Domestic Composite ETF",
                  "CA", "CAD", None),
             ],
         )
 
-        # 7. Identifiers (ISIN + Ticker per ETF) ---------------------------
+        # 7. Identifiers (fictional ISIN + Ticker per ETF) ----------------
         connection.executemany(
             "INSERT INTO ETFIdentifier VALUES (?, ?, ?, ?, ?)",
             [
-                (1, 1, "ISIN", "CA9229081082", None),
-                (2, 1, "Ticker", "VFV", "XTSX"),
-                (3, 2, "ISIN", "CA9229071034", None),
-                (4, 2, "Ticker", "VUN", "XTSX"),
-                (5, 3, "ISIN", "CA46430J1005", None),
-                (6, 3, "Ticker", "XIC", "XTSX"),
+                (1, 1, "ISIN", "ZZ0000000001", None),
+                (2, 1, "Ticker", "SYA", "XDEM"),
+                (3, 2, "ISIN", "ZZ0000000002", None),
+                (4, 2, "Ticker", "SYB", "XDEM"),
+                (5, 3, "ISIN", "ZZ0000000003", None),
+                (6, 3, "Ticker", "SYC", "XDEM"),
             ],
         )
 
-        # 8. Holdings (synthetic portfolio weights) ------------------------
+        # 8. Holdings (fictional portfolio weights) ------------------------
         connection.executemany(
             "INSERT INTO Holding VALUES (?, ?, ?, ?, ?)",
             [
@@ -126,61 +131,63 @@ def seed(connection: sqlite3.Connection, capture_root: Path) -> None:
         connection.executemany(
             "INSERT INTO SourceDocument VALUES (?, ?, ?, ?, ?, ?, ?)",
             [
-                (1, 1, URL_VFV, RET_VFV, None,
-                 "data/raw/vanguard_vfv_etf_facts_20260716.pdf",
-                 "Vanguard VFV ETF Facts"),
-                (2, 1, URL_VUN, RET_VUN, None,
-                 "data/raw/vanguard_vun_etf_facts_20260716.pdf",
-                 "Vanguard VUN ETF Facts"),
-                (3, 2, URL_XIC, RET_XIC, None,
-                 "data/raw/blackrock_xic_product_20260801.pdf",
-                 "BlackRock iShares XIC Product Page"),
+                (1, 1, URL_SYA, RET_SYA, None,
+                 "data/raw/example_sya_facts_20260716.pdf",
+                 "Example SYA ETF Facts"),
+                (2, 1, URL_SYB, RET_SYB, None,
+                 "data/raw/example_syb_facts_20260716.pdf",
+                 "Example SYB ETF Facts"),
+                (3, 2, URL_SYC, RET_SYC, None,
+                 "data/raw/demo_syc_product_20260801.pdf",
+                 "Demo SYC Product Page"),
             ],
         )
 
         # 10. Categories ---------------------------------------------------
-        gics_ctx = scheme_context("S&P Dow Jones Indices", "GICS", "2025")
-        vfv_geo = disclosure_context(URL_VFV, RET_VFV, "geography-table", "Geography")
-        vun_geo = disclosure_context(URL_VUN, RET_VUN, "geography-table", "Geography")
-        xic_geo = disclosure_context(URL_XIC, RET_XIC, "geography-table", "Geography")
+        sector_ctx = scheme_context("Example Standards Body",
+                                    "Demo Sector Scheme", "v1")
+        sya_geo = disclosure_context(URL_SYA, RET_SYA,
+                                     "geography-table", "Geography")
+        syb_geo = disclosure_context(URL_SYB, RET_SYB,
+                                     "geography-table", "Geography")
+        syc_geo = disclosure_context(URL_SYC, RET_SYC,
+                                     "geography-table", "Geography")
 
-        # Sector categories under the known GICS edition (dimension 1).
+        # Sector categories under the known fictional edition (dimension 1).
         connection.executemany(
             "INSERT INTO AllocationCategory VALUES (?, ?, ?, ?, ?, ?)",
             [
-                (1, 1, 1, "Information Technology", "GICS25-45", gics_ctx),
-                (2, 1, 1, "Financials", "GICS25-40", gics_ctx),
-                (3, 1, 1, "Consumer Discretionary", "GICS25-25", gics_ctx),
-                (4, 1, 1, "Energy", "GICS25-10", gics_ctx),
-                (5, 1, 1, "Other Sectors", None, gics_ctx),
+                (1, 1, 1, "Information Technology", "DEMO-45", sector_ctx),
+                (2, 1, 1, "Financials", "DEMO-40", sector_ctx),
+                (3, 1, 1, "Consumer Discretionary", "DEMO-25", sector_ctx),
+                (4, 1, 1, "Energy", "DEMO-10", sector_ctx),
+                (5, 1, 1, "Other Sectors", None, sector_ctx),
             ],
         )
         # Geography categories, disclosure-local contexts (dimension 2).
         connection.executemany(
             "INSERT INTO AllocationCategory VALUES (?, ?, ?, ?, ?, ?)",
             [
-                (6, 2, None, "United States", None, vfv_geo),
-                (7, 2, None, "Canada", None, vfv_geo),
-                (8, 2, None, "Other / Multi-region", None, vfv_geo),
-                (9, 2, None, "United States", None, vun_geo),
-                (10, 2, None, "Other / Multi-region", None, vun_geo),
-                (11, 2, None, "Canada", None, xic_geo),
-                (12, 2, None, "United States", None, xic_geo),
-                (13, 2, None, "Other / Multi-region", None, xic_geo),
+                (6, 2, None, "United States", None, sya_geo),
+                (7, 2, None, "Canada", None, sya_geo),
+                (8, 2, None, "Other / Multi-region", None, sya_geo),
+                (9, 2, None, "United States", None, syb_geo),
+                (10, 2, None, "Other / Multi-region", None, syb_geo),
+                (11, 2, None, "Canada", None, syc_geo),
+                (12, 2, None, "United States", None, syc_geo),
+                (13, 2, None, "Other / Multi-region", None, syc_geo),
             ],
         )
 
         # 11. Snapshots ----------------------------------------------------
-        basis = ("Synthetic illustrative weights; identifying facts are real "
-                 "and sourced.")
         connection.executemany(
             "INSERT INTO AllocationSnapshot VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             [
-                (1, 1, 2, 1, "2026-05-31", basis, "Complete", "geography-table"),
-                (2, 1, 1, 1, "2026-05-31", basis, "Complete", "sector-table"),
-                (3, 2, 2, 2, "2026-05-31", basis, "Complete", "geography-table"),
-                (4, 3, 2, 3, "2026-06-30", basis, "Complete", "geography-table"),
-                (5, 3, 1, 3, "2026-06-30", basis, "Complete", "sector-table"),
+                (1, 1, 2, 1, "2026-05-31", BASIS, "Complete", "geography-table"),
+                (2, 1, 1, 1, "2026-05-31", BASIS, "Complete", "sector-table"),
+                (3, 2, 2, 2, "2026-05-31", BASIS, "Complete", "geography-table"),
+                (4, 3, 2, 3, "2026-06-30", BASIS, "Complete", "geography-table"),
+                (5, 3, 1, 3, "2026-06-30", BASIS, "Complete", "sector-table"),
             ],
         )
 
@@ -188,16 +195,16 @@ def seed(connection: sqlite3.Connection, capture_root: Path) -> None:
         connection.executemany(
             "INSERT INTO AllocationEntry VALUES (?, ?, ?, ?)",
             [
-                # VFV geography
+                # SYA geography
                 (1, 1, 6, 0.985), (2, 1, 7, 0.010), (3, 1, 8, 0.005),
-                # VFV sector (GICS)
+                # SYA sector (fictional scheme)
                 (4, 2, 1, 0.310), (5, 2, 2, 0.130), (6, 2, 3, 0.105),
                 (7, 2, 4, 0.040), (8, 2, 5, 0.415),
-                # VUN geography
+                # SYB geography
                 (9, 3, 9, 0.995), (10, 3, 10, 0.005),
-                # XIC geography
+                # SYC geography
                 (11, 4, 11, 0.975), (12, 4, 12, 0.020), (13, 4, 13, 0.005),
-                # XIC sector (GICS)
+                # SYC sector (fictional scheme)
                 (14, 5, 2, 0.320), (15, 5, 4, 0.175), (16, 5, 1, 0.095),
                 (17, 5, 5, 0.410),
             ],
@@ -216,7 +223,7 @@ def open_connection(db_path: Path) -> sqlite3.Connection:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--database", type=Path,
-                        default=ROOT / "data" / "etf_allocations.sqlite3")
+                        default=ROOT / "data/etf_allocations.sqlite3")
     args = parser.parse_args()
     db_path = args.database
     if not db_path.exists():

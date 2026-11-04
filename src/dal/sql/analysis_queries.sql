@@ -1,9 +1,9 @@
 -- CSC501 Milestone 4 - analytical SELECT/JOIN/aggregate queries.
--- Synthetic demonstration only; retained files are placeholders, not evidence.
+-- Fully synthetic demonstration: all identities and weights are fictional.
 -- Label matches are search results, not assertions of equivalent categories.
 
 -- Q1. Geographic exposure across issuers, with observation date.
--- VFV/VUN are observed 2026-05-31, XIC 2026-06-30: not directly summable.
+-- SYA/SYB are observed 2026-05-31, SYC 2026-06-30: not directly summable.
 SELECT t.IdentifierValue AS Ticker,
        p.LegalName       AS Provider,
        c.Label           AS Region,

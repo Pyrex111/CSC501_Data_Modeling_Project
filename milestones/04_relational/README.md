@@ -1,6 +1,6 @@
 # Milestone 4: Solution Design and Implementation, Part I: Relational
 
-Status: schema contribution implemented and tested on 2 November 2026; application/data integration is pending. The conceptual model was revised on 30 October 2026. The official submission deadline is 4 November 2026 AoE.
+Status: schema contribution implemented and tested; the data-access layer and a fully synthetic demonstration dataset are integrated and pass 44 tests. The conceptual model was revised on 30 October 2026. The official submission deadline is 4 November 2026 AoE.
 
 ## Start here
 
@@ -8,6 +8,7 @@ Status: schema contribution implemented and tested on 2 November 2026; applicati
 | --- | --- |
 | Revised conceptual ERD and business identity rules, two-page PDF | [figures/etf_allocation_erd_revised.pdf](figures/etf_allocation_erd_revised.pdf) |
 | Editable Draw.io source, two tabs | [figures/etf_allocation_erd.drawio](figures/etf_allocation_erd.drawio) |
+| Layered system architecture figure | [figures/system_architecture.png](figures/system_architecture.png) |
 | Revision explanation, implementation rules and team responsibilities | [docs/milestone4_handoff.md](docs/milestone4_handoff.md) |
 | Executable relational schema | [schema.sql](../../src/dal/sql/schema.sql) |
 | Relation/column dictionary | [docs/relational_mapping.md](docs/relational_mapping.md) |
@@ -49,9 +50,9 @@ See the [handoff](docs/milestone4_handoff.md#ownership-and-deliverables) for exa
 
 ## Submission status
 
-Available: revised conceptual model, business identity rules, executable schema, relation/column dictionary, shared transaction validator, schema initializer, 33 passing behavioral tests, validation evidence and report fragments.
+Available: revised conceptual model, business identity rules, executable schema, relation/column dictionary, shared transaction validator, schema initializer, 44 passing tests (33 schema + 11 integration), connection manager, parameterized CRUD, fully synthetic seed data, six analytical queries, an interface contract, an architecture figure and report fragments.
 
-Pending: demonstration sample data, application SELECT/CRUD functions, web application, architecture/UI evidence, full application reproducibility checks, final ACM report and ZIP. The report must contain two report pages plus one page listing all relations and constraints. The planned package name is `4_Relational_Taimoor_Mason_Shahmeer.zip`.
+Pending: Flask web application and UI evidence, final end-to-end application run, the assembled ACM report and ZIP. The report must contain two report pages plus one page listing all relations and constraints. The planned package name is `4_Relational_Taimoor_Mason_Shahmeer.zip`.
 
 ## AI assistance and evaluation
 

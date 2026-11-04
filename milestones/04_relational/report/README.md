@@ -5,6 +5,7 @@ These are inputs to the team's final ACM sigconf report, not a complete submissi
 | File | Use |
 | --- | --- |
 | [taimoor_relational_section.tex](taimoor_relational_section.tex) | Main-relations, identification and schema-integrity explanation for the two report pages |
+| [mason_query_dml_section.tex](mason_query_dml_section.tex) | Mason's query, DML-integrity and reproducibility discussion for the two report pages |
 | [taimoor_references.bib](taimoor_references.bib) | Official SQLite references cited by that section; merge with the team bibliography |
 | [relations_constraints.tex](relations_constraints.tex) | All twelve relations, attributes, keys and other integrity rules for the third page |
 | [relations_constraints_preview.tex](relations_constraints_preview.tex) | Standalone two-column review wrapper requiring an installed ACM template/class |
