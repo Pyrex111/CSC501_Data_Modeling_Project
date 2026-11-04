@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}ETF Allocation Manager{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; color: #222; }
+        nav { background: #1f3a5f; padding: 10px 40px; }
+        nav a { color: #fff; margin-right: 22px; text-decoration: none; font-weight: bold; }
+        nav a:hover { text-decoration: underline; }
+        main { margin: 24px 40px 40px; max-width: 1100px; }
+        table { border-collapse: collapse; width: 100%; margin-top: 16px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+        th { background-color: #f2f2f2; }
+        .message { padding: 10px 14px; margin-bottom: 16px; background: #e6f7ff; border-left: 4px solid #1890ff; white-space: pre-line; }
+        .message.success { background: #f6ffed; border-left-color: #52c41a; }
+        .message.error { background: #fff1f0; border-left-color: #cf1322; }
+        .filters label, .grid label { display: inline-block; margin-right: 14px; }
+        .grid label { display: block; margin: 10px 0; max-width: 640px; }
+        .grid input[type=text], .grid input[type=date], .grid select, .grid textarea { width: 100%; box-sizing: border-box; padding: 6px; }
+        .meta td:first-child { width: 190px; background: #fafafa; font-weight: bold; }
+        .muted { color: #666; font-size: 0.9em; }
+        .num { text-align: right; }
+        button { padding: 5px 12px; cursor: pointer; }
+        button.danger { color: #a8071a; }
+        form.inline { margin: 0; display: inline; }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('index') }}">Search disclosures</a>
+        <a href="{{ url_for('new_disclosure') }}">New disclosure</a>
+        <a href="{{ url_for('portfolio') }}">Portfolio</a>
+    </nav>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

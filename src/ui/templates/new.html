@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}New Disclosure{% endblock %}
+{% block content %}
+<h2>New Allocation Disclosure</h2>
+<p class="muted">Saves the snapshot and all its entries together, or nothing at all. Leave unused entry rows blank.</p>
+<form method="POST" class="grid">
+    <label>ETF
+        <select name="etf_id" required>
+            <option value="">Choose...</option>
+            {% for e in etfs %}
+            <option value="{{ e.ETFId }}" {{ 'selected' if form.get('etf_id', '') == e.ETFId|string }}>{{ e.Ticker }} - {{ e.FundName }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Dimension
+        <select name="dimension_id" id="dimension_id" required>
+            {% for d in dimensions %}
+            <option value="{{ d.DimensionId }}" {{ 'selected' if form.get('dimension_id', '') == d.DimensionId|string }}>{{ d.DimensionName }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Source document
+        <select name="source_id" id="source_id" required>
+            {% for s in sources %}
+            <option value="{{ s.SourceDocumentId }}" {{ 'selected' if form.get('source_id', '') == s.SourceDocumentId|string }}>{{ s.SourceDocumentId }}: {{ s.DocumentTitle or s.Url }} ({{ s.ProviderName }})</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Source locator (where in the document the table appears)
+        <input type="text" name="source_locator" id="source_locator" value="{{ form.get('source_locator', '') }}" placeholder="e.g. sector-table or geography-table" required>
+    </label>
+    <label>Allocation as-of date
+        <input type="date" name="as_of_date" value="{{ form.get('as_of_date', '') }}" required>
+    </label>
+    <label>Coverage
+        <select name="coverage_status" required>
+            {% for s in statuses %}
+            <option value="{{ s }}" {{ 'selected' if form.get('coverage_status', 'Complete') == s }}>{{ s }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Basis note
+        <textarea name="basis_note" rows="2" required>{{ form.get('basis_note', '') }}</textarea>
+    </label>
+
+    <h3>Entries</h3>
+    <p class="muted">Geography categories belong to one source document and locator, so they appear once those match. A Complete disclosure must total 1 (allowed error 0.005).</p>
+    <table style="max-width: 640px;">
+        <tr><th>Category</th><th>Weight (fraction)</th></tr>
+        {% for cat, w in rows %}
+        <tr>
+            <td><select class="cat" name="category" data-selected="{{ cat }}"></select></td>
+            <td><input type="number" class="w" name="weight" step="0.001" min="0" max="1" value="{{ w }}"></td>
+        </tr>
+        {% endfor %}
+        <tr><td><strong>Total</strong></td><td id="total"><strong>0</strong></td></tr>
+    </table>
+    <p><button type="submit">Create disclosure</button> <a href="{{ url_for('index') }}">Cancel</a></p>
+</form>
+
+<script>
+(function () {
+    var CATS = {{ categories|tojson }};
+    var dim = document.getElementById('dimension_id');
+    var src = document.getElementById('source_id');
+    var loc = document.getElementById('source_locator');
+
+    function rebuild() {
+        var d = dim.value, s = src.value, l = loc.value.trim();
+        document.querySelectorAll('select.cat').forEach(function (sel) {
+            var keep = sel.value || sel.dataset.selected || '';
+            sel.innerHTML = '';
+            var blank = document.createElement('option');
+            blank.value = ''; blank.textContent = '(unused row)';
+            sel.appendChild(blank);
+            CATS.forEach(function (c) {
+                if (String(c.dim) !== d) return;
+                if (c.source !== '' && (String(c.source) !== s || c.locator !== l)) return;
+                var o = document.createElement('option');
+                o.value = String(c.id);
+                o.textContent = c.label + ' (' + c.hint + ')';
+                if (o.value === keep) o.selected = true;
+                sel.appendChild(o);
+            });
+            sel.dataset.selected = '';
+        });
+    }
+    function total() {
+        var t = 0;
+        document.querySelectorAll('input.w').forEach(function (i) { t += parseFloat(i.value) || 0; });
+        document.getElementById('total').textContent = (Math.round(t * 1e6) / 1e6).toString();
+    }
+    [dim, src].forEach(function (e) { e.addEventListener('change', rebuild); });
+    loc.addEventListener('input', rebuild);
+    document.querySelectorAll('input.w').forEach(function (i) { i.addEventListener('input', total); });
+    rebuild(); total();
+})();
+</script>
+{% endblock %}

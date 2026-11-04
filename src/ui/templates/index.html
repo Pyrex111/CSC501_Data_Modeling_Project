@@ -1,51 +1,44 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>ETF Allocation Manager</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .message { padding: 10px; margin-bottom: 20px; background-color: #e6f7ff; border-left: 4px solid #1890ff; }
-    </style>
-</head>
-<body>
-    <h2>ETF Allocation Search</h2>
-    
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-          <div class="message">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+{% extends "base.html" %}
+{% block title %}ETF Allocation Search{% endblock %}
+{% block content %}
+<h2>ETF Allocation Search</h2>
+<form method="GET" class="filters">
+    <label>Ticker <input type="text" name="ticker" value="{{ filters.ticker }}" size="8"></label>
+    <label>Dimension
+        <select name="dimension">
+            <option value="">Any</option>
+            {% for d in dimensions %}
+            <option value="{{ d }}" {{ 'selected' if filters.dimension == d }}>{{ d }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>As-of date <input type="date" name="as_of" value="{{ filters.as_of }}"></label>
+    <button type="submit">Search</button>
+    <a href="{{ url_for('index') }}">Clear</a>
+</form>
 
-    <form method="POST">
-        <label>Search by Ticker:</label>
-        <input type="text" name="ticker" value="{{ search_term or '' }}">
-        <button type="submit">Search</button>
-    </form>
-
-    <table>
-        <tr>
-            <th>ETF Ticker</th>
-            <th>Fund Name</th>
-            <th>Dimension</th>
-            <th>As Of Date</th>
-            <th>Action</th>
-        </tr>
-        {% for d in disclosures %}
-        <tr>
-            <td>{{ d.Ticker }}</td>
-            <td>{{ d.FundName }}</td>
-            <td>{{ d.DimensionName }}</td>
-            <td>{{ d.AllocationAsOfDate }}</td>
-            <td><a href="{{ url_for('detail', snapshot_id=d.SnapshotId) }}">View / Edit</a></td>
-        </tr>
-        {% else %}
-        <tr><td colspan="5">No disclosures found.</td></tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+<table>
+    <tr>
+        <th>ETF Ticker</th>
+        <th>Fund Name</th>
+        <th>Provider</th>
+        <th>Dimension</th>
+        <th>As Of Date</th>
+        <th>Coverage</th>
+        <th>Action</th>
+    </tr>
+    {% for d in disclosures %}
+    <tr>
+        <td>{{ d.Ticker }}</td>
+        <td>{{ d.FundName }}</td>
+        <td>{{ d.ProviderName }}</td>
+        <td>{{ d.DimensionName }}</td>
+        <td>{{ d.AllocationAsOfDate }}</td>
+        <td>{{ d.CoverageStatus }}</td>
+        <td><a href="{{ url_for('detail', snapshot_id=d.SnapshotId) }}">View / Edit</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7">No disclosures found.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

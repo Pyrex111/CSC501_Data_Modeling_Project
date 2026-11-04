@@ -1,52 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Disclosure Detail</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .message { padding: 10px; margin-bottom: 20px; background-color: #e6f7ff; border-left: 4px solid #1890ff; }
-    </style>
-</head>
-<body>
-    <h2>Disclosure Details for {{ detail.Ticker }}</h2>
-    <p><strong>Fund Name:</strong> {{ detail.FundName }}</p>
-    <p><strong>As Of Date:</strong> {{ detail.AllocationAsOfDate }}</p>
-    <p><strong>Dimension:</strong> {{ detail.DimensionName }}</p>
-    
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        {% for category, message in messages %}
-          <div class="message">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
+{% extends "base.html" %}
+{% block title %}Disclosure Detail{% endblock %}
+{% block content %}
+<h2>Disclosure Details for {{ detail.Ticker or detail.FundName }}</h2>
 
-    <h3>Allocation Entries</h3>
-    <table>
-        <tr>
-            <th>Label</th>
-            <th>Weight Fraction</th>
-            <th>Action</th>
-        </tr>
-        {% for entry in entries %}
-        <tr>
-            <td>{{ entry.Label }}</td>
-            <td>{{ entry.WeightFraction }}</td>
-            <td>
-                <form method="POST" action="{{ url_for('update_weight') }}" style="margin: 0;">
-                    <input type="hidden" name="entry_id" value="{{ entry.EntryId }}">
-                    <input type="hidden" name="snapshot_id" value="{{ detail.SnapshotId }}">
-                    <input type="number" step="0.001" name="weight" value="{{ entry.WeightFraction }}" required>
-                    <button type="submit">Update</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <br>
-    <a href="{{ url_for('index') }}">Back to Search</a>
-</body>
-</html>
+<table class="meta">
+    <tr><td>Fund name</td><td>{{ detail.FundName }}</td></tr>
+    <tr><td>Ticker</td><td>{{ detail.Ticker }}{% if detail.ExchangeContext %} ({{ detail.ExchangeContext }}){% endif %}</td></tr>
+    <tr><td>Dimension</td><td>{{ detail.DimensionName }}</td></tr>
+    <tr><td>Allocation as-of date</td><td>{{ detail.AllocationAsOfDate }}</td></tr>
+    <tr><td>Coverage</td><td>{{ detail.CoverageStatus }}</td></tr>
+    <tr><td>Basis note</td><td>{{ detail.BasisNote }}</td></tr>
+    <tr><td>Publisher</td><td>{{ detail.PublisherName }}</td></tr>
+    <tr><td>Source document</td><td>{{ detail.DocumentTitle or 'Untitled' }}<br><span class="muted">{{ detail.Url }}</span></td></tr>
+    <tr><td>Source locator</td><td>{{ detail.SourceLocator }}</td></tr>
+    <tr><td>Retrieved at</td><td>{{ detail.RetrievedAt }}</td></tr>
+    <tr><td>Published at</td><td>{{ detail.PublishedAt or 'Unknown' }}</td></tr>
+    <tr><td>Retained capture</td><td>{{ detail.CapturedFileRef }}</td></tr>
+</table>
+
+<h3>Allocation Entries</h3>
+<table>
+    <tr>
+        <th>Label</th>
+        <th>Category meaning</th>
+        <th class="num">Weight Fraction</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    {% for entry in entries %}
+    <tr>
+        <td>{{ entry.Label }}{% if entry.CategoryCode %} <span class="muted">({{ entry.CategoryCode }})</span>{% endif %}</td>
+        <td class="muted">{{ entry.ContextLabel }}</td>
+        <td class="num">{{ entry.WeightFraction }}</td>
+        <td>
+            <form method="POST" action="{{ url_for('update_weight') }}" class="inline">
+                <input type="hidden" name="entry_id" value="{{ entry.EntryId }}">
+                <input type="hidden" name="snapshot_id" value="{{ detail.SnapshotId }}">
+                <input type="number" step="0.001" min="0" max="1" name="weight" value="{{ entry.WeightFraction }}" required>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+        <td>
+            <form method="POST" action="{{ url_for('remove_entry') }}" class="inline"
+                  onsubmit="return confirm('Delete this entry?');">
+                <input type="hidden" name="entry_id" value="{{ entry.EntryId }}">
+                <input type="hidden" name="snapshot_id" value="{{ detail.SnapshotId }}">
+                <button type="submit" class="danger">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="2"><strong>Total</strong></td>
+        <td class="num"><strong>{{ total }}</strong></td>
+        <td colspan="2" class="muted">
+            {% if detail.CoverageStatus == 'Complete' %}A Complete disclosure must total 1 (allowed error 0.005).{% else %}Totals are not enforced for {{ detail.CoverageStatus }} disclosures.{% endif %}
+        </td>
+    </tr>
+</table>
+<p class="muted">Changes are saved only if the whole disclosure stays valid; otherwise nothing changes.</p>
+<p><a href="{{ url_for('index') }}">Back to Search</a></p>
+{% endblock %}
