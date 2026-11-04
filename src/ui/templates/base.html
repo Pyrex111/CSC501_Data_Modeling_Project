@@ -21,6 +21,7 @@
         .grid input[type=text], .grid input[type=date], .grid select, .grid textarea { width: 100%; box-sizing: border-box; padding: 6px; }
         .meta td:first-child { width: 190px; background: #fafafa; font-weight: bold; }
         .muted { color: #666; font-size: 0.9em; }
+        .banner { background: #fffbe6; border-bottom: 1px solid #ffe58f; padding: 6px 40px; font-size: 0.9em; }
         .num { text-align: right; }
         button { padding: 5px 12px; cursor: pointer; }
         button.danger { color: #a8071a; }
@@ -33,6 +34,7 @@
         <a href="{{ url_for('new_disclosure') }}">New disclosure</a>
         <a href="{{ url_for('portfolio') }}">Portfolio</a>
     </nav>
+    <div class="banner">Fully synthetic demonstration: every ETF, provider, source document and weight shown here is fictional.</div>
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% for category, message in messages %}

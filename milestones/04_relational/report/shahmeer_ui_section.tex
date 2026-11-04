@@ -1,0 +1,8 @@
+% Shahmeer: interface section (about 190 words). Figure 2 = screenshots in
+% milestones/04_relational/figures/ui_screenshots/ (Mason selects panels).
+\subsection{Web Interface and Validation}
+The Flask interface has three layers: routes (\texttt{src/ui}), business logic (\texttt{src/biz}) and the data-access layer, so routes contain no SQL. Users search disclosures by ticker, dimension and as-of date; open a disclosure to see its basis, coverage, classification authority, scheme and version (or ``not recorded''), source URL, locator, retrieval and publication dates and retained file; create a disclosure with its entries; edit several weights together; delete an entry; and view a portfolio with the holding date shown apart from each ETF's allocation dates.
+
+Input is checked in the browser, the business layer (real dates, fractions in $[0,1]$, no duplicate categories, at least one entry), the DAL (parameterized SQL) and the database, where \texttt{validated\_transaction} rejects any final state that breaks a rule, such as a Complete disclosure not summing to $1\pm0.005$. Rejected changes roll back and show a plain message and the user's typed values, never a server error.
+
+We ran 30 route tests (74 with the schema suite, all passing) and exercised the running application; rejected writes left the database unchanged. Complete disclosures only accept coherent multi-entry edits, so deletion is demonstrated on a Partial synthetic disclosure.

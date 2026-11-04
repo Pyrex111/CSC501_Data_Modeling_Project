@@ -4,26 +4,24 @@
 <h2>Customer Portfolio</h2>
 <form method="GET" class="filters">
     <label>Customer
-        <select name="customer">
+        <select name="customer" onchange="window.location='{{ url_for('portfolio') }}?customer='+encodeURIComponent(this.value)">
             <option value="">Choose...</option>
             {% for c in customers %}
             <option value="{{ c.CustomerNumber }}" {{ 'selected' if number == c.CustomerNumber }}>{{ c.CustomerNumber }} - {{ c.GivenName }} {{ c.FamilyName }}</option>
             {% endfor %}
         </select>
     </label>
-    {% if portfolios|length > 1 %}
+    {% if number %}
     <label>Portfolio
-        <select name="portfolio_id">
+        <select name="portfolio_id" onchange="this.form.holding_date.value=''; this.form.submit();">
             <option value="">Choose...</option>
             {% for p in portfolios %}
             <option value="{{ p.PortfolioId }}" {{ 'selected' if portfolio_id == p.PortfolioId }}>{{ p.PortfolioReference }} - {{ p.PortfolioName }}</option>
             {% endfor %}
         </select>
     </label>
-    {% endif %}
-    {% if dates|length > 1 %}
     <label>Holding date
-        <select name="holding_date">
+        <select name="holding_date" onchange="this.form.submit();">
             <option value="">Choose...</option>
             {% for d in dates %}
             <option value="{{ d }}" {{ 'selected' if holding_date == d }}>{{ d }}</option>
@@ -41,9 +39,9 @@
     <tr><td>Holding as-of date</td><td>{{ result.HoldingAsOfDate }}</td></tr>
 </table>
 
-<h3>Holdings</h3>
+<h3>Holdings on {{ result.HoldingAsOfDate }}</h3>
 <table>
-    <tr><th>ETF Ticker</th><th>Fund Name</th><th class="num">Holding Weight</th><th>Available disclosures (each has its own as-of date)</th></tr>
+    <tr><th>ETF Ticker</th><th>Fund Name</th><th class="num">Holding Weight</th><th>Available disclosures (each has its own allocation date)</th></tr>
     {% for h in result.Holdings %}
     <tr>
         <td>{{ h.Ticker }}</td>
@@ -51,7 +49,7 @@
         <td class="num">{{ h.WeightFraction }}</td>
         <td>
             {% for d in disclosures[h.ETFId] %}
-            <a href="{{ url_for('detail', snapshot_id=d.SnapshotId) }}">{{ d.DimensionName }}, as of {{ d.AllocationAsOfDate }}</a><br>
+            <a href="{{ url_for('detail', snapshot_id=d.SnapshotId) }}">{{ d.DimensionName }}, allocation as of {{ d.AllocationAsOfDate }}</a><br>
             {% else %}
             <span class="muted">None</span>
             {% endfor %}
@@ -61,6 +59,6 @@
     <tr><td colspan="4">No holdings on this date.</td></tr>
     {% endfor %}
 </table>
-<p class="muted">The holding date describes the customer's position. Each disclosure date describes the provider's allocation. They are different observations and are not combined here.</p>
+<p class="muted">The holding date describes the customer's position. Each allocation date describes the provider's disclosure. They are different observations and are not combined here.</p>
 {% endif %}
 {% endblock %}

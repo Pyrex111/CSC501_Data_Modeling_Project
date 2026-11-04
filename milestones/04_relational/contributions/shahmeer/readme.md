@@ -1,6 +1,6 @@
 # Shahmeer: Milestone 4 interface and business logic
 
-Prepared 4 November 2026. Responsibility: the Flask application, its templates, the business-logic layer, and connecting them to Mason's data-access layer (DAL). This is an AI-assisted contribution owned by Shahmeer.
+Prepared 4 November 2026. Responsibility: the Flask application, its templates, the business-logic layer, route tests, screenshots, and connecting them to Mason's data-access layer (DAL). This is an AI-assisted contribution owned by Shahmeer.
 
 ## Deliverables
 
@@ -8,7 +8,10 @@ Prepared 4 November 2026. Responsibility: the Flask application, its templates, 
 - [Templates](../../../../src/ui/templates/): `base.html`, `index.html` (search), `detail.html`, `new.html` (create), `portfolio.html`.
 - [Business logic](../../../../src/biz/disclosures.py): parsing and validation of form input, the create-disclosure payload, category scoping for the create form, and translation of database/rule errors into plain messages.
 - [Lookup queries](../../../../src/dal/lookups.py): read-only, parameterized queries that fill the form controls (ETFs, dimensions, source documents, categories, customers, portfolios). Added to the DAL so the UI writes no SQL. Mason should review it.
-- Uses `search_disclosures`, `get_disclosure_detail`, `create_disclosure`, `update_entry_weight`, `delete_entry` and `get_customer_portfolio` from [repositories.py](../../../../src/dal/repositories.py) unchanged.
+- [Route and business-logic tests](../../../../tests/test_ui_routes.py): 30 tests against a temporary copy of the synthetic database.
+- [Screenshots](../../figures/ui_screenshots/): nine captures of the running application showing each operation and its result.
+- [Report section](../../report/shahmeer_ui_section.tex): about 190 words of LaTeX for the interface, validation and results.
+- Uses `search_disclosures`, `get_disclosure_detail`, `create_disclosure`, `update_weights_batch`, `delete_entry` and `get_customer_portfolio` from [repositories.py](../../../../src/dal/repositories.py) unchanged.
 
 ## How to run
 
@@ -27,7 +30,8 @@ The app starts on `http://127.0.0.1:5000/`. Optional environment variables: `FLA
 | Search disclosures | `/` | Search by ticker (case-insensitive), dimension and as-of date. |
 | Disclosure detail | `/disclosure/<id>` | View ETF, provider, dimension, as-of date, coverage, basis note, source URL, locator, retrieval and publication dates, retained capture, each category's meaning, and the weight total. Update or delete each entry. |
 | New disclosure | `/disclosure/new` | Create a snapshot with its entries in one transaction. |
-| Update / delete entry | `/update_weight`, `/delete_entry` (POST) | Save one change, flash the result, return to the detail page. |
+| Update weights | `/update_weights` (POST) | Save all edited weights of a disclosure in one transaction (`update_weights_batch`). On failure the page is redisplayed with the typed values. |
+| Delete entry | `/delete_entry` (POST) | Delete one entry; rejected if it would break a Complete total or remove the last entry. |
 | Portfolio | `/portfolio` | Show a customer's portfolio at one holding date, next to the separately dated disclosures available for each held ETF. |
 
 ## Layers
@@ -46,37 +50,37 @@ Jinja2 autoescaping is on for the `.html` templates.
 
 Routes catch every error and show it through `friendly_error`, which turns repository, rule and `sqlite3` errors into plain messages (for example, "A Complete disclosure must add up to 1 (allowed error 0.005). This change would make the total 1.04."). The user stays on a valid page and no partial data is saved.
 
-## Observed behavior
+## Checks performed
 
-These checks were run with Flask's test client against the freshly seeded demo database. They are manual checks of the interface, not an automated suite. The 44 existing tests cover the schema and DAL and still pass.
+- **Automated:** `python -m unittest discover -s tests` ran 74 tests, all passing: the 44 schema/DAL tests plus 30 new ones in `tests/test_ui_routes.py`. The new tests use Flask's test client against a temporary copy of the synthetic database. They cover search filters and ticker normalization, the detail page's preserved information, creation (Partial, Complete, Geography), 15 rejected creates, coherent and incoherent batch updates, 9 invalid update inputs, delete in Complete and Partial disclosures, the last-entry rule, portfolio selection, and malformed ids, dates and URLs. Every rejected write is checked to leave a full database dump unchanged. They do not drive a browser or check page appearance.
+- **Running application:** the real server was started with `python src/ui/app.py` and driven with HTTP requests through search, detail, portfolio, create, rejected create, rejected and saved batch updates, rejected delete and successful delete. The pages were rendered to the screenshots listed below with wkhtmltoimage.
+- **Clean checkout:** from a fresh unzip of the repository with this contribution copied in, `python quickstart.py --serve` built the database, started the application, and `/`, `/portfolio` and `/disclosure/new` returned 200. The 74 tests passed there too.
 
-| Action | Observed result |
+## Screenshots
+
+Stored in `milestones/04_relational/figures/ui_screenshots/`. Each shows the result page, including its message.
+
+| File | Shows |
 | --- | --- |
-| Search `sya` (lowercase) | Finds SYA's 2 disclosures. |
-| Filter Geography / as-of 2026-06-30 | 3 and 2 disclosures respectively. |
-| Open `/disclosure/2` | Heading shows SYA; source, locator and category meanings displayed. |
-| Create a Partial sector disclosure (3 entries) | Saved; detail page opens. |
-| Create with a duplicate category, no entries, weight 2, bad date, or missing locator | Rejected with a specific message. |
-| Create a Complete disclosure totalling 0.8 | Rejected: total would be 0.8. |
-| Create a Complete sector disclosure of five 0.2 entries | Saved. |
-| Create a Geography disclosure with the matching source and locator | Saved. |
-| Same geography categories with a different locator | Rejected: category does not belong to this source and locator. |
-| Sector category in a Geography disclosure | Rejected. |
-| Update an entry by +0.002 in a Complete disclosure | Saved. |
-| Update by +0.04 | Rejected: total would be 1.04. |
-| Delete an entry from a Complete disclosure | Rejected: total would be 0.69. |
-| Update and delete entries in a Partial disclosure | Saved. |
-| Delete the last entry | Rejected: a disclosure must keep at least one entry. |
-| Portfolio for customer 1001 | Holdings at 2026-08-01 with dated disclosures per ETF. |
-| Unknown customer, unknown disclosure | "not found" message, page stays valid. |
+| `01_search_geography_filter` | Search filtered to the Geography dimension |
+| `02_detail_with_source_and_classification` | Disclosure detail with basis, source, locator, retained file and classification |
+| `03_portfolio_holding_vs_allocation_dates` | Portfolio with the holding date apart from allocation dates |
+| `04_create_partial_disclosure_saved` | Newly created Partial synthetic disclosure |
+| `05_create_rejected_total_form_kept` | Complete disclosure totalling 0.8 rejected, entered values kept |
+| `06_update_rejected_total_1.04` | Edit rejected: total would be 1.04, typed values kept |
+| `07_update_batch_saved` | Coherent multi-entry update saved |
+| `08_delete_rejected_complete` | Delete from a Complete disclosure rejected |
+| `09_delete_saved_partial` | Entry deleted from the Partial disclosure |
+
+These were captured from rendered pages, not from a desktop browser. Retake them in a browser if the team wants browser chrome visible.
 
 ## Known limitations
 
-- A Complete disclosure must always total 1 ± 0.005, so single-entry updates and deletes in Complete disclosures only work for very small changes. Larger rebalancing needs several weights changed together; `update_weights_batch` exists in the DAL but the interface does not expose it. Entry deletion is demonstrated on Partial disclosures.
-- The interface cannot create new ETFs, source documents or categories; it only uses existing ones. The DAL has no functions for these.
+- A Complete disclosure must total 1 within 0.005, so changes must be coherent and deleting an entry from one is normally rejected. Deletion is demonstrated on a Partial synthetic disclosure created through the create form; no Complete disclosure's status was changed.
+- The interface cannot create ETFs, source documents or categories; the DAL has no functions for them.
 - Geography categories are tied to one source document and locator, so a new geography disclosure must reuse a source and locator that already have categories.
-- There is no CSRF protection, authentication or automated UI test suite. The secret key defaults to a fixed development value.
-- Screenshots in the final report were taken by the team from the running application; none are stored in the repository by this contribution.
+- There is no CSRF protection or authentication. The secret key defaults to a fixed development value; set `FLASK_SECRET_KEY` to override it. Debug mode is off unless `FLASK_DEBUG=1`.
+- Entry lists are ordered by the DAL (largest weight first), so rows can move after an edit.
 
 ## Handoff boundaries
 
@@ -84,4 +88,4 @@ The templates depend on the field names returned by `repositories.py` and `looku
 
 ## AI-use and evaluation record
 
-AI assisted with reviewing the interface against the manual and the team handoff, writing the business-logic and lookup modules, the new templates and routes, running the manual checks listed above, and drafting this README. The checks were run by the assistant with Flask's test client; they do not claim that Shahmeer personally ran them or tested the pages in a browser. The manual permits AI task completion with human evaluation; Shahmeer and the team must review and run the interface and disclose the assistance in the final submission. Mason's and Taimoor's approval of the interface and of `lookups.py` is not asserted.
+AI assisted with reviewing the interface against the manual and the team's feedback, writing the business-logic and lookup modules, the routes and templates, the route tests, drafting this README and the report section, and rendering the screenshots. The checks above were run by the assistant; they do not claim that Shahmeer personally ran them or used the pages in a desktop browser. The manual permits AI task completion with human evaluation; Shahmeer and the team must review and run the interface and disclose the assistance in the final submission. Mason's and Taimoor's approval of the interface and of `lookups.py` is not asserted.

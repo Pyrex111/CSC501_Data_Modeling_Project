@@ -113,6 +113,34 @@ def parse_new_disclosure(form: Any) -> dict:
     return payload
 
 
+def parse_batch(form: Any) -> list[dict]:
+    """Validate the multi-entry weight form for update_weights_batch."""
+    ids, weights = form.getlist("entry_id"), form.getlist("weight")
+    if not ids or len(ids) != len(weights):
+        raise ValidationError("No weights were submitted.")
+    changes, seen = [], set()
+    for n, (raw_id, raw_weight) in enumerate(zip(ids, weights), start=1):
+        entry_id = parse_id(raw_id, f"Row {n} entry")
+        try:
+            weight = parse_weight(raw_weight)
+        except ValidationError as exc:
+            raise ValidationError(f"Row {n}: {exc}")
+        if entry_id in seen:
+            raise ValidationError("The same entry was submitted twice.")
+        seen.add(entry_id)
+        changes.append({"EntryId": entry_id, "WeightFraction": weight})
+    return changes
+
+
+def submitted_weights(form: Any) -> dict[int, str]:
+    """Raw submitted text per entry id, used to refill the form after an error."""
+    out: dict[int, str] = {}
+    for raw_id, raw_weight in zip(form.getlist("entry_id"), form.getlist("weight")):
+        if raw_id.strip().isdigit():
+            out[int(raw_id)] = raw_weight
+    return out
+
+
 # --------------------------------------------------------------------------
 # Presentation helpers (data only, no HTML)
 # --------------------------------------------------------------------------
@@ -143,16 +171,32 @@ def category_scopes(categories: list[dict], sources: list[dict]) -> list[dict]:
     return out
 
 
-def describe_context(entry: Mapping[str, Any]) -> str:
-    if entry.get("SchemeName") and entry.get("Version"):
-        return f'{entry["SchemeAuthority"]}: {entry["SchemeName"]} {entry["Version"]}'
+def format_percent(weight: float) -> str:
+    text = f"{weight * 100:.3f}".rstrip("0").rstrip(".")
+    return text + "%"
+
+
+def classification(entry: Mapping[str, Any]) -> tuple[list[tuple[str, str]], str]:
+    """Authority/scheme/version lines, with unknown information stated plainly."""
     if entry.get("SchemeName"):
-        return f'{entry["SchemeName"]} (edition unknown)'
-    return "Disclosure-local label (meaning limited to this source and locator)"
+        rows = [
+            ("Authority", entry.get("SchemeAuthority") or "Unknown"),
+            ("Scheme", entry["SchemeName"]),
+            ("Version", entry.get("Version") or "Unknown (edition not recorded)"),
+        ]
+        note = "" if entry.get("Version") else "The classification edition is unresolved, so this label is limited to its source and locator."
+        return rows, note
+    rows = [("Authority", "Not recorded"), ("Scheme", "Not recorded"), ("Version", "Not recorded")]
+    return rows, "Disclosure-local label: its meaning is limited to this source and locator."
 
 
 def annotate_entries(entries: list[dict]) -> list[dict]:
-    return [dict(e, ContextLabel=describe_context(e)) for e in entries]
+    out = []
+    for e in entries:
+        rows, note = classification(e)
+        out.append(dict(e, Percent=format_percent(e["WeightFraction"]),
+                        Classification=rows, ClassificationNote=note))
+    return out
 
 
 def total_weight(entries: list[dict]) -> float:
