@@ -50,11 +50,15 @@ Jinja2 autoescaping is on for the `.html` templates.
 
 Routes catch every error and show it through `friendly_error`, which turns repository, rule and `sqlite3` errors into plain messages (for example, "A Complete disclosure must add up to 1 (allowed error 0.005). This change would make the total 1.04."). The user stays on a valid page and no partial data is saved.
 
+
+
 ## Checks performed
 
 - **Automated:** `python -m unittest discover -s tests` ran 74 tests, all passing: the 44 schema/DAL tests plus 30 new ones in `tests/test_ui_routes.py`. The new tests use Flask's test client against a temporary copy of the synthetic database. They cover search filters and ticker normalization, the detail page's preserved information, creation (Partial, Complete, Geography), 15 rejected creates, coherent and incoherent batch updates, 9 invalid update inputs, delete in Complete and Partial disclosures, the last-entry rule, portfolio selection, and malformed ids, dates and URLs. Every rejected write is checked to leave a full database dump unchanged. They do not drive a browser or check page appearance.
 - **Running application:** the real server was started with `python src/ui/app.py` and driven with HTTP requests through search, detail, portfolio, create, rejected create, rejected and saved batch updates, rejected delete and successful delete. The pages were rendered to the screenshots listed below with wkhtmltoimage.
 - **Clean checkout:** from a fresh unzip of the repository with this contribution copied in, `python quickstart.py --serve` built the database, started the application, and `/`, `/portfolio` and `/disclosure/new` returned 200. The 74 tests passed there too.
+
+
 
 ## Screenshots
 
