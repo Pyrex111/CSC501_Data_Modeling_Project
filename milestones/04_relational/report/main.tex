@@ -1,11 +1,5 @@
-% ============================================================================
-% CSC501 Milestone 4 - final ACM sigconf report (working draft).
-% Two report pages + one relation/constraint page.
-% Sections: Taimoor (relational model), Mason (data access/queries),
-% Shahmeer (placeholder), followed by the relation/constraint listing.
-% Compile (pdflatex):
-%   pdflatex main && bibtex main && pdflatex main && pdflatex main
-% ============================================================================
+% CSC501 Milestone 4: two report pages, then one relation/constraint page.
+% Build and package: python scripts/build_m4_submission.py (repository root).
 \documentclass[sigconf,nonacm]{acmart}
 \settopmatter{printacmref=false,printfolios=true}
 \setcopyright{none}
@@ -14,59 +8,57 @@
 \usepackage{xurl}
 \hypersetup{hidelinks}
 \urlstyle{same}
+\graphicspath{{../figures/}{figures/}}
 \raggedbottom
-
 \begin{document}
-
 \title{Dated ETF Allocation Disclosures: A Relational Design and Data-Access Layer}
 \titlenote{Project repository: \url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}}
-
 \author{Taimoor Shahzad}
 \affiliation{\institution{University of Victoria}\city{Victoria}\country{Canada}}
-
 \author{M. Shahmeer Ather Kakwan}
 \affiliation{\institution{University of Victoria}\city{Victoria}\country{Canada}}
-
 \author{Mason Li}
 \affiliation{\institution{University of Victoria}\city{Victoria}\country{Canada}}
-
 \begin{abstract}
-Exchange-traded fund (ETF) providers publish dated sector and geographic
-allocation percentages that are difficult to compare across funds and time.
-We present a relational design for dated ETF allocation disclosures that
-separates a customer's holdings from a provider's disclosure, scopes category
-identity by classification or capture context, and enforces integrity through
-STRICT tables, foreign keys, triggers and validated transactions. A
-data-access layer exposes parameterized functions for search, detail,
-portfolio and create/update/delete operations over a fully synthetic
-demonstration dataset, and a Flask web interface presents the same operations
-to users. The suite passes 74 tests and the full demonstration is
-reproducible from a clean checkout through a single quickstart command. The
-project repository is
+Exchange-traded fund (ETF) allocation percentages need dates, category meanings
+and source evidence to support comparison. Our relational design separates
+customer holdings from provider disclosures and scopes categories by
+classification edition or captured-source context. A Flask interface supports
+search, creation, batch updates, deletion and dated portfolio views over a
+fully synthetic dataset. Twelve tables, SQL constraints and transaction
+validation preserve the modeled rules; 74 automated tests and six analytical
+queries exercise the implementation. Code, setup and evaluation records:
 \url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}.
 \end{abstract}
-
 \maketitle
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth]{../figures/figure2_ui_composite.png}
-  \caption{Web interface: search results, disclosure detail with source evidence, the create form, and a rejected update (fully synthetic data).}
-  \label{fig:ui}
-\end{figure*}
 
-\section{Design and Implementation}
 
+\section{Relational Design}
 \input{taimoor_relational_section}
 
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{ui_operations.pdf}
+\caption{Unchanged screenshot excerpts: search, successful creation, a coherent
+batch update and deletion from a Partial disclosure. Intervening rows are omitted; update and delete are separate examples. All nine
+full-resolution captures, including rejected writes, provenance and portfolio
+views, are in \texttt{supplements/ui\_screenshots/}. All data are fictional.}
+\Description{Four labeled screenshot excerpts show a Geography search, a created Partial disclosure, saved batch weights totaling one, and a deletion leaving two entries totaling 0.7.}
+\label{fig:ui}
+\end{figure*}
+\section{Queries and Application}
 \input{mason_query_dml_section}
-
 \input{shahmeer_ui_section}
-
+\subsection{AI assistance and evaluation}
+OpenAI ChatGPT/Codex assisted with modeling, code, tests, figures and
+prose~\cite{openaiAssistance}. Taimoor's supplied critique covers keys, dates,
+contexts and tolerance; Mason reports independent integrated reruns.
+\href{https://github.com/Pyrex111/CSC501_Data_Modeling_Project/tree/main/milestones/04_relational}{Project evaluation records}
+distinguish human review from assistant-executed checks. Personal browser
+testing is not inferred.
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{taimoor_references}
-
 \clearpage
 \input{relations_constraints}
-
 \end{document}

@@ -44,7 +44,7 @@ exchange is required, uppercase and nonempty. ISIN checksum is not checked.
 
 \par\smallskip\noindent\textbf{Common scalar rules.}
 Fractions are in $[0,1]$. Currency codes have three uppercase letters and domicile
-codes two. Dates are valid \texttt{YYYY-MM-DD}; source timestamps are UTC
+codes two. Dates are valid \texttt{YYYY-MM-DD}. Source timestamps use UTC:\\
 \texttt{YYYY-MM-DDTHH:MM:SS.ffffffZ}. Optional text is NULL when unknown and
 nonempty when present. Code formats do not verify external registry membership.
 
@@ -60,7 +60,8 @@ file existence within the supplied project root.
 UK: DimensionName; DimensionName $\in$ \{Sector, Geography\}.
 
 \rel{ClassificationScheme}{Id, SchemeAuthority, SchemeName, Version?, DefinitionUrl?}
-Conditional UK: (SchemeAuthority, SchemeName, Version) WHERE Version IS NOT NULL.
+Conditional UK: (SchemeAuthority, SchemeName, Version).
+Applies only WHERE Version IS NOT NULL.
 Unknown editions retain NULL Version and no asserted complete business key.
 
 \rel{AllocationCategory}{Id, AllocationDimensionId, ClassificationSchemeId?, Label, Code?, ContextKey}
@@ -85,7 +86,7 @@ AllocationCategoryId $\rightarrow$ AllocationCategory.
 UK: (AllocationSnapshotId, AllocationCategoryId).
 
 \par\smallskip\noindent\textbf{Cross-relation rules.}
-SQL triggers require matching category/snapshot dimensions on entry writes and
+SQL triggers require matching category and snapshot dimensions on entry writes and
 parent dimension edits. Before COMMIT, the transaction validator requires an
 entry per saved snapshot, validates used category contexts and checks Complete
 totals within $0.005$ of 1 (inclusive, configurable). Partial/Unknown totals and

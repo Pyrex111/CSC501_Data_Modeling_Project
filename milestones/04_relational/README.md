@@ -16,7 +16,9 @@ Status: schema, data-access layer and a fully synthetic demonstration dataset ar
 | Observed schema validation results | [docs/schema_validation_results.md](docs/schema_validation_results.md) |
 | Taimoor's supplied design evaluation, 3 November | [docs/taimoor_design_evaluation.md](docs/taimoor_design_evaluation.md) |
 | Taimoor's contribution and review guide | [contributions/taimoor/README.md](contributions/taimoor/README.md) |
-| Report fragments and relation-list preview | [report/README.md](report/README.md) |
+| Three-page report and build instructions | [report/main.pdf](report/main.pdf), [report/README.md](report/README.md) |
+| Corrected submission ZIP | [submission/4_Relational_Taimoor_Mason_Shahmeer.zip](submission/4_Relational_Taimoor_Mason_Shahmeer.zip) |
+| Correction and verification record | [docs/submission_review.md](docs/submission_review.md) |
 | Historical Milestone 2 model | [Milestone 2 figures](../02_background/figures/) |
 
 Open the Draw.io file in diagrams.net. The first tab is the conceptual ERD; the second explains business identification, scoped uniqueness and implementation rules. The PDF contains the same two views. The official Milestone 4 manual governs the requirements; illustrative samples do not override it.
@@ -26,10 +28,11 @@ Open the Draw.io file in diagrams.net. The first tab is the conceptual ERD; the 
 - `figures/`: shared model PDF, its editable source, the architecture figure and UI screenshots.
 - `docs/`: model revision explanation, assumptions, implementation decisions and team handoff.
 - `report/`: assembled three-page report, section fragments, bibliography and the relation/constraint listing.
+- `submission/`: self-contained LaTeX/PDF ZIP with all nine original screenshot supplements.
 - `contributions/`: per-member ownership, evaluation and review records.
 - `README.md`: artifact navigation and milestone status.
 
-The root-level `src/` now holds the Flask routes (`src/ui`), business validation (`src/biz`) and the data-access layer (`src/dal`); `scripts/` contains a schema-only initializer and `tests/` covers the schema, integration and UI routes. The final submission package is being assembled.
+The root-level `src/` holds the Flask routes (`src/ui`), business validation (`src/biz`) and the data-access layer (`src/dal`). `scripts/` contains the schema initializer, synthetic PDF/report-figure generators and checked report/package builder; `tests/` covers the schema, integration and UI routes. Install the declared dependencies before launching the UI, as described in the root README.
 
 ## Model revision
 
@@ -52,8 +55,8 @@ See the [handoff](docs/milestone4_handoff.md#ownership-and-deliverables) for exa
 
 Available: revised conceptual model, business identity rules, executable schema, relation/column dictionary, shared transaction validator, schema initializer, 74 passing tests (33 schema, 11 integration, 30 UI routes), connection manager, parameterized CRUD and lookups, fully synthetic seed data, six analytical queries, an interface contract, an architecture figure, the Flask application with UI screenshots and the compiled three-page report.
 
-Remaining: final cross-review and the submission ZIP. The report contains two report pages plus one page listing all relations and constraints. The planned package name is `4_Relational_Taimoor_Mason_Shahmeer.zip`.
+The corrected report and `4_Relational_Taimoor_Mason_Shahmeer.zip` are linked above. The report contains two report pages plus one page listing all relations and constraints. All three team members are graduate students; their existing author order is retained. The team should review the resulting submission before uploading; individual review is not inferred from automated test success.
 
 ## AI assistance and evaluation
 
-AI assisted with the model revision, visual exports, handoff and 2 November schema/code/documentation contribution. The [contribution record](contributions/taimoor/README.md#ai-use-and-evaluation-record) distinguishes executed automated checks from pending human evaluation. The Milestone 4 manual classifies the work as **D: AI Task Completion, Human Evaluation**. Team members must critically review the design, validate the implementation and document/cite AI assistance as required. See the [AI-use record](docs/milestone4_handoff.md#ai-use-record).
+AI assisted with the model revision, implementation, documentation, figures and final submission corrections. The [submission review](docs/submission_review.md) distinguishes the supplied human evaluations, reported personal reruns and assistant-executed checks. The Milestone 4 manual classifies the work as **D: AI Task Completion, Human Evaluation**. The report cites the assistance and evaluation records; team members remain responsible for reviewing and understanding their submission. See the original [AI-use record](docs/milestone4_handoff.md#ai-use-record) for development history.

@@ -1,81 +1,19 @@
-// CSC 501 Milestone 4 - system architecture for the fully synthetic
-// Dated ETF Allocation Disclosures demonstration (Python + Flask + SQLite).
-// Render:
-//   dot -Tpng system_architecture.dot -o system_architecture.png
-//   dot -Tpdf system_architecture.dot -o system_architecture.pdf
+// Editable topology. Canonical report layout: scripts/generate_report_figures.py.
+// Optional: dot -Tpdf system_architecture.dot -o architecture_graphviz.pdf
 digraph ETFArchitecture {
-    rankdir="TB";
-    fontname="Helvetica";
-    labelloc="t";
-    label="System Architecture - Dated ETF Allocation Disclosures (fully synthetic; Python + Flask + SQLite)";
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10, margin="0.12,0.08"];
-    edge [fontname="Helvetica", fontsize=9, color="#555555"];
-    graph [splines=polyline, nodesep=0.4, ranksep=0.55];
-
-    // ---- UI layer (implemented) -----------------------------------------
-    subgraph cluster_ui {
-        label="UI Layer - src/ui (Flask routes; implemented)";
-        style="rounded,filled"; fillcolor="#eaf2fb"; fontcolor="#1f4e79";
-        routes [label="app.py: routes / HTML templates / forms\nsearch, detail, portfolio, create, update, delete\nNo SQL written here",
-                fillcolor="#cfe2f3"];
-    }
-
-    // ---- Business logic layer -------------------------------------------
-    subgraph cluster_biz {
-        label="Business Logic - src/biz";
-        style="rounded,filled"; fillcolor="#fdf3e7"; fontcolor="#8a5a00";
-        biz [label="disclosures.py\nparse and validate input, build payloads\ntranslate rule errors into plain messages",
-             fillcolor="#fce5cd"];
-    }
-
-    // ---- Data access layer ----------------------------------------------
-    subgraph cluster_dal {
-        label="Data Access Layer - src/dal";
-        style="rounded,filled"; fillcolor="#eef7ee"; fontcolor="#2e6b2e";
-        repos [label="repositories.py\n8 parameterized functions\nsearch / detail / entries / portfolio\ncreate / update / batch / delete",
-               fillcolor="#d9ead3"];
-        lookups [label="lookups.py\nread-only parameterized lookups\nfor form controls",
-                 fillcolor="#d9ead3"];
-        validator [label="schema_validation.py\nvalidated_transaction around every write\nContextKey, parent minimums, Complete totals (0.005)",
-                   fillcolor="#d9ead3"];
-        db [label="database.py\nDatabase context manager\nPRAGMA foreign_keys = ON (verified)\nexplicit BEGIN / COMMIT / ROLLBACK",
-            fillcolor="#d9ead3"];
-        loader [label="seed_data.py + run_analysis_queries.py\nvalidated synthetic seed, six analytical queries",
-                fillcolor="#d9ead3"];
-    }
-
-    // ---- SQLite persistence ---------------------------------------------
-    subgraph cluster_persist {
-        label="Persistence";
-        style="rounded,filled"; fillcolor="#f3eef7"; fontcolor="#5b2e8a";
-        sqlite [shape=cylinder, label="SQLite database (data/etf_allocations.sqlite3)\n12 STRICT tables, 13 foreign keys, 4 triggers",
-                fillcolor="#d9d2e9"];
-    }
-
-    // ---- Synthetic retained evidence ------------------------------------
-    subgraph cluster_evidence {
-        label="Synthetic Retained Evidence - data/raw/";
-        style="rounded,filled"; fillcolor="#f4f6f8"; fontcolor="#333333";
-        raw [label="Fictional capture files (placeholder text, .pdf)\nidentities on reserved example.invalid domain\nnot real issuer documents",
-             fillcolor="#ffffff"];
-    }
-
-    // ---- Request path (forward edges set the layer order) ---------------
-    routes -> biz [label="request data for validation", color="#1f4e79"];
-    routes -> lookups [label="form option lists", color="#1f4e79"];
-    biz -> repos [label="validated payload / calls", color="#8a5a00"];
-    routes -> repos [label="direct read and write calls", color="#1f4e79"];
-    repos -> validator [label="writes run inside validated_transaction", color="#2e6b2e"];
-    repos -> db [label="acquires connection"];
-    lookups -> db [label="acquires connection"];
-    db -> sqlite [label="parameterized SQL", color="#1f4e79"];
-
-    // ---- Return path (constraint=false keeps the vertical order) --------
-    sqlite -> db [label="rows sqlite3.Row", constraint=false, color="#2e6b2e"];
-    repos -> routes [label="dicts, lists and domain errors", constraint=false, color="#2e6b2e"];
-
-    // ---- Seed and evidence links ----------------------------------------
-    loader -> db [label="seed/query entry", style=dashed, color="#8a5a00"];
-    raw -> loader [label="retained references", constraint=false, style=dashed];
-    raw -> validator [label="file-existence check", constraint=false, style=dashed];
+  rankdir=TB;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=10];
+  edge [fontname="Helvetica", fontsize=9];
+  routes [label="UI: Flask routes + templates\nOpens a Database connection; renders forms/results", fillcolor="#eaf2fb"];
+  biz [label="Business helpers\nParse/check input, build payloads, explain errors", fillcolor="#fff3de"];
+  repos [label="DAL: repositories + lookups\nReceives the request connection; parameterized SQL", fillcolor="#edf6ed"];
+  validator [label="validated_transaction\nFinal-state checks around writes", fillcolor="#edf6ed"];
+  sqlite [label="SQLite\n12 STRICT tables, 13 FKs, 4 triggers", fillcolor="#f2edf8"];
+  routes -> biz [label="parse/check input"];
+  routes -> repos [label="connection + direct calls"];
+  repos -> validator [label="writes"];
+  repos -> sqlite [label="SQL"];
+  validator -> sqlite [label="read proposed state", style=dashed];
+  capture [shape=note, label="Synthetic source PDFs: existence checked\nonly when capture_root is supplied", fillcolor="#ffffff"];
+  capture -> validator [style=dashed, label="optional file check"];
 }

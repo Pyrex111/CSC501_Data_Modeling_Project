@@ -1,25 +1,59 @@
-# Taimoor's report contribution
+# Milestone 4 report and submission
 
-These are inputs to the team's final ACM sigconf report, not a complete submission.
+`main.tex` combines the model, query/DML and interface contributions, an
+architecture diagram, UI evidence, AI attribution and references. The compiled
+`main.pdf` has two report pages followed by one relations/constraints page.
+All members are graduate students, so the existing author order is retained.
 
-| File | Use |
+| Artifact | Location |
 | --- | --- |
-| [taimoor_relational_section.tex](taimoor_relational_section.tex) | Main-relations, identification and schema-integrity explanation for the two report pages |
-| [mason_query_dml_section.tex](mason_query_dml_section.tex) | Mason's query, DML-integrity and reproducibility discussion for the two report pages |
-| [taimoor_references.bib](taimoor_references.bib) | Official SQLite references cited by that section; merge with the team bibliography |
-| [relations_constraints.tex](relations_constraints.tex) | All twelve relations, attributes, keys and other integrity rules for the third page |
-| [relations_constraints_preview.tex](relations_constraints_preview.tex) | Standalone two-column review wrapper requiring an installed ACM template/class |
-| [relations_constraints_preview.pdf](relations_constraints_preview.pdf) | One-page visual preview of the relation/constraint listing |
+| Compiled report | [main.pdf](main.pdf) |
+| Main source | [main.tex](main.tex) |
+| Model section | [taimoor_relational_section.tex](taimoor_relational_section.tex) |
+| Queries and DML | [mason_query_dml_section.tex](mason_query_dml_section.tex) |
+| Interface section | [shahmeer_ui_section.tex](shahmeer_ui_section.tex) |
+| Complete third-page listing | [relations_constraints.tex](relations_constraints.tex) |
+| Bibliography, including the AI tool citation | [taimoor_references.bib](taimoor_references.bib) |
+| Architecture, exact calls | [system_architecture.pdf](../figures/system_architecture.pdf) |
+| Enlarged UI excerpts | [ui_operations.pdf](../figures/ui_operations.pdf) |
+| Full-resolution UI evidence | [Nine original captures](../figures/ui_screenshots/) |
+| Submission ZIP | [4_Relational_Taimoor_Mason_Shahmeer.zip](../submission/4_Relational_Taimoor_Mason_Shahmeer.zip) |
+| Correction and verification scope | [submission_review.md](../docs/submission_review.md) |
 
-In the team's current ACM sigconf source, insert Taimoor's section at the appropriate place alongside Mason's query discussion and Shahmeer's application material. After the two report pages, use:
+## Rebuild from the repository root
 
-```tex
-\clearpage
-\input{relations_constraints}
+Install `requirements.txt` and a LaTeX distribution with `pdflatex`, BibTeX,
+ACM `sigconf` packages/fonts (Libertine, Inconsolata and newtxmath) and `xurl`.
+Standard Overleaf ACM environments provide these. Python dependencies alone do
+not install LaTeX or its fonts. Poppler is optional for the PNG figure preview.
+
+```sh
+python -m pip install -r requirements.txt
+python scripts/generate_report_figures.py
+python scripts/build_m4_submission.py
 ```
 
-Adjust input paths for the team's source layout. The listing's internal `\newpage` moves to its second column when used in a two-column report. Include it at the start of page 3. It assumes no prior definition of its local `\rel` macro.
+The builder stages the exact standalone ZIP structure, compiles four passes,
+checks the page count/third-page listing, repository links, undefined references,
+overfull boxes, missing ACM fonts and ZIP integrity, and includes all nine screenshot supplements.
+It publishes the report PDF and ZIP only after those checks pass. The original
+screenshots are neither resized nor altered; supplementary PNGs are losslessly
+compressed and checked for identical pixels. Inspect the resulting pages
+visually as well, since automatic checks cannot establish legibility.
 
-The preview was compiled using the acmart class supplied in the illustrative sample ZIP. Some ACM font packages were unavailable in the runtime, so the preview uses fallback fonts. It checks content fit and legibility; compile the final report in the current ACM template and verify exactly two text/report pages plus one relation/constraint page. Do not treat this standalone preview as the final team report.
+For manual compilation, run the four LaTeX/BibTeX commands in
+[PACKAGE_README.md](PACKAGE_README.md) from this directory. The ZIP contains the
+same main source and local figures, so it also compiles without the repository.
 
-The report section accurately describes the schema tests and explicitly distinguishes them from application/data evaluation. Update the test count if the suite changes, and rewrite claims if the implementation changes. Each member must review the resulting prose and disclose AI assistance as required by the manual.
+## Evaluation and attribution
+
+AI assisted with the section drafts, implementation, figures, tests and final
+report corrections. Taimoor's supplied design evaluation and Mason's reported
+human reruns are distinguished from the assistant's verification. Shahmeer's
+notes do not yet establish a personal browser walkthrough. Do not attribute
+assistant-executed checks to an individual human. The report cites the tool and
+project evaluation records.
+
+The old `relations_constraints_preview.*` files are a historical standalone
+layout preview, not the final report. The final listing retains the same
+attributes and rules, with wrapping adjusted for the ACM fonts.

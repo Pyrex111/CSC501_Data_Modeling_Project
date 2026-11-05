@@ -1,9 +1,9 @@
 """Generate the three readable synthetic retained-evidence PDFs.
 
-The placeholder files in ``data/raw`` carry a ``.pdf`` name but contain plain
-text. This script rebuilds them as genuine, openable PDFs using the values
-stored in the demo database, so the retained source always matches the seed
-data rather than a hand-written copy.
+The earlier plain-text placeholders have been replaced with readable synthetic
+PDFs. This script rebuilds them using the values stored in the selected demo
+database. Regenerate from a fresh seed when reproducing the retained examples;
+an edited database produces PDFs reflecting those edits instead.
 
 From the repository root:
     python scripts/generate_synthetic_pdfs.py

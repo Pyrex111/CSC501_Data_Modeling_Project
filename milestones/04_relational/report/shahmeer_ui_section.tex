@@ -1,8 +1,33 @@
-% Shahmeer: interface section (about 190 words). Figure 2 = screenshots in
-% milestones/04_relational/figures/ui_screenshots/ (Mason selects panels).
-\subsection{Web Interface and Validation}
-The Flask interface has three layers: routes (\texttt{src/ui}), business logic (\texttt{src/biz}) and the data-access layer, so routes contain no SQL. Users search disclosures by ticker, dimension and as-of date; open a disclosure to see its basis, coverage, classification authority, scheme and version (or ``not recorded''), source URL, locator, retrieval and publication dates and retained file; create a disclosure with its entries; edit several weights together; delete an entry; and view a portfolio with the holding date shown apart from each ETF's allocation dates.
+% UI contribution: Shahmeer; final AI-assisted condensation.
+\subsection{Interface and validation}
+Users search by ticker, dimension and allocation date; inspect classification
+and source evidence; create disclosures; batch-edit weights; and delete entries.
+Portfolio selection displays a holding date alongside separately dated
+disclosures, without unsupported aggregation. The prototype operates on
+preloaded funds, sources and categories.
 
-Input is checked in the browser, the business layer (real dates, fractions in $[0,1]$, no duplicate categories, at least one entry), the DAL (parameterized SQL) and the database, where \texttt{validated\_transaction} rejects any final state that breaks a rule, such as a Complete disclosure not summing to $1\pm0.005$. Rejected changes roll back and show a plain message and the user's typed values, never a server error.
+Routes call business helpers and DAL functions separately
+(Figure~\ref{fig:architecture}). Helpers reject invalid dates, nonfinite or
+out-of-range fractions, duplicate categories and empty disclosures. SQL and
+transaction checks apply before commit. Rejected creates/updates retain input
+and show plain messages: the recorded total 1.04 is rejected, while a coherent
+batch saves at 1.0. Full screenshots document each operation and rejection.
 
-We ran 30 route tests (74 with the schema suite, all passing) and exercised the running application; rejected writes left the database unchanged. Complete disclosures only accept coherent multi-entry edits, so deletion is demonstrated on a Partial synthetic disclosure.
+\noindent\begin{minipage}{\columnwidth}
+Recorded write examples (screenshots 04--09):
+\begin{center}
+\small
+\begin{tabular}{@{}p{.61\columnwidth}p{.34\columnwidth}@{}}
+\toprule
+\textbf{Operation / proposed state} & \textbf{Result} \\
+\midrule
+Create Partial; total 0.8 & Saved \\
+Create Complete; total 0.8 & Rejected \\
+Batch update; total 1.04 & Rejected \\
+Batch update; total 1.0 & Saved \\
+Delete breaking Complete total & Rejected \\
+Delete from Partial example & Saved; total 0.7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{minipage}

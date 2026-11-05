@@ -36,7 +36,7 @@ The app starts on `http://127.0.0.1:5000/`. Optional environment variables: `FLA
 
 ## Layers
 
-Routes (`src/ui`) call business logic (`src/biz`), which validates input and calls the DAL (`src/dal`). The DAL runs every write inside `validated_transaction`, which checks the final database state before committing. Each request opens its own connection with `with Database() as conn`.
+Routes (`src/ui`) use business helpers (`src/biz`) to parse and validate input, construct payloads and explain errors. The routes call DAL (`src/dal`) functions directly and pass an existing connection opened through the `Database` context manager. The DAL runs every write inside `validated_transaction`, which checks the proposed final database state before committing. The business helpers themselves do not call the DAL.
 
 ## Input validation
 
@@ -97,7 +97,7 @@ These were captured from rendered pages, not from a desktop browser. Retake them
 
 ## Handoff boundaries
 
-The templates depend on the field names returned by `repositories.py` and `lookups.py`. If Mason renames a returned column, the matching template field must change too. The architecture figure should show the order UI, business logic, DAL, then `validated_transaction` (called from the DAL), and should list only the operations above.
+The templates depend on the field names returned by `repositories.py` and `lookups.py`. If Mason renames a returned column, the matching template field must change too. The architecture shows the routes calling business helpers and DAL functions separately, with repository writes invoking `validated_transaction`. This layer clarification was made during the final AI-assisted submission review; the original authorship and evaluation record below are retained.
 
 ## AI-use and evaluation record
 

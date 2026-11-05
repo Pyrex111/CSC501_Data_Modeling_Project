@@ -43,3 +43,15 @@ The integration patch was subsequently refreshed against `290b9ca`, preserving
 the supplied design evaluation and provisional tolerance decision. AI prepared
 the integration fixes, added eleven regression tests and ran the 44-test suite.
 Mason's and Shahmeer's approval of interface changes is not asserted.
+
+## Final submission corrections
+
+After reviewing Mason's `c5b5008` handoff, Taimoor requested correction of the
+report, architecture, screenshot layout, setup instructions and AI attribution.
+All members were confirmed to be graduate students, so author order is retained.
+The assistant implemented and verified these edits, including the report/ZIP
+builder. The [submission review](../../docs/submission_review.md) records exact
+changes and executed checks. This adds no claim that Taimoor personally ran the
+UI or completed additional tests; his supplied design evaluation remains the
+human judgment previously recorded. Mason's original assembly and Shahmeer's
+UI/screenshot work remain credited to them.

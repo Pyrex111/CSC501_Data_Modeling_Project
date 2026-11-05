@@ -1,46 +1,33 @@
-% Mason's report contribution, 3 November 2026.
-% Input into the team's ACM sigconf report; this is not a complete report.
-% Pairs with Taimoor's relational section and the third-page relation listing.
-\subsection{Data access, queries and reproducibility}
-The demonstration is fully synthetic: every customer, provider, source
-identity, captured file, classification example and weight is fictional.
-Source URLs use the reserved \texttt{example.invalid} domain and are not real
-addresses. The same dataset is produced by the executable, parameterized
-loader \texttt{seed\_data.py} and the human-readable \texttt{seed.sql}; their
-logical dumps are identical. All five Complete snapshots sum to exactly
-$1.0$, while the twelve tables retain the agreed row counts (three ETFs, six
-identifiers, thirteen categories, seventeen entries).
+% Data-access contribution: Mason; final AI-assisted condensation.
+\subsection{Data and SELECT queries}
+All identities and observations are fictional. Three readable synthetic PDFs
+match the seed; URLs use \nolinkurl{example.invalid}. The Python loader and
+\texttt{seed.sql} yield identical dumps. Every table is populated: three ETFs,
+six identifiers, thirteen categories, five Complete disclosures and seventeen
+entries; each Complete total is one.
 
-The six SELECT/JOIN queries are best read through representative examples
-rather than as a catalogue. The geographic query joins entries to their
-snapshot, dimension, ticker and source and returns the observation date on
-every row, so the 2026-05-31 and 2026-06-30 figures are never silently
-summed as if measured together. The per-snapshot aggregate returns the
-category count and rounded total, giving a direct check that each disclosure
-is complete and closed. The fifth query is deliberately a \emph{diagnostic
-candidate listing}: it pairs historical holdings with candidate geographic
-rows and multiplies them, but it does not select an applicable disclosure or
-produce a validated portfolio exposure. A genuine look-through would still
-require an explicit holding date, disclosure selection, coverage/basis checks
-and evidence that the category meanings are compatible.
+Q1 joins geography entries to funds and sources (8 rows). Q2 ranks Financials
+allocations within one fictional scheme edition (2). Q3 groups by snapshot
+with \texttt{COUNT} and \texttt{SUM} to show coverage/totals (5). Q4 separates
+observation, publication and retrieval dates (5). Q6 traces entries to category
+context and retained capture (17).
 
-Create, update and delete operations preserve the same integrity boundary.
-Every user value is bound through placeholders, and each write runs inside the
-validated transaction that verifies the whole database before COMMIT. Creating
-a disclosure inserts the snapshot and all its entries as one atomic unit, and
-an invalid total is rolled back rather than partially saved. A single weight
-edit, or a batch of edits, is rejected when it would break a Complete total; a
-missing identifier inside a batch now rolls back the earlier valid changes.
-Deletion is not restricted by type: the same function refuses removing the
-last entry of a snapshot, or any edit that would leave a Complete total off
-$1\pm0.005$, so a successful deletion is shown on a Partial disclosure.
-Failures surface as
-\texttt{ValidationError}, \texttt{NotFoundError} or
-\texttt{BusinessRuleError}, which the UI can render as friendly messages.
+Q5 returns five \emph{diagnostic candidates}: holding weight multiplied by
+candidate geography allocation. For example, $0.6\times0.985=0.591$ is not
+validated exposure. Look-through also requires explicit holding/disclosure
+dates, coverage/basis checks and compatible category meanings. The query
+retains dates and contexts instead of silently aggregating them.
 
-A single \texttt{quickstart.py} makes the demonstration reproducible from a
-clean checkout. It reuses an existing database and only replaces it after an
-explicit \texttt{--reset}; the replacement is built in a temporary location
-and atomically published, and a failed seed leaves the previous file intact.
-The full suite passes 74 tests---33 schema tests, 11 integration
-regressions and 30 UI-route tests---and the quickstart runs all six queries.
+\subsection{Writes and reproducibility}
+INSERT, UPDATE and DELETE bind user values through parameters and use the
+transaction validator. Creation saves a snapshot and entries atomically; batch edits validate the
+combined result. Invalid totals or missing batch entries roll back every change.
+Deletion must preserve an entry and any Complete-total requirement; successful
+Partial deletion is demonstrated in Figure~\ref{fig:ui}.
+
+After installing dependencies, \texttt{quickstart.py} builds/seeds a missing
+database; \texttt{--serve} starts the UI. Later runs validate/reuse data;
+only \texttt{--reset} replaces it, after a successful temporary build.
+The 74 tests comprise 33 schema, 11 integration and 30 UI-route tests.
+Six-query output, seed equivalence, source-PDF consistency and reuse/reset
+were also verified. Synthetic checks validate behavior, not provider accuracy.
