@@ -1,6 +1,6 @@
 # Milestone 4: Solution Design and Implementation, Part I: Relational
 
-Status: schema contribution implemented and tested; the data-access layer and a fully synthetic demonstration dataset are integrated and pass 44 tests. The conceptual model was revised on 30 October 2026. The official submission deadline is 4 November 2026 AoE.
+Status: schema, data-access layer and a fully synthetic demonstration dataset are integrated with the Flask web interface and pass 74 tests. The conceptual model was revised on 30 October 2026. The official submission deadline is 4 November 2026 AoE.
 
 ## Start here
 
@@ -23,13 +23,13 @@ Open the Draw.io file in diagrams.net. The first tab is the conceptual ERD; the 
 
 ## Folder organization
 
-- `figures/`: shared model PDF and its editable source.
+- `figures/`: shared model PDF, its editable source, the architecture figure and UI screenshots.
 - `docs/`: model revision explanation, assumptions, implementation decisions and team handoff.
-- `report/`: main-relations section, bibliography and one-page relation/constraint listing.
-- `contributions/taimoor/`: ownership, evaluation record and review guide.
+- `report/`: assembled three-page report, section fragments, bibliography and the relation/constraint listing.
+- `contributions/`: per-member ownership, evaluation and review records.
 - `README.md`: artifact navigation and milestone status.
 
-Shared root-level `src/dal/` now contains the schema and transaction validator; `scripts/` contains a schema-only initializer and `tests/` contains synthetic behavioral tests. Mason and Shahmeer can implement the remaining application and demonstration data under root-level `src/` and `data/`. The final submission package is still pending.
+The root-level `src/` now holds the Flask routes (`src/ui`), business validation (`src/biz`) and the data-access layer (`src/dal`); `scripts/` contains a schema-only initializer and `tests/` covers the schema, integration and UI routes. The final submission package is being assembled.
 
 ## Model revision
 
@@ -50,9 +50,9 @@ See the [handoff](docs/milestone4_handoff.md#ownership-and-deliverables) for exa
 
 ## Submission status
 
-Available: revised conceptual model, business identity rules, executable schema, relation/column dictionary, shared transaction validator, schema initializer, 44 passing tests (33 schema + 11 integration), connection manager, parameterized CRUD, fully synthetic seed data, six analytical queries, an interface contract, an architecture figure and report fragments.
+Available: revised conceptual model, business identity rules, executable schema, relation/column dictionary, shared transaction validator, schema initializer, 74 passing tests (33 schema, 11 integration, 30 UI routes), connection manager, parameterized CRUD and lookups, fully synthetic seed data, six analytical queries, an interface contract, an architecture figure, the Flask application with UI screenshots and the compiled three-page report.
 
-Pending: Flask web application and UI evidence, final end-to-end application run, the assembled ACM report and ZIP. The report must contain two report pages plus one page listing all relations and constraints. The planned package name is `4_Relational_Taimoor_Mason_Shahmeer.zip`.
+Remaining: final cross-review and the submission ZIP. The report contains two report pages plus one page listing all relations and constraints. The planned package name is `4_Relational_Taimoor_Mason_Shahmeer.zip`.
 
 ## AI assistance and evaluation
 

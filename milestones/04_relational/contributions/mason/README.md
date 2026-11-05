@@ -11,11 +11,11 @@ Evaluation**; the human author reviewed and executed every check below.
 The demonstration is **fully synthetic**. Every customer, provider, source
 identity, captured file, classification example, label and weight is
 fictional. Source URLs use the reserved `example.invalid` domain and are not
-real addresses; the three files in `data/raw/` are plain-text placeholders
-with `.pdf` names, not issuer documents. This removes the earlier mismatch
-between real provider identities and unsupported synthetic weights. The
-executable `seed_data.py` and the reference `seed.sql` produce identical
-logical dumps.
+real addresses; the three files in `data/raw/` are readable synthetic PDFs
+(generated from the database, not issuer documents), each carrying an explicit
+fictional-data notice. This removes the earlier mismatch between real
+provider identities and unsupported synthetic weights. The executable
+`seed_data.py` and the reference `seed.sql` produce identical logical dumps.
 
 ## Deliverables
 
@@ -27,9 +27,12 @@ logical dumps.
 | `src/dal/run_analysis_queries.py` | Runner for the six analytical queries (in-memory or file database). |
 | `src/dal/sql/seed.sql` | Human-readable SQL reference, identical to the executable loader. |
 | `src/dal/sql/analysis_queries.sql` | Six SELECT/JOIN/aggregate queries. |
-| `src/dal/INTERFACE.md` | Interface contract for the Flask UI integration. |
+| [`schema_integration.md`](../../docs/schema_integration.md) | Interface/function contract for the UI integration (replaces the earlier absent `INTERFACE.md`). |
 | `quickstart.py` | One-command build/seed with `--queries`, `--serve` and explicit `--reset`. |
-| `milestones/04_relational/figures/system_architecture.dot/.png/.pdf` | Layered architecture figure (UI pending; backend complete). |
+| `scripts/generate_synthetic_pdfs.py` | Rebuilds the three readable synthetic PDFs from the database. |
+| `milestones/04_relational/figures/system_architecture.dot/.png/.pdf` | Layered architecture figure showing routes, business logic and the DAL. |
+| `milestones/04_relational/figures/figure2_ui_composite.png` | Combined UI figure assembled from the screenshots. |
+| `milestones/04_relational/report/main.tex`/`main.pdf` | Assembled three-page team report (sections, references and constraint listing). |
 | `milestones/04_relational/report/mason_query_dml_section.tex` | Report section on queries, DML integrity and reproducibility. |
 | `README.md`, `requirements.txt` | Setup, run instructions and dependencies. |
 
@@ -69,8 +72,8 @@ integration fixes:
 
 ## Verification performed
 
-- `python -m unittest discover -s tests -v`: **44 tests pass** (33 schema
-  tests and 11 integration regressions).
+- `python -m unittest discover -s tests -v`: **74 tests pass** (33 schema
+  tests, 11 integration regressions and 30 UI-route tests).
 - From a clean checkout, `python quickstart.py` builds the database and
   reports the expected row counts; all five Complete snapshots sum to 1.0.
 - `python quickstart.py --queries` runs all six queries (counts 8, 2, 5, 5,

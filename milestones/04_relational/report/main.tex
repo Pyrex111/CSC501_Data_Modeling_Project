@@ -1,0 +1,72 @@
+% ============================================================================
+% CSC501 Milestone 4 - final ACM sigconf report (working draft).
+% Two report pages + one relation/constraint page.
+% Sections: Taimoor (relational model), Mason (data access/queries),
+% Shahmeer (placeholder), followed by the relation/constraint listing.
+% Compile (pdflatex):
+%   pdflatex main && bibtex main && pdflatex main && pdflatex main
+% ============================================================================
+\documentclass[sigconf,nonacm]{acmart}
+\settopmatter{printacmref=false,printfolios=true}
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\acmDOI{}
+\usepackage{xurl}
+\hypersetup{hidelinks}
+\urlstyle{same}
+\raggedbottom
+
+\begin{document}
+
+\title{Dated ETF Allocation Disclosures: A Relational Design and Data-Access Layer}
+\titlenote{Project repository: \url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}}
+
+\author{Taimoor Shahzad}
+\affiliation{\institution{University of Victoria}\city{Victoria}\country{Canada}}
+
+\author{M. Shahmeer Ather Kakwan}
+\affiliation{\institution{University of Victoria}\city{Victoria}\country{Canada}}
+
+\author{Mason Li}
+\affiliation{\institution{University of Victoria}\city{Victoria}\country{Canada}}
+
+\begin{abstract}
+Exchange-traded fund (ETF) providers publish dated sector and geographic
+allocation percentages that are difficult to compare across funds and time.
+We present a relational design for dated ETF allocation disclosures that
+separates a customer's holdings from a provider's disclosure, scopes category
+identity by classification or capture context, and enforces integrity through
+STRICT tables, foreign keys, triggers and validated transactions. A
+data-access layer exposes parameterized functions for search, detail,
+portfolio and create/update/delete operations over a fully synthetic
+demonstration dataset, and a Flask web interface presents the same operations
+to users. The suite passes 74 tests and the full demonstration is
+reproducible from a clean checkout through a single quickstart command. The
+project repository is
+\url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}.
+\end{abstract}
+
+\maketitle
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{../figures/figure2_ui_composite.png}
+  \caption{Web interface: search results, disclosure detail with source evidence, the create form, and a rejected update (fully synthetic data).}
+  \label{fig:ui}
+\end{figure*}
+
+\section{Design and Implementation}
+
+\input{taimoor_relational_section}
+
+\input{mason_query_dml_section}
+
+\input{shahmeer_ui_section}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{taimoor_references}
+
+\clearpage
+\input{relations_constraints}
+
+\end{document}

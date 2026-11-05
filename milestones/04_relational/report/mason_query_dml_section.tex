@@ -31,7 +31,10 @@ a disclosure inserts the snapshot and all its entries as one atomic unit, and
 an invalid total is rolled back rather than partially saved. A single weight
 edit, or a batch of edits, is rejected when it would break a Complete total; a
 missing identifier inside a batch now rolls back the earlier valid changes.
-Deleting the last entry of a snapshot is refused. Failures surface as
+Deletion is not restricted by type: the same function refuses removing the
+last entry of a snapshot, or any edit that would leave a Complete total off
+$1\pm0.005$, so a successful deletion is shown on a Partial disclosure.
+Failures surface as
 \texttt{ValidationError}, \texttt{NotFoundError} or
 \texttt{BusinessRuleError}, which the UI can render as friendly messages.
 
@@ -39,5 +42,5 @@ A single \texttt{quickstart.py} makes the demonstration reproducible from a
 clean checkout. It reuses an existing database and only replaces it after an
 explicit \texttt{--reset}; the replacement is built in a temporary location
 and atomically published, and a failed seed leaves the previous file intact.
-The current suite passes 44 tests---33 schema tests and 11 integration
-regressions---and the quickstart runs all six queries.
+The full suite passes 74 tests---33 schema tests, 11 integration
+regressions and 30 UI-route tests---and the quickstart runs all six queries.
