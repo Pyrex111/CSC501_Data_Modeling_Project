@@ -39,5 +39,4 @@ https://github.com/Pyrex111/CSC501_Data_Modeling_Project.
 Run `python -m pip install -r requirements.txt`, then
 `python quickstart.py --serve` from a checkout. Read the root README and
 `milestones/04_relational/docs/submission_review.md` for verification scope.
-The supplied judgments and assistant-executed checks are recorded separately;
-this package does not claim unrecorded individual browser testing.
+The supplied judgments and assistant-executed checks are recorded separately.

@@ -139,9 +139,8 @@ remain documented; this correction set does not alter the design decisions:
   errors, separate observation dates and visible category/source context.
 - **Taimoor / follow-up:** the supplied design evaluation is recorded. Review
   the integration corrections and updated report explanation separately, keeping
-  the tolerance provisional until genuine source precision supports it. A local
-  walkthrough becomes useful when the UI exists; the automated checks above
-  were run by the assistant.
+  the tolerance provisional until genuine source precision supports it. The
+  automated checks above were run by the assistant.
 - **Team / submission:** run the integrated application from a clean checkout,
   review screenshots/architecture and report accuracy, compile exactly two ACM
   text pages plus the relation page, and inspect the final source/PDF ZIP and

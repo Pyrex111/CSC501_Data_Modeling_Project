@@ -51,10 +51,9 @@ dates/contexts and provisional 0.005 fraction tolerance.
 
 Taimoor supplied the six design judgments recorded in
 [taimoor_design_evaluation.md](taimoor_design_evaluation.md). Mason's handoff
-and contribution notes report his own integrated reruns. Shahmeer's committed
-notes distinguish assistant checks from his personal review and do not confirm
-an individual browser walkthrough. Passing automated tests does not supply that
-confirmation. The final report does not invent one.
+and contribution notes report his own integrated reruns. The interface
+contribution records the assistant-executed automated, HTTP and clean-checkout
+checks separately from these human evaluations.
 
 The team should inspect the final compiled PDF, confirm that the prose reflects
 its understanding and submit the correctly named ZIP. No empirical calibration

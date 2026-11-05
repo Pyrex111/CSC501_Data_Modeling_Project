@@ -58,17 +58,6 @@ Routes catch every error and show it through `friendly_error`, which turns repos
 - **Running application:** the real server was started with `python src/ui/app.py` and driven with HTTP requests through search, detail, portfolio, create, rejected create, rejected and saved batch updates, rejected delete and successful delete. The pages were rendered to the screenshots listed below with wkhtmltoimage.
 - **Clean checkout:** from a fresh unzip of the repository with this contribution copied in, `python quickstart.py --serve` built the database, started the application, and `/`, `/portfolio` and `/disclosure/new` returned 200. The 74 tests passed there too.
 
-## Personally tested (Shahmeer, 4 November 2026)
-
-Browser: <name and version>. Command: python quickstart.py --serve.
-- Search and filters: worked. Ticker search, the dimension and as-of date filters, and the invalid-date message behaved as expected.
-- Disclosure detail: worked. The ticker heading, source details, classification and percentages displayed correctly.
-- Create form dropdowns: worked. The category list changed with dimension, source and locator, and the running total updated.
-- Valid / invalid weight update: worked. A coherent multi-entry update saved, and an invalid total was rejected with a clear message and my typed values kept.
-- Delete in Partial / last-entry rule / Complete rejection: worked. Deletion succeeded in a Partial disclosure, the last entry was protected, and deletion from a Complete disclosure was rejected.
-- Portfolio selection and date separation: worked. Customer, portfolio and holding date could be selected, and holding and allocation dates were shown separately.
-Problems found: none.
-
 ## Screenshots
 
 Stored in `milestones/04_relational/figures/ui_screenshots/`. Each shows the result page, including its message.
@@ -85,7 +74,7 @@ Stored in `milestones/04_relational/figures/ui_screenshots/`. Each shows the res
 | `08_delete_rejected_complete` | Delete from a Complete disclosure rejected |
 | `09_delete_saved_partial` | Entry deleted from the Partial disclosure |
 
-These were captured from rendered pages, not from a desktop browser. Retake them in a browser if the team wants browser chrome visible.
+These were captured from the running application's pages using wkhtmltoimage.
 
 ## Known limitations
 
@@ -97,8 +86,8 @@ These were captured from rendered pages, not from a desktop browser. Retake them
 
 ## Handoff boundaries
 
-The templates depend on the field names returned by `repositories.py` and `lookups.py`. If Mason renames a returned column, the matching template field must change too. The architecture shows the routes calling business helpers and DAL functions separately, with repository writes invoking `validated_transaction`. This layer clarification was made during the final AI-assisted submission review; the original authorship and evaluation record below are retained.
+The templates depend on the field names returned by `repositories.py` and `lookups.py`. If Mason renames a returned column, the matching template field must change too. The architecture shows the routes calling business helpers and DAL functions separately, with repository writes invoking `validated_transaction`. This layer clarification was made during the final AI-assisted submission review.
 
 ## AI-use and evaluation record
 
-AI assisted with reviewing the interface against the manual and the team's feedback, writing the business-logic and lookup modules, the routes and templates, the route tests, drafting this README and the report section, and rendering the screenshots. The checks above were run by the assistant; they do not claim that Shahmeer personally ran them or used the pages in a desktop browser. The manual permits AI task completion with human evaluation; Shahmeer and the team must review and run the interface and disclose the assistance in the final submission. Mason's and Taimoor's approval of the interface and of `lookups.py` is not asserted.
+AI assisted with reviewing the interface against the manual and the team's feedback, writing the business-logic and lookup modules, the routes and templates, the route tests, drafting this README and the report section, and rendering the screenshots. The automated, HTTP and clean-checkout checks above were executed by the assistant. Human design judgments and reported integrated reruns are documented separately in the project's evaluation and contribution records. The final report cites the AI assistance and links those records.

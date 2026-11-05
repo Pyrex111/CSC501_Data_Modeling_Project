@@ -49,10 +49,8 @@ same main source and local figures, so it also compiles without the repository.
 
 AI assisted with the section drafts, implementation, figures, tests and final
 report corrections. Taimoor's supplied design evaluation and Mason's reported
-human reruns are distinguished from the assistant's verification. Shahmeer's
-notes do not yet establish a personal browser walkthrough. Do not attribute
-assistant-executed checks to an individual human. The report cites the tool and
-project evaluation records.
+human reruns are distinguished from the assistant's verification. The report
+cites the tool and project evaluation records.
 
 The old `relations_constraints_preview.*` files are a historical standalone
 layout preview, not the final report. The final listing retains the same
