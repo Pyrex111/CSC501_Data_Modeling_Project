@@ -1,0 +1,14 @@
+# M4 Q6: each entry back to its source, observation date and classification context.
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+SELECT ?EntryId ?Ticker ?Label ?ContextKey ?WeightFraction ?SnapshotId
+       ?AllocationAsOfDate ?SourceLocator ?BasisNote ?SourceDocumentId ?RetrievedAt ?Url ?CapturedFileRef
+WHERE { GRAPH <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data> {
+  ?entry a etf:AllocationEntry; etf:recordId ?EntryId; etf:inSnapshot ?s;
+     etf:usesCategory ?c; etf:weightFraction ?WeightFraction .
+  ?c etf:label ?Label; etf:contextKey ?ContextKey .
+  ?s etf:recordId ?SnapshotId; etf:describesETF ?fund; etf:allocationAsOfDate ?AllocationAsOfDate;
+     etf:sourceLocator ?SourceLocator; etf:basisNote ?BasisNote; etf:supportedBy ?doc .
+  ?identifier etf:identifiesETF ?fund; etf:identifierScheme "Ticker"; etf:identifierValue ?Ticker .
+  ?doc etf:recordId ?SourceDocumentId; etf:retrievedAt ?RetrievedAt;
+       etf:url ?Url; etf:capturedFileRef ?CapturedFileRef .
+} } ORDER BY ?Ticker ?EntryId

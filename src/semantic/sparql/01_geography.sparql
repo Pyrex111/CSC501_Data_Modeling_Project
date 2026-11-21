@@ -1,0 +1,12 @@
+# M4 Q1: retain date and context; do not sum different disclosures.
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+SELECT ?Ticker ?Provider ?Region ?ContextKey ?WeightFraction ?AllocationAsOfDate ?RetrievedAt
+WHERE { GRAPH <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data> {
+  ?entry a etf:AllocationEntry; etf:inSnapshot ?s; etf:usesCategory ?c; etf:weightFraction ?WeightFraction .
+  ?s etf:describesETF ?fund; etf:hasDimension ?dim; etf:allocationAsOfDate ?AllocationAsOfDate; etf:supportedBy ?doc .
+  ?dim etf:dimensionName "Geography" .
+  ?c etf:label ?Region; etf:contextKey ?ContextKey .
+  ?fund etf:offeredBy ?provider . ?provider etf:legalName ?Provider .
+  ?identifier etf:identifiesETF ?fund; etf:identifierScheme "Ticker"; etf:identifierValue ?Ticker .
+  ?doc etf:retrievedAt ?RetrievedAt .
+} } ORDER BY ?AllocationAsOfDate ?Ticker DESC(?WeightFraction)

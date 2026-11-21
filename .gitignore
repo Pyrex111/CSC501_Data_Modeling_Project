@@ -10,3 +10,5 @@ milestones/04_relational/report/*.log
 milestones/04_relational/report/*.out
 milestones/04_relational/report/*.bbl
 milestones/04_relational/report/*.blg
+# M5 embedded RocksDB database; rebuild using quickstart_semantic.py.
+data/semantic_store/

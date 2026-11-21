@@ -1,0 +1,13 @@
+# M4 Q2: label search, not an assertion of equivalent category meanings.
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+SELECT ?Ticker ?Sector ?ContextKey ?WeightFraction ?SnapshotId ?AllocationAsOfDate ?SourceDocumentId ?SourceLocator ?BasisNote
+WHERE { GRAPH <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data> {
+  ?entry a etf:AllocationEntry; etf:inSnapshot ?s; etf:usesCategory ?c; etf:weightFraction ?WeightFraction .
+  ?s etf:recordId ?SnapshotId; etf:describesETF ?fund; etf:hasDimension ?dim;
+     etf:allocationAsOfDate ?AllocationAsOfDate; etf:supportedBy ?doc;
+     etf:sourceLocator ?SourceLocator; etf:basisNote ?BasisNote .
+  ?dim etf:dimensionName "Sector" .
+  ?c etf:label ?Sector; etf:contextKey ?ContextKey . FILTER (?Sector = "Financials")
+  ?identifier etf:identifiesETF ?fund; etf:identifierScheme "Ticker"; etf:identifierValue ?Ticker .
+  ?doc etf:recordId ?SourceDocumentId .
+} } ORDER BY DESC(?WeightFraction)

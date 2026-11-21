@@ -1,0 +1,113 @@
+{
+  "triple_store": "Oxigraph/pyoxigraph 0.5.3",
+  "baseline": "a00c0052289bc5acce17ad1b57f4d84832abda14",
+  "data_triples": 356,
+  "entity_counts": {
+    "Customer": 2,
+    "ETFProvider": 2,
+    "AllocationDimension": 2,
+    "ClassificationScheme": 2,
+    "Portfolio": 2,
+    "ETF": 3,
+    "ETFIdentifier": 6,
+    "Holding": 5,
+    "SourceDocument": 3,
+    "AllocationCategory": 13,
+    "AllocationSnapshot": 5,
+    "AllocationEntry": 17
+  },
+  "ontology_supplied": false,
+  "vocabulary_status": "proposed; Mason agreement pending",
+  "query_comparison": [
+    {
+      "query": 1,
+      "file": "01_geography.sparql",
+      "sql_rows": 8,
+      "sparql_rows": 8,
+      "full_result_match": true
+    },
+    {
+      "query": 2,
+      "file": "02_financials.sparql",
+      "sql_rows": 2,
+      "sparql_rows": 2,
+      "full_result_match": true
+    },
+    {
+      "query": 3,
+      "file": "03_complete_totals.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 4,
+      "file": "04_observation_capture.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 5,
+      "file": "05_portfolio_candidates.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 6,
+      "file": "06_provenance.sparql",
+      "sql_rows": 17,
+      "sparql_rows": 17,
+      "full_result_match": true
+    }
+  ],
+  "run_date": "2026-11-20",
+  "python": "3.12.14",
+  "tests": {
+    "total": 100,
+    "m4": 74,
+    "semantic": 26,
+    "failures": 0,
+    "errors": 0
+  },
+  "fresh_persistent_setup": "passed",
+  "existing_store_reuse": "passed",
+  "crud_demo": [
+    {
+      "operation": "create",
+      "snapshot": 6,
+      "result": "saved"
+    },
+    {
+      "operation": "invalid Complete edit",
+      "result": "rejected; graph unchanged",
+      "message": "AllocationSnapshot 6: complete total is 0.4, expected 1"
+    },
+    {
+      "operation": "coherent batch update",
+      "result": "saved"
+    },
+    {
+      "operation": "invalid Complete deletion",
+      "result": "rejected; graph unchanged",
+      "message": "AllocationSnapshot 6: complete total is 0.6, expected 1"
+    },
+    {
+      "operation": "Partial entry deletion",
+      "result": "saved"
+    },
+    {
+      "operation": "final-entry deletion",
+      "result": "rejected; graph unchanged",
+      "message": "AllocationSnapshot 7: at least one entry is required"
+    }
+  ],
+  "limitations": [
+    "Vocabulary is proposed, not approved by Mason",
+    "Native graph validation pending; M4 parity bridge active",
+    "No semantic UI integration or Prot\u00e9g\u00e9/OWL reasoning evaluation claimed",
+    "IRI allocation policy requires agreement before external reuse"
+  ],
+  "execution_attribution": "AI executed these checks; student evaluation is a separate requirement"
+}

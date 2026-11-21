@@ -1,0 +1,10 @@
+# M4 Q4: OPTIONAL preserves unknown publication time as an unbound result.
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+SELECT ?Ticker ?DimensionName ?ObservationDate ?PublishedAt ?RetrievedAt
+WHERE { GRAPH <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data> {
+  ?s a etf:AllocationSnapshot; etf:describesETF ?fund; etf:hasDimension ?dim;
+     etf:allocationAsOfDate ?ObservationDate; etf:supportedBy ?doc .
+  ?dim etf:dimensionName ?DimensionName .
+  ?identifier etf:identifiesETF ?fund; etf:identifierScheme "Ticker"; etf:identifierValue ?Ticker .
+  ?doc etf:retrievedAt ?RetrievedAt . OPTIONAL { ?doc etf:publishedAt ?PublishedAt }
+} } ORDER BY ?Ticker ?DimensionName

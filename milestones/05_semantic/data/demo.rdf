@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFIdentifier/5">
+		<identifiesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3"/>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+		<identifierScheme xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">ISIN</identifierScheme>
+		<identifierValue xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">ZZ0000000003</identifierValue>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Information Technology</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">scheme:[&quot;Example Standards Body&quot;,&quot;Demo Sector Scheme&quot;,&quot;v1&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<definedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/1"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+		<code xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">DEMO-45</code>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<registrationJurisdiction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYNTHETIC</registrationJurisdiction>
+		<websiteUrl xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">https://provider.example.invalid</websiteUrl>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+		<legalName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example Fund Management Ltd.</legalName>
+		<registrationNumber xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYN-REG-001</registrationNumber>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/10">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Other / Multi-region</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://provider.example.invalid/funds/syb/facts&quot;,&quot;2026-09-23T09:20:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<documentTitle xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example SYB ETF Facts</documentTitle>
+		<url xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">https://provider.example.invalid/funds/syb/facts</url>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+		<publishedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/1"/>
+		<retrievedAt xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-09-23T09:20:00Z</retrievedAt>
+		<capturedFileRef xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">data/raw/example_syb_facts_20260716.pdf</capturedFileRef>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Holding/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.4</weightFraction>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+		<holdingAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-08-01</holdingAsOfDate>
+		<holdsETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3"/>
+		<inPortfolio xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/9">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">United States</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://provider.example.invalid/funds/syb/facts&quot;,&quot;2026-09-23T09:20:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/3">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<documentTitle xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Demo SYC Product Page</documentTitle>
+		<url xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">https://manager.example.invalid/funds/syc/facts</url>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+		<publishedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/2"/>
+		<retrievedAt xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-09-23T09:25:00Z</retrievedAt>
+		<capturedFileRef xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">data/raw/demo_syc_product_20260801.pdf</capturedFileRef>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.985</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/6"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/13">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Other / Multi-region</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://manager.example.invalid/funds/syc/facts&quot;,&quot;2026-09-23T09:25:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/8">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Other / Multi-region</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://provider.example.invalid/funds/sya/facts&quot;,&quot;2026-09-23T09:15:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/10">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">10</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.005</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/10"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/3"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Holding/4">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.2</weightFraction>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+		<holdingAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-08-01</holdingAsOfDate>
+		<holdsETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/2"/>
+		<inPortfolio xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/3">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Consumer Discretionary</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">scheme:[&quot;Example Standards Body&quot;,&quot;Demo Sector Scheme&quot;,&quot;v1&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<definedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/1"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+		<code xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">DEMO-25</code>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/2">
+		<basisNote xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Fully synthetic demonstration: all identities and weights are fictional.</basisNote>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<allocationAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-05-31</allocationAsOfDate>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+		<describesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1"/>
+		<sourceLocator xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">sector-table</sourceLocator>
+		<coverageStatus xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Complete</coverageStatus>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+		<supportedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/6">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">United States</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://provider.example.invalid/funds/sya/facts&quot;,&quot;2026-09-23T09:15:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/4">
+		<basisNote xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Fully synthetic demonstration: all identities and weights are fictional.</basisNote>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</recordId>
+		<allocationAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-06-30</allocationAsOfDate>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+		<describesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3"/>
+		<sourceLocator xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">geography-table</sourceLocator>
+		<coverageStatus xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Complete</coverageStatus>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+		<supportedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/3"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Holding/3">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.3</weightFraction>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+		<holdingAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-08-01</holdingAsOfDate>
+		<holdsETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1"/>
+		<inPortfolio xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+		<fundName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Demonstration Domestic Composite ETF</fundName>
+		<domicileCountryCode xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CA</domicileCountryCode>
+		<offeredBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/2"/>
+		<baseCurrency xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CAD</baseCurrency>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Holding/5">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.5</weightFraction>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+		<holdingAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-08-01</holdingAsOfDate>
+		<holdsETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3"/>
+		<inPortfolio xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/13">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">13</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.005</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/13"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/4"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+		<fundName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example Large-Cap Equity ETF</fundName>
+		<domicileCountryCode xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CA</domicileCountryCode>
+		<offeredBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/1"/>
+		<baseCurrency xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CAD</baseCurrency>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<registrationJurisdiction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYNTHETIC</registrationJurisdiction>
+		<websiteUrl xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">https://manager.example.invalid</websiteUrl>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+		<legalName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Demonstration Asset Managers Inc.</legalName>
+		<registrationNumber xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYN-REG-002</registrationNumber>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/11">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Canada</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://manager.example.invalid/funds/syc/facts&quot;,&quot;2026-09-23T09:25:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+		<portfolioReference xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">P-ALICE-01</portfolioReference>
+		<ownedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Customer/1"/>
+		<baseCurrency xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CAD</baseCurrency>
+		<portfolioName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Growth Portfolio</portfolioName>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/4">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.31</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/1"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/16">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">16</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.095</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/1"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFIdentifier/6">
+		<identifiesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3"/>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+		<exchangeContext xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">XDEM</exchangeContext>
+		<identifierScheme xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Ticker</identifierScheme>
+		<identifierValue xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYC</identifierValue>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/11">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">11</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.975</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/11"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/4"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFIdentifier/2">
+		<identifiesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1"/>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+		<exchangeContext xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">XDEM</exchangeContext>
+		<identifierScheme xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Ticker</identifierScheme>
+		<identifierValue xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYA</identifierValue>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/14">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">14</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.32</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/2"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/3">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.005</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/8"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/9">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">9</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.995</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/9"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/3"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/17">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">17</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.41</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/5"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFIdentifier/3">
+		<identifiesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/2"/>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+		<identifierScheme xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">ISIN</identifierScheme>
+		<identifierValue xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">ZZ0000000002</identifierValue>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/12">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">United States</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://manager.example.invalid/funds/syc/facts&quot;,&quot;2026-09-23T09:25:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/15">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">15</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.175</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/4"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/5"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+		<schemeAuthority xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example Standards Body</schemeAuthority>
+		<schemeName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Demo Sector Scheme</schemeName>
+		<version xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">v1</version>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/3">
+		<basisNote xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Fully synthetic demonstration: all identities and weights are fictional.</basisNote>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</recordId>
+		<allocationAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-05-31</allocationAsOfDate>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+		<describesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/2"/>
+		<sourceLocator xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">geography-table</sourceLocator>
+		<coverageStatus xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Complete</coverageStatus>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+		<supportedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/5">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Other Sectors</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">scheme:[&quot;Example Standards Body&quot;,&quot;Demo Sector Scheme&quot;,&quot;v1&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<definedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/1"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Holding/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.6</weightFraction>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+		<holdingAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-08-01</holdingAsOfDate>
+		<holdsETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1"/>
+		<inPortfolio xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Customer/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<givenName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Alice</givenName>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+		<familyName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Chen</familyName>
+		<customerNumber xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">1001</customerNumber>
+		<email xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">alice.chen@example.invalid</email>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.01</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/7"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/1">
+		<basisNote xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Fully synthetic demonstration: all identities and weights are fictional.</basisNote>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<allocationAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-05-31</allocationAsOfDate>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+		<describesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1"/>
+		<sourceLocator xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">geography-table</sourceLocator>
+		<coverageStatus xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Complete</coverageStatus>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+		<supportedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/1"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFIdentifier/4">
+		<identifiesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/2"/>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+		<exchangeContext xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">XDEM</exchangeContext>
+		<identifierScheme xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Ticker</identifierScheme>
+		<identifierValue xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">SYB</identifierValue>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Customer/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<givenName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Brian</givenName>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+		<familyName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Li</familyName>
+		<customerNumber xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">1002</customerNumber>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+		<schemeAuthority xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example Fund Management Ltd.</schemeAuthority>
+		<schemeName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Demo Regional Scheme</schemeName>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Financials</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">scheme:[&quot;Example Standards Body&quot;,&quot;Demo Sector Scheme&quot;,&quot;v1&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<definedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/1"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+		<code xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">DEMO-40</code>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFIdentifier/1">
+		<identifiesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/1"/>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+		<identifierScheme xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">ISIN</identifierScheme>
+		<identifierValue xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">ZZ0000000001</identifierValue>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+		<fundName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example Broad Market Equity ETF</fundName>
+		<domicileCountryCode xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CA</domicileCountryCode>
+		<offeredBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/1"/>
+		<baseCurrency xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CAD</baseCurrency>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/7">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Canada</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">source:[&quot;https://provider.example.invalid/funds/sya/facts&quot;,&quot;2026-09-23T09:15:00.000000Z&quot;,&quot;geography-table&quot;,&quot;Geography&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<dimensionName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Sector</dimensionName>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/1">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</recordId>
+		<documentTitle xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Example SYA ETF Facts</documentTitle>
+		<url xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">https://provider.example.invalid/funds/sya/facts</url>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+		<publishedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETFProvider/1"/>
+		<retrievedAt xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime">2026-09-23T09:15:00Z</retrievedAt>
+		<capturedFileRef xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">data/raw/example_sya_facts_20260716.pdf</capturedFileRef>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/5">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.13</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/2"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/6">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">6</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.105</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/3"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/7">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">7</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.04</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/4"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/5">
+		<basisNote xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Fully synthetic demonstration: all identities and weights are fictional.</basisNote>
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">5</recordId>
+		<allocationAsOfDate xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-06-30</allocationAsOfDate>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+		<describesETF xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ETF/3"/>
+		<sourceLocator xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">sector-table</sourceLocator>
+		<coverageStatus xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Complete</coverageStatus>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+		<supportedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/SourceDocument/3"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/12">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">12</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.02</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/12"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/4"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<dimensionName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Geography</dimensionName>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationEntry/8">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">8</recordId>
+		<weightFraction xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#double">0.415</weightFraction>
+		<usesCategory xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/5"/>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+		<inSnapshot xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/2"/>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationCategory/4">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</recordId>
+		<label xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Energy</label>
+		<contextKey xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">scheme:[&quot;Example Standards Body&quot;,&quot;Demo Sector Scheme&quot;,&quot;v1&quot;]</contextKey>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+		<definedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/ClassificationScheme/1"/>
+		<hasDimension xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationDimension/1"/>
+		<code xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">DEMO-10</code>
+	</rdf:Description>
+	<rdf:Description rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Portfolio/2">
+		<recordId xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</recordId>
+		<rdf:type rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+		<portfolioReference xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">P-BRIAN-01</portfolioReference>
+		<ownedBy xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#" rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/Customer/2"/>
+		<baseCurrency xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">CAD</baseCurrency>
+		<portfolioName xmlns="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">Balanced Portfolio</portfolioName>
+	</rdf:Description>
+</rdf:RDF>
