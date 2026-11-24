@@ -1,7 +1,9 @@
-# M5 integration contract: proposal for Mason and Shahmeer
+# M5 integration contract: backend and ontology integrated
 
 Prepared by AI for Taimoor's review, 20 November 2026. This does not assert team
-agreement. Accepted M4 baseline: `a00c0052289bc5acce17ad1b57f4d84832abda14`.
+agreement at that time. Update, 24 November: Mason's v1.1.0 ontology follows these
+terms, and the backend startup now attaches his native validator. Accepted M4
+baseline: `a00c0052289bc5acce17ad1b57f4d84832abda14`.
 
 ## Proposed terms and identity
 
@@ -29,19 +31,31 @@ xsd:double and other scalar fields xsd:string. The adapter restores M4's six-dig
 UTC timestamp spelling after Oxigraph normalizes redundant zeroes; this is needed
 to reconstruct accepted disclosure-local ContextKeys consistently.
 
-Mason should review all classes/properties and domain/range choices before freezing
-the ontology. `hasDimension` is proposed on both categories and snapshots; multiple
+Mason aligned the ontology to the committed vocabulary; see `backend_alignment.md`.
+`hasDimension` is shared by categories and snapshots; multiple
 RDFS domain statements would imply an intersection, so its domain needs deliberate
 modeling (for example a union or suitable superclass), not two accidental domains.
 Do not declare an `owl:hasKey` on recordId alone globally or treat OWL restrictions
-as closed-world required-field checks. No FIBO equivalence/subclass claim has been
-added by this backend contribution.
+as closed-world required-field checks. FIBO subclass/subproperty decisions belong
+to Mason's ontology; see `fibo_alignment.md`.
 
 ## Application interface for Shahmeer
 
 Use `semantic.repositories` and `semantic.lookups` with a shared GraphDatabase
 instead of `dal.repositories`/`dal.lookups` with a SQLite connection. Error classes
 are the existing RepositoryError/ValidationError/NotFoundError/BusinessRuleError.
+
+Use the integrated startup once when creating the application:
+
+```python
+from semantic.runtime import open_graph_database
+graph = open_graph_database('data/semantic_store')
+```
+
+This binds Mason's native validator with the project capture root, validates
+existing data, and loads the committed ontology. Reuse this same instance across
+requests. The factory does not seed data or start Flask: run the quickstart first.
+All graph repository function signatures below are unchanged.
 
 | Function | Inputs / result |
 | --- | --- |
@@ -75,7 +89,9 @@ def validate_graph(candidate_store):
 graph = GraphDatabase('data/semantic_store', validator=validate_graph)
 ```
 
-The ellipsis above is an interface illustration, not a completed validator.
+The ellipsis above is an interface illustration. Mason's implemented adapter is
+`dal.models.semantic.backend_bridge.make_backend_validator(capture_root=...)`;
+the shared factory shown above always attaches it.
 Use the proposed DATA_GRAPH for ABox checks; TBox is separate. The initial backend
 always runs a strict temporary M4 parity validator, then invokes the supplied
 callback. That bridge decodes every mapped RDF fact into an ephemeral accepted
@@ -83,7 +99,10 @@ SQLite schema and runs its keys/checks/dimension/context/minimum-child/total rul
 It rejects unknown ABox predicates, unsupported types, multivalued scalar fields,
 wrong literal types and missing/wrong-class reference targets rather than dropping
 facts. It is useful migration protection, **not Mason's native graph validation**.
-Mason must supply native graph rules and tests before the bridge can be retired.
+Mason has supplied native graph rules and tests. The bridge is retained as
+additional migration protection; this integration does not retire it. Nine runtime
+tests include native-only rejection checks with the bridge mocked out within those
+tests, so success cannot be attributed solely to the SQL checks.
 
 Write order: acquire shared RLock -> copy current dataset -> execute proposed
 SPARQL against candidate -> inspect candidate -> validate -> compute exact data
@@ -99,13 +118,14 @@ just as raw commits bypassed the M4 validator; UI code must not perform them.
 
 ## Integration order and acceptance
 
-1. Mason agrees/changes the vocabulary and IRI policy; regenerate RDF and update
-   SPARQL/tests together if terms change. Provide the actual ontology in RDF/XML.
-2. Run the quickstart with that ontology and the shared native graph validator.
+1. Complete: Mason aligned the RDF/XML ontology and native validator to the backend.
+2. Complete: the quickstart and CRUD demo use integrated startup; six queries still
+   match SQL, startup/reuse and rejected-write rollback pass.
 3. Shahmeer connects search and detail first, then portfolio/form lookups and
    create/update/delete; preserve distinct dates and friendly validation messages.
 4. Verify rejected writes against the actual integrated UI, collect screenshots
    and architecture, rerun query parity and review the final three-page report.
 
-The current 26 graph tests and six full-result SQL comparisons are evidence for
-this backend. They do not demonstrate an integrated semantic UI or finished ontology.
+The suite now has 160 tests (74 M4 + 26 backend + 51 ontology + nine runtime), plus
+six full-result SQL comparisons. These checks demonstrate backend/ontology
+integration, not an integrated semantic UI. See `backend_integration.md`.

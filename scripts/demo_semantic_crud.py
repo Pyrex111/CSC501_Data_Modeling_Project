@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from dal.seed_data import seed
 from semantic import repositories as repo
 from semantic.codec import export_connection
-from semantic.store import GraphDatabase
+from semantic.runtime import open_graph_database
 from semantic.vocabulary import ROOT, schema_connection
 
 
@@ -16,7 +16,7 @@ def main():
     sql = schema_connection()
     try:
         seed(sql, ROOT)
-        db = GraphDatabase(capture_root=ROOT)
+        db = open_graph_database(capture_root=ROOT)
         db.load_data(export_connection(sql))
     finally:
         sql.close()

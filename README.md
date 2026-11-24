@@ -1,7 +1,7 @@
 # CSC501 Data Modeling Project
 
 Milestone 5 development: see [the semantic backend and handoff](milestones/05_semantic/README.md)
-for the separate graph quickstart, proposed vocabulary, six SPARQL queries and
+for the graph quickstart, integrated ontology/validation, six SPARQL queries and
 current integration status. The accepted Milestone 4 application remains available below.
 
 **Extending the Financial Industry Business Ontology to Represent Time-Varying Exchange-Traded Fund Allocations**

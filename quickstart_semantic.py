@@ -10,11 +10,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 from dal.seed_data import seed
 from semantic.codec import decode_records, export_connection, export_rdfxml
 from semantic.parity import compare
-from semantic.store import GraphDatabase
+from semantic.runtime import DEFAULT_ONTOLOGY, open_graph_database
 from semantic.vocabulary import DATA_GRAPH, ONTOLOGY_GRAPH, ROOT, schema_connection
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--store", type=Path, default=ROOT / "data/semantic_store")
     parser.add_argument(
@@ -28,24 +28,24 @@ def main():
     parser.add_argument(
         "--ontology",
         type=Path,
-        help="Mason's RDF/XML ontology; retained in a separate graph",
+        default=DEFAULT_ONTOLOGY,
+        help="RDF/XML ontology; defaults to the committed Mason ontology",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     # Do not publish an empty directory or accept an unusable capture set when
     # fresh sample validation fails; prepare the entire ABox before opening disk.
     sql = schema_connection()
     try:
         seed(sql, ROOT)
-        graph = GraphDatabase(args.store, capture_root=ROOT)
+        graph = open_graph_database(
+            args.store, capture_root=ROOT, ontology_path=args.ontology
+        )
         if not any(q.graph_name == DATA_GRAPH for q in graph.snapshot()):
             graph.load_data(export_connection(sql))
             print("Created RDF data graph:", args.store)
         else:
-            graph.validate(graph._store)
             print("Reused existing graph:", args.store)
-        if args.ontology:
-            graph.load_ontology(args.ontology)
-            print("Loaded supplied ontology into:", ONTOLOGY_GRAPH.value)
+        print("Loaded ontology into:", ONTOLOGY_GRAPH.value)
         args.export.parent.mkdir(parents=True, exist_ok=True)
         export_rdfxml(graph._store, args.export)
         evidence = {
@@ -55,8 +55,22 @@ def main():
             "entity_counts": {
                 t: len(rows) for t, rows in decode_records(graph._store).items()
             },
-            "ontology_supplied": args.ontology is not None,
-            "vocabulary_status": "proposed; Mason agreement pending",
+            "ontology_supplied": True,
+            "ontology_path": str(args.ontology),
+            "ontology_triples": sum(
+                q.graph_name == ONTOLOGY_GRAPH for q in graph.snapshot()
+            ),
+            "validation": {
+                "m4_parity_bridge": True,
+                "native_graph_validator": True,
+                "capture_files_checked": True,
+                "owl_reasoner": False,
+            },
+            "vocabulary_status": (
+                "aligned with Mason's committed v1.1.0 ontology"
+                if args.ontology.resolve() == DEFAULT_ONTOLOGY.resolve()
+                else "custom ontology loaded; vocabulary alignment not asserted"
+            ),
         }
         if args.compare:
             evidence["query_comparison"] = compare(sql, graph)

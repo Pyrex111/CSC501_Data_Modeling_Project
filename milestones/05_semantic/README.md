@@ -1,6 +1,7 @@
 # Milestone 5: Semantic Web implementation
 
-Initial Taimoor contribution, 20 November 2026. Baseline: accepted M4 main
+Initial Taimoor contribution, 20 November 2026; backend integration, 24 November.
+Baseline: accepted M4 main
 `a00c0052289bc5acce17ad1b57f4d84832abda14`. The official **5_Semantic_Manual.pdf**
 controls requirements. The supplied **Milestone-5-CSC501.pdf** assigns Taimoor
 the store, RDF population, SPARQL, graph DAL and reproducibility work; Mason owns
@@ -17,13 +18,17 @@ ontology/FIBO/native validation, and Shahmeer owns the UI adaptation.
 - Graph-backed search/details/portfolio/create/update/batch/delete plus seven
   form lookup functions, preserving the M4 dictionary keys and error classes.
 - Candidate validation followed by one atomic SPARQL delta; rejected writes
-  leave the live graph unchanged. Existing M4 validation is a temporary bridge.
-- **100 tests passed**: 74 accepted M4 tests plus 26 semantic tests.
+  leave the live graph unchanged. Both the M4 parity bridge and Mason's native
+  graph validator run, including capture-file checks at application startup.
+- Default startup loads Mason's v1.1.0 ontology into its separate named graph;
+  it validates existing data before replacing the ontology. No reasoner is enabled.
+- **160 tests passed**: 74 accepted M4, 26 backend, 51 ontology/validation and nine
+  runtime integration tests. See [integration verification](docs/backend_integration.md).
 
-This is an integration-ready first backend, **not the completed milestone**.
-The vocabulary is a proposal for Mason's agreement. No finished OWL ontology,
-FIBO alignment, Protégé inspection or inference is claimed. Mason's native graph
-validator and Shahmeer's graph-connected UI remain integration dependencies.
+The backend and Mason's ontology/native validator are integrated; **the milestone
+is not complete**. Shahmeer's graph-connected UI, application screenshots and final
+report/package are still pending. Mason's ontology and FIBO/Protégé work are
+documented in [his handoff](README_ONTOLOGY.md). No OWL inference is enabled.
 
 ## Setup and reproduction
 
@@ -62,17 +67,18 @@ new store path for baseline comparison. Never delete user work to make parity pa
 Custom store directories are not automatically gitignored; do not commit RocksDB files.
 
 The default RDF/XML export is [data/demo.rdf](data/demo.rdf). Its 356 triples
-describe instances, not Mason's ontology. Once Mason supplies an agreed RDF/XML
-ontology, load it with:
+describe instances, not the ontology. The committed ontology is loaded by default.
+To explicitly select an alternative RDF/XML ontology:
 
 ```sh
-python quickstart_semantic.py --ontology path/to/agreed-ontology.owl --compare
+python quickstart_semantic.py --ontology path/to/alternative-ontology.owl --compare
 ```
 
 The ontology graph is atomically replaced by the supplied file, separately from
 the data graph. This command stores axioms; it does not activate an OWL reasoner.
-It also does not prove that the supplied terms match the proposal. Agree the
-vocabulary with Mason and regenerate data/queries if the contract changes.
+The default ontology's terms match the committed backend vocabulary. A custom
+ontology is not automatically checked for vocabulary alignment. Regenerate
+data/queries together if the contract changes.
 
 ## Runtime configuration and operations
 
@@ -83,10 +89,10 @@ same writable directory. Do not use multiple Flask workers or the debug reloader
 with independent writable store instances. There is no public SPARQL endpoint.
 
 ```python
-from semantic.store import GraphDatabase
+from semantic.runtime import open_graph_database
 from semantic import repositories, lookups
 
-graph = GraphDatabase('data/semantic_store')
+graph = open_graph_database('data/semantic_store')
 rows = repositories.search_disclosures(graph, ticker='SYA', dimension_name='Geography')
 details = repositories.get_disclosure_detail(graph, snapshot_id=1)
 portfolio = repositories.get_customer_portfolio(
@@ -96,6 +102,10 @@ portfolio = repositories.get_customer_portfolio(
 Make `src` importable in the app entry point, as in the accepted M4 application.
 Use the graph modules instead of the SQL modules for M5 routes. The UI adaptation
 is Shahmeer's task; the accepted Flask app is intentionally unchanged in this contribution.
+Use this factory once at application startup and share the returned instance; it
+attaches `make_backend_validator(capture_root=ROOT)`, validates existing data and
+loads the ontology. Constructing the lower-level `GraphDatabase` without a callback
+still runs only the legacy parity bridge; it is not the integrated startup path.
 All reads execute SPARQL SELECT; writes execute SPARQL INSERT/DELETE over a
 candidate graph, validate, and publish the exact delta in one store update.
 
@@ -107,17 +117,19 @@ candidate graph, validate, and publish the exact delta in one store update.
 | [Vocabulary proposal](docs/vocabulary_proposal.json) | Machine-readable proposed class/property mapping for Mason |
 | [Integration contract](docs/integration_contract.md) | API, validation callback, concurrency and identity details |
 | `src/semantic/codec.py`, `store.py` | RDF population, strict migration checking and transactional boundary |
+| `src/semantic/runtime.py` | Shared startup with native validation, source-file checks and default ontology |
 | `src/semantic/repositories.py`, `lookups.py` | Graph-backed application operations |
 | `src/semantic/sparql/01_*.sparql` through `06_*.sparql` | Six analytical SELECT files |
 | `quickstart_semantic.py` | Fresh creation/reuse, ontology load, RDF/XML export and comparison |
 | `scripts/demo_semantic_crud.py` | Executed create/edit/delete and rollback examples on a temporary graph |
 | `tests/test_semantic_backend.py` | 26 semantic behavioral/parity checks |
+| `tests/test_semantic_runtime.py` | Nine tests of actual startup, callback invocation and native rollback |
 | [Verification evidence](docs/verification.json) | Observed setup, parity and test results |
 | [Report fragment](report/taimoor_semantic_section.tex) | Accurate draft of graph population/operations/results, pending integration |
 
 ## Requirements and remaining work
 
-Manual 5.1: Mason supplies the ontology, meaningful restrictions, FIBO mapping,
+Manual 5.1: Mason supplied the ontology, meaningful restrictions, FIBO mapping,
 Protégé evaluation and documented OWL-versus-validation limits. Manual 5.2
 allows an alternative RDF/XML/SPARQL-capable store with documented installation.
 Manual 5.3: population, six SELECT examples and graph DML are implemented here.
@@ -135,8 +147,9 @@ their own licenses.
 ## AI assistance and evidence
 
 AI assisted with implementation, SPARQL translation, tests, documentation and the
-report fragment, and actually ran the recorded checks. These are not claims that
-Taimoor personally executed tests, that Mason approved the vocabulary, or that
+report fragment, and actually ran the recorded checks. Mason subsequently aligned
+his ontology and validator to the backend. These are not claims that
+Taimoor personally executed tests or that
 the professor approved implementation choices. The manual requires students to
 critically evaluate AI-generated work and disclose/cite assistance.
 

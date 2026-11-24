@@ -1,5 +1,5 @@
 % Taimoor's AI-assisted M5 draft. Merge into the team's exactly-three-page report.
-% This is an initial-backend record; revise after ontology/UI integration.
+% Backend/ontology integration verified; application integration remains pending.
 \subsection{Graph population, SPARQL, and reproducibility}
 We implemented an embedded Oxigraph backend through a pinned PyOxigraph package,
 with a persistent local store and RDF/XML import/export~\cite{oxigraphStore,oxigraphIO}.
@@ -8,8 +8,8 @@ and 356 instance triples. Each record receives a stable project IRI within the
 demonstration dataset. Relationships become IRI edges, scalar values become typed
 literals, and unknown optional values are omitted. Holding and allocation dates,
 classification context, coverage and source provenance remain explicit.
-The proposed term and resource-identity contract awaits ontology integration;
-this backend does not itself establish FIBO alignment or OWL reasoning.
+The term and resource-identity contract matches Mason's version 1.1.0 ontology,
+loaded into a separate named graph. Loading axioms does not enable OWL reasoning.
 
 Six standalone SPARQL SELECT queries translate the accepted SQL analyses.
 We compared complete result multisets, including duplicate multiplicity and
@@ -24,13 +24,15 @@ form lookups and SPARQL-backed creation, editing and deletion~\cite{sparqlUpdate
 An operation first changes a candidate graph. Validation precedes publication of
 the exact delta in one transactional update, so rejected edits preserve the live
 graph. Application writers share a process lock. A temporary checker projects
-candidate records into the accepted relational constraints; the interface also
-accepts a read-only shared graph validator. Native semantic validation remains
-an integration dependency rather than a completed claim.
+candidate records into the accepted relational constraints. Startup also binds
+Mason's native graph validator, including retained-file checks, to every proposed
+write. Both checks run before publication; native-only rejection tests isolate
+the graph validator by bypassing the relational checker within those tests.
 
 The semantic quickstart builds or reuses its own store, exports RDF/XML and can
 rerun all SQL/SPARQL comparisons without altering the accepted application database.
-The initial verification passed 26 semantic tests and all 74 existing tests.
+Integration verification passed 160 tests: 74 existing tests, 26 backend tests,
+51 ontology/validation tests and nine runtime integration tests.
 It includes RDF round-tripping, persistence, result compatibility, invalid-weight
 and context rejection, coherent batch changes and unchanged-state checks after
-rejected writes. Final ontology and application integration require separate checks.
+rejected writes. The graph-backed application and its UI evidence remain pending.
