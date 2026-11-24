@@ -5,3 +5,5 @@ pypdf>=4.0
 # Rebuild the synthetic source PDFs and report figures.
 reportlab>=4.0
 Pillow>=10.0
+# Semantic layer (Milestone 5): parse and validate the OWL ontology and RDF data.
+rdflib>=7.0

@@ -1,0 +1,824 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Dated ETF Allocation Disclosure Ontology (Milestone 5, Part II: Semantic Web).
+  Owner: Mason Li. Prepared with AI assistance; the human author reviewed the
+  mapping against src/dal/sql/schema.sql and edited it before committing.
+
+  This file is the TBox only. It contains no individuals: the ABox is produced by
+  the triple-store owner from the synthetic demonstration dataset.
+
+  FIBO resources are referenced by IRI but NOT imported with owl:imports, so the
+  file stays offline-inspectable in Protege. IRIs are resolvable at
+  https://spec.edmcouncil.org/fibo/ when network access is available.
+-->
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:etf="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#">
+
+  <owl:Ontology rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology">
+    <rdfs:label xml:lang="en">Dated ETF Allocation Disclosure Ontology</rdfs:label>
+    <owl:versionInfo>1.1.0 (CSC501 Milestone 5; aligned to the accepted backend vocabulary)</owl:versionInfo>
+    <rdfs:comment xml:lang="en">Semantic schema for dated sector and geographic
+      allocation disclosures published by exchange-traded fund providers. It
+      separates a customer's dated holding from a provider's dated disclosure,
+      scopes category identity by classification edition or capture context, and
+      keeps source provenance on every observed allocation block. It refines the
+      accepted Milestone 4 relational schema; the same twelve relations appear
+      here as ten entity classes plus two association classes.</rdfs:comment>
+  </owl:Ontology>
+
+  <!-- =====================================================================
+       Classes
+       ===================================================================== -->
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer">
+    <rdfs:label xml:lang="en">customer</rdfs:label>
+    <rdfs:comment xml:lang="en">The individual whose portfolio is described.
+      Project extension: FIBO models parties and roles but does not provide a
+      retail customer-account concept at this granularity.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider">
+    <rdfs:label xml:lang="en">ETF provider</rdfs:label>
+    <rdfs:comment xml:lang="en">Organisation that issues the fund and publishes
+      its disclosure. Project extension: a single relation carries two roles here
+      (fund issuer and document publisher), so the class is deliberately not
+      declared a FIBO Publisher role.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Portfolio"/>
+    <rdfs:label xml:lang="en">portfolio</rdfs:label>
+    <rdfs:comment xml:lang="en">A customer's collection of dated ETF holdings.
+      Reuses the FIBO Portfolio class.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/Pools/CollectiveInvestmentVehicle"/>
+    <rdfs:label xml:lang="en">exchange-traded fund</rdfs:label>
+    <rdfs:comment xml:lang="en">The fund whose allocations are disclosed. Reuses
+      the FIBO CollectiveInvestmentVehicle class; ETF identity is supplied by
+      separate identifier resources rather than by the fund name.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier">
+    <rdfs:label xml:lang="en">ETF identifier</rdfs:label>
+    <rdfs:comment xml:lang="en">ISIN or (ticker, exchange context) pair that
+      identifies the fund. Project extension: ISIN uniqueness excludes exchange
+      context while ticker uniqueness includes it.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/OwnershipAndControl/Ownership/Holding"/>
+    <rdfs:label xml:lang="en">holding</rdfs:label>
+    <rdfs:comment xml:lang="en">Association class: a dated Portfolio-ETF relation
+      that carries its own weight fraction. Reuses the FIBO Holding class and
+      keeps the holding date independent of any allocation date.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument">
+    <rdfs:label xml:lang="en">source document</rdfs:label>
+    <rdfs:comment xml:lang="en">A retained capture of a provider publication,
+      identified by URL together with retrieval time. Project extension: FIBO
+      describes documents but not the capture/provenance pair used here.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension">
+    <rdfs:label xml:lang="en">allocation dimension</rdfs:label>
+    <rdfs:comment xml:lang="en">The axis along which an allocation is reported:
+      Sector or Geography. Project extension.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/SEC/Funds/CollectiveInvestmentVehicles/FundClassificationScheme"/>
+    <rdfs:label xml:lang="en">classification scheme</rdfs:label>
+    <rdfs:comment xml:lang="en">A published edition of a category system. Reuses
+      the FIBO FundClassificationScheme class; an unresolved edition keeps its
+      version unrecorded instead of inventing one.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/SEC/Funds/CollectiveInvestmentVehicles/FundClassification"/>
+    <rdfs:label xml:lang="en">allocation category</rdfs:label>
+    <rdfs:comment xml:lang="en">A category label within one dimension and one
+      context. Reuses the FIBO FundClassification class; the context key makes
+      identical labels from different editions or captures distinct resources.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/WeightedBasket"/>
+    <rdfs:label xml:lang="en">allocation snapshot</rdfs:label>
+    <rdfs:comment xml:lang="en">One dated disclosure block for one ETF and one
+      dimension, taken from one source document. Reuses the FIBO WeightedBasket
+      class. Project extension: FIBO's allocation policy describes an intended
+      strategy; this class records an observed disclosure instead, which is why
+      coverage status, basis note and locator are added.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry">
+    <rdfs:subClassOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FBC/ProductsAndServices/FinancialProductsAndServices/WeightedBasketConstituent"/>
+    <rdfs:label xml:lang="en">allocation entry</rdfs:label>
+    <rdfs:comment xml:lang="en">Association class: one category's reported weight
+      inside one snapshot. Reuses the FIBO WeightedBasketConstituent class.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot">
+    <owl:disjointWith rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+    <owl:disjointWith rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio">
+    <owl:disjointWith rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+  </owl:Class>
+
+  <!-- =====================================================================
+       Object properties
+       ===================================================================== -->
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ownedBy">
+    <rdfs:label xml:lang="en">owned by</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <owl:inverseOf rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#owns"/>
+    <rdfs:comment xml:lang="en">Mirrors the Portfolio to Customer foreign key,
+      which is NOT NULL and therefore exactly one owner per portfolio.</rdfs:comment>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#owns">
+    <rdfs:label xml:lang="en">owns</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#offeredBy">
+    <rdfs:label xml:lang="en">has issuer</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasIdentifier">
+    <rdfs:label xml:lang="en">has identifier</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+    <owl:inverseOf rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifiesETF"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifiesETF">
+    <rdfs:label xml:lang="en">identifies ETF</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasHolding">
+    <rdfs:label xml:lang="en">has holding</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+    <rdfs:subPropertyOf rdf:resource="https://www.omg.org/spec/Commons/Collections/comprises"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#inPortfolio">
+    <rdfs:label xml:lang="en">holding of portfolio</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <owl:inverseOf rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasHolding"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#holdsETF">
+    <rdfs:label xml:lang="en">holding asset</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasSnapshot">
+    <rdfs:label xml:lang="en">has allocation snapshot</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#describesETF">
+    <rdfs:label xml:lang="en">snapshot of ETF</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <owl:inverseOf rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasSnapshot"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasDimension">
+    <rdfs:label xml:lang="en">has allocation dimension</rdfs:label>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment xml:lang="en">Shared by snapshots and categories, mirroring the
+      two AllocationDimensionId columns. The chain axiom below restates the
+      schema invariant: an entry's category dimension is the snapshot dimension.</rdfs:comment>
+    <owl:propertyChainAxiom rdf:parseType="Collection">
+      <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasEntry"/>
+      <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#usesCategory"/>
+      <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasDimension"/>
+    </owl:propertyChainAxiom>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#supportedBy">
+    <rdfs:label xml:lang="en">from source document</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#publishedBy">
+    <rdfs:label xml:lang="en">published by</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#definedBy">
+    <rdfs:label xml:lang="en">uses classification scheme</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasEntry">
+    <rdfs:label xml:lang="en">has allocation entry</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+    <rdfs:subPropertyOf rdf:resource="https://www.omg.org/spec/Commons/Collections/hasMember"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#inSnapshot">
+    <rdfs:label xml:lang="en">entry snapshot</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <owl:inverseOf rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasEntry"/>
+  </owl:ObjectProperty>
+
+  <owl:ObjectProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#usesCategory">
+    <rdfs:label xml:lang="en">entry category</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+    <rdfs:range rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+  </owl:ObjectProperty>
+
+  <!-- =====================================================================
+       Datatype properties
+       ===================================================================== -->
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#customerNumber">
+    <rdfs:label xml:lang="en">customer number</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#givenName">
+    <rdfs:label xml:lang="en">given name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#familyName">
+    <rdfs:label xml:lang="en">family name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#email">
+    <rdfs:label xml:lang="en">email</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Optional: absent when unknown, never an empty string.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#legalName">
+    <rdfs:label xml:lang="en">legal name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#registrationNumber">
+    <rdfs:label xml:lang="en">registration number</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#registrationJurisdiction">
+    <rdfs:label xml:lang="en">registration jurisdiction</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#websiteUrl">
+    <rdfs:label xml:lang="en">website URL</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#portfolioReference">
+    <rdfs:label xml:lang="en">portfolio reference</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#portfolioName">
+    <rdfs:label xml:lang="en">portfolio name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#baseCurrency">
+    <rdfs:label xml:lang="en">base currency</rdfs:label>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">The accepted schema names the column BaseCurrency in
+      both Portfolio and ETF, and the ABox uses the same predicate for both. One
+      property with a union domain; the subject class says which currency is meant.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#fundName">
+    <rdfs:label xml:lang="en">fund name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#domicileCountryCode">
+    <rdfs:label xml:lang="en">domicile country code</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#inceptionDate">
+    <rdfs:label xml:lang="en">inception date</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    <rdfs:comment xml:lang="en">Optional: absent when unknown.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifierScheme">
+    <rdfs:label xml:lang="en">identifier scheme</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Permitted values ISIN and Ticker. The closed value
+      set is checked explicitly, because OWL does not restrict a literal to an
+      enumerated set unless the individuals are also enumerated.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifierValue">
+    <rdfs:label xml:lang="en">identifier value</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#exchangeContext">
+    <rdfs:label xml:lang="en">exchange context</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Required for tickers, absent for ISINs.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#holdingAsOfDate">
+    <rdfs:subPropertyOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/FinancialDates/hasAsOfDate"/>
+    <rdfs:label xml:lang="en">holding as-of date</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#weightFraction">
+    <rdfs:subPropertyOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/Utilities/Analytics/hasWeight"/>
+    <rdfs:label xml:lang="en">weight fraction</rdfs:label>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+    <rdfs:comment xml:lang="en">One accepted column, two readings: on a Holding
+      the fraction is the share of that portfolio; on an AllocationEntry it is the
+      declared share of the disclosed basket. The subject class disambiguates, so a
+      single property matches the accepted ABox instead of inventing a second name.
+      Only the generic FIBO weight property is claimed: an allocation share is not
+      a fractional ownership interest.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#url">
+    <rdfs:label xml:lang="en">source URL</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#retrievedAt">
+    <rdfs:label xml:lang="en">retrieved at</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#publishedAt">
+    <rdfs:label xml:lang="en">published at</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+    <rdfs:comment xml:lang="en">Optional: absent when the publication date is not recorded.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#capturedFileRef">
+    <rdfs:label xml:lang="en">captured file reference</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Project-relative path to the retained capture.
+      Under the synthetic demonstration this is a generated PDF whose existence is
+      checked explicitly; existence is not verification of the observation.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#documentTitle">
+    <rdfs:label xml:lang="en">document title</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#dimensionName">
+    <rdfs:label xml:lang="en">dimension name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Permitted values Sector and Geography, checked explicitly.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#schemeAuthority">
+    <rdfs:label xml:lang="en">scheme authority</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#schemeName">
+    <rdfs:label xml:lang="en">scheme name</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#version">
+    <rdfs:label xml:lang="en">scheme version</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Optional by design: an unresolved edition stays
+      unrecorded instead of being assigned a fictional version.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#definitionUrl">
+    <rdfs:label xml:lang="en">definition URL</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#label">
+    <rdfs:label xml:lang="en">category label</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#code">
+    <rdfs:label xml:lang="en">category code</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Optional: present only when the source prints a code.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#contextKey">
+    <rdfs:label xml:lang="en">category context key</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Carries the classification-edition or capture
+      context, so that identical labels from different contexts remain distinct
+      resources. The construction rule is documented in the namespace guide.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#allocationAsOfDate">
+    <rdfs:subPropertyOf rdf:resource="https://spec.edmcouncil.org/fibo/ontology/FND/DatesAndTimes/FinancialDates/hasAsOfDate"/>
+    <rdfs:label xml:lang="en">allocation as-of date</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#basisNote">
+    <rdfs:label xml:lang="en">basis note</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#coverageStatus">
+    <rdfs:label xml:lang="en">coverage status</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Permitted values Complete, Partial and Unknown,
+      checked explicitly. Only Complete totals must sum to one.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#sourceLocator">
+    <rdfs:label xml:lang="en">source locator</rdfs:label>
+    <rdfs:domain rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment xml:lang="en">Distinguishes dated allocation blocks and bases
+      inside one capture.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+
+
+  <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#recordId">
+    <rdfs:label xml:lang="en">local record identifier</rdfs:label>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+          <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    <rdfs:comment xml:lang="en">Integer key of the accepted row, carried into the
+      ABox so the existing application and its integer identifiers keep working.
+      It is a local record handle, not a business key and not the subject of an
+      owl:hasKey axiom; business identity stays in the declared keys below.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <!-- =====================================================================
+       Keys (owl:hasKey). Composite keys that involve a parent reference are
+       enforced by the URI minting rules and explicit validation instead, since
+       owl:hasKey over an object property asserts individual equality in a way
+       that is stronger than a per-parent uniqueness constraint.
+       ===================================================================== -->
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer">
+    <owl:hasKey rdf:parseType="Collection">
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#customerNumber"/>
+    </owl:hasKey>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider">
+    <owl:hasKey rdf:parseType="Collection">
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#registrationJurisdiction"/>
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#registrationNumber"/>
+    </owl:hasKey>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier">
+    <owl:hasKey rdf:parseType="Collection">
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifierScheme"/>
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifierValue"/>
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#exchangeContext"/>
+    </owl:hasKey>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension">
+    <owl:hasKey rdf:parseType="Collection">
+      <owl:DatatypeProperty rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#dimensionName"/>
+    </owl:hasKey>
+  </owl:Class>
+
+  <!-- =====================================================================
+       Cardinality and participation restrictions
+       ===================================================================== -->
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#customerNumber"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ownedBy"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Customer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#offeredBy"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasIdentifier"/>
+        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFIdentifier">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#identifiesETF"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Holding">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#inPortfolio"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#Portfolio"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#holdsETF"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#weightFraction"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#holdingAsOfDate"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#publishedBy"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETFProvider"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#url"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#retrievedAt"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#capturedFileRef"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasDimension"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#label"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#contextKey"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#definedBy"/>
+        <owl:maxQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:maxQualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ClassificationScheme"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#describesETF"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#ETF"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasDimension"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationDimension"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#supportedBy"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#SourceDocument"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#allocationAsOfDate"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#coverageStatus"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#hasEntry"/>
+        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+  <owl:Class rdf:about="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationEntry">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#inSnapshot"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationSnapshot"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#usesCategory"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onClass rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#AllocationCategory"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#weightFraction"/>
+        <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+        <owl:onDataRange rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+
+</rdf:RDF>
