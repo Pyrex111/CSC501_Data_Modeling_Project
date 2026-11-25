@@ -1,6 +1,4 @@
-% Taimoor's AI-assisted M5 draft. Merge into the team's exactly-three-page report.
-% Backend/ontology integration verified; application integration remains pending.
-\subsection{Graph population, SPARQL, and reproducibility}
+% Taimoor's AI-assisted M5 draft. Merged into the team's three-page report.
 We implemented an embedded Oxigraph backend through a pinned PyOxigraph package,
 with a persistent local store and RDF/XML import/export~\cite{oxigraphStore,oxigraphIO}.
 The accepted, fully synthetic relational dataset populates twelve entity classes
@@ -30,9 +28,10 @@ write. Both checks run before publication; native-only rejection tests isolate
 the graph validator by bypassing the relational checker within those tests.
 
 The semantic quickstart builds or reuses its own store, exports RDF/XML and can
-rerun all SQL/SPARQL comparisons without altering the accepted application database.
-Integration verification passed 160 tests: 74 existing tests, 26 backend tests,
-51 ontology/validation tests and nine runtime integration tests.
-It includes RDF round-tripping, persistence, result compatibility, invalid-weight
-and context rejection, coherent batch changes and unchanged-state checks after
-rejected writes. The graph-backed application and its UI evidence remain pending.
+rerun all SQL/SPARQL comparisons without altering the accepted application
+database. Integration verification passed 189 tests: 74 existing Milestone 4 tests,
+26 backend tests, 51 ontology/validation tests, nine runtime integration
+tests, 26 M4 route tests rerun on the graph, and three graph-specific route
+tests. It includes RDF round-tripping, persistence, result compatibility,
+invalid-weight and context rejection, coherent batch changes and unchanged-state
+checks after rejected writes.

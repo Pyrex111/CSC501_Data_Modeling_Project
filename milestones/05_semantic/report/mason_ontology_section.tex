@@ -1,0 +1,108 @@
+% Section 2 (ontology) of the Milestone 5 report. Owner: Mason Li.
+% Written to be \input into the assembled main.tex. Numbers quoted here are
+% checked against src/dal/sql/schema.sql and tests/test_semantic_ontology.py.
+
+\section{Proposed Ontology}
+\label{sec:ontology}
+
+The accepted Milestone 4 model maps onto one ontology in two steps: each relation
+becomes a class, and each column becomes a property. That baseline is applied
+without shortcuts, and it accounts for the whole schema rather than a sample of
+it. The schema has 51 non-identifier columns: 13 foreign keys and 38 scalar
+columns. The keys collapse to 12 distinct forward object properties
+(\texttt{hasDimension} serves both the snapshot and the category columns), and
+five declared inverses complete the pairs, giving 17 object properties. The
+scalar columns collapse to 36 distinct datatype properties, and one further
+property, \texttt{recordId}, carries the surrogate row handle the application
+still uses, giving 37 datatype properties. Twelve relations therefore yield
+twelve classes.
+
+\subsection{Classes, association classes and reused terms}
+
+Two relations are association classes rather than link tables with a payload
+attached: \texttt{Holding} carries a fractional interest and its own date, and
+\texttt{AllocationEntry} carries the weight that belongs to a snapshot--category
+pair. Both stay full classes. Collapsing either into a plain object property
+would delete the very quantity the relation exists to hold.
+
+Seven classes specialise FIBO\cite{fibo} or OMG Commons terms, shown in
+Table~\ref{tab:alignment}: the portfolio and the holding reuse the FIBO ownership
+classes, a snapshot is a \texttt{WeightedBasket} and an entry one of its
+weighted constituents, and the scheme and the category reuse the FIBO fund
+classification classes. Four published properties are reused as super-properties instead of being
+invented: \texttt{weightFraction} is a sub-property of
+\texttt{fibo:hasWeight}, both as-of columns are sub-properties of
+\texttt{fibo:hasAsOfDate}, which FIBO explicitly distinguishes from a creation
+date, and the two containment properties \texttt{hasEntry} and
+\texttt{hasHolding} are sub-properties of the OMG Commons
+\texttt{hasMember} and \texttt{comprises}. An allocation share is not a
+fractional ownership interest, so no FIBO fractional-interest property is
+claimed. The alignment is stated by IRI
+only; the file carries no \texttt{owl:imports}, so it parses and validates offline
+and the reuse stays an auditable claim rather than a network dependency.
+
+\input{tables/alignment_table}
+
+\subsection{Identity and context}
+
+Identity is minted from the columns that already separate two records, never from
+the surrogate \texttt{Id}, which is an artefact of row storage. Customers, providers,
+dimensions and identifiers get \texttt{owl:hasKey}. Composite keys that name a
+parent---a portfolio under a customer, a snapshot under a fund---do not: a
+\texttt{hasKey} over an object property asserts individual equality across
+parents, which is stronger than per-parent uniqueness. Those keys become URI
+templates that mirror the constraint, one path segment per key component in key
+order, with an explicit duplicate check beside them.
+
+The category is the one class whose identity is not a single column. The schema
+keys it by (dimension, context key, label). The context key is a prefix plus a
+JSON list: either the classification authority, name and version, or --- when the
+edition is unpublished --- the source URL, retrieval time, locator and dimension.
+The graph reproduces that construction, and a parity test asserts that the graph
+helper and the relational helper return byte-identical strings, so the two layers
+cannot drift into disagreeing about which labels are the same label.
+
+Provenance is structural, not annotational. Every snapshot keeps its source
+document, its as-of date and the locator inside the capture that the weights were
+read from, and the capture itself is retained by reference. An unresolved
+classification edition keeps its version unrecorded instead of being assigned a
+fabricated one, and a second unversioned edition for the same authority is
+refused. Under the synthetic demonstration the retained file is generated, so the
+file-existence check proves only that a capture exists---never that it supports
+the numbers.
+
+\subsection{What OWL states, and what it cannot}
+
+The ontology states the schema's shape: domains and ranges, exactly-one and
+at-least-one restrictions on participation, at-most-one scheme per category,
+functional properties, four keys, and disjointness between snapshot, entry and
+category. One axiom is worth singling out. The four schema triggers keep an
+entry's category dimension equal to its snapshot's dimension; the graph restates
+that as the property chain
+\texttt{hasEntry}~$\circ$~\texttt{usesCategory}~$\circ$~\texttt{hasDimension}
+$\sqsubseteq$~\texttt{hasDimension}.
+
+But an open-world ontology\cite{owl2profiles} does not forbid what it does not
+know, and it cannot add. A missing basis note is unknown, not invalid; a total of 0.94 against
+\texttt{Complete} is not an axiom violation; a closed value set such as
+\{Sector, Geography\} needs enumerated individuals, which would drag instance data
+into the schema file. The dimension chain entails agreement but still cannot
+\emph{flag} a disagreement, because without an \texttt{AllDifferent} assertion on
+the dimension individuals the two dimensions may simply be the same individual.
+Table~\ref{tab:split} records the split we ship: axioms for what must hold,
+explicit checks for aggregation, closed sets, filesystem facts and composite
+uniqueness. The validator module, built on RDFLib~\cite{rdflib}, publishes
+both lists and a CLI, so the split can be reviewed without reading the code.
+
+\input{tables/split_table}
+
+The split is also the argument for the extension. FIBO's
+\texttt{FundPortfolioInvestmentPolicy} describes how a portfolio is \emph{intended}
+to be allocated; a snapshot records what a provider \emph{disclosed} on a date,
+sometimes with partial coverage. Subsuming one under the other would license
+inferences about managerial intent that the evidence does not support, so the
+reuse stops at the basket and the constituent and the observation is modelled as
+an extension with coverage status, basis note and locator. We likewise decline to
+type the provider as FIBO's \texttt{Publisher} role: one relation plays both the
+issuer and the publisher role, and the correct FIBO-shaped treatment would be two
+role individuals over one party, a modelling change outside this milestone.
