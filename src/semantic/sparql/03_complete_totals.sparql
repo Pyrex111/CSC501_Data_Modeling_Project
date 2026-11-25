@@ -1,0 +1,12 @@
+# M4 Q3: aggregate each snapshot independently.
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+SELECT ?SnapshotId ?DimensionName ?AllocationAsOfDate ?CoverageStatus
+       (COUNT(?entry) AS ?NumberOfCategories)
+       ((ROUND(SUM(?weight) * 10000) / 10000) AS ?TotalWeight)
+WHERE { GRAPH <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data> {
+  ?s a etf:AllocationSnapshot; etf:recordId ?SnapshotId; etf:hasDimension ?dim;
+     etf:allocationAsOfDate ?AllocationAsOfDate; etf:coverageStatus ?CoverageStatus .
+  ?dim etf:dimensionName ?DimensionName .
+  ?entry a etf:AllocationEntry; etf:inSnapshot ?s; etf:weightFraction ?weight .
+} } GROUP BY ?SnapshotId ?DimensionName ?AllocationAsOfDate ?CoverageStatus
+ORDER BY ?SnapshotId

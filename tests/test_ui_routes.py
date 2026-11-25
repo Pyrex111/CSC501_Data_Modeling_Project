@@ -1,7 +1,10 @@
 """Route-level checks for the Flask interface and its business-logic layer.
 
 Each test runs against a temporary copy of the fully synthetic demo database, so
-the real database is never touched. These tests exercise the routes through
+the real database is never touched. These classes use the accepted M4 SQLite layer
+(BACKEND='sql'); tests/test_ui_graph_routes.py reruns every route test unchanged
+against the Milestone 5 knowledge graph. State checks go through the helper
+methods below so each backend can answer them in its own terms. These tests exercise the routes through
 Flask's test client; they do not drive a browser or verify page appearance.
 Run from the repository root: python -m unittest discover -s tests -v
 """
@@ -56,8 +59,23 @@ class UiTestCase(unittest.TestCase):
         self.db_path = Path(self.tmp.name) / f'{self.id().split(".")[-1]}.sqlite3'
         shutil.copy(self.template_db, self.db_path)
         app.config['TESTING'] = True
+        app.config['BACKEND'] = 'sql'
         app.config['DATABASE'] = self.db_path
         self.client = app.test_client()
+
+    # Backend-neutral state helpers (overridden by the graph test classes).
+    def state(self):
+        return dump(self.db_path)
+
+    def snapshot_count(self):
+        return self.query('SELECT COUNT(*) FROM AllocationSnapshot')[0][0]
+
+    def entry_ids(self, snapshot_id):
+        return [r[0] for r in self.query(
+            'SELECT Id FROM AllocationEntry WHERE AllocationSnapshotId=? ORDER BY Id', (snapshot_id,))]
+
+    def weight(self, entry_id):
+        return self.query('SELECT WeightFraction FROM AllocationEntry WHERE Id=?', (entry_id,))[0][0]
 
     def query(self, sql, params=()):
         connection = sqlite3.connect(str(self.db_path))
@@ -139,8 +157,8 @@ class CreateTests(UiTestCase):
     def test_create_partial_disclosure(self):
         response = self.new_disclosure(['1', '2', '3'], ['0.4', '0.3', '0.1'])
         self.assertIn('Disclosure created.', messages(response))
-        self.assertEqual(self.query('SELECT COUNT(*) FROM AllocationSnapshot')[0][0], 6)
-        self.assertEqual(self.query('SELECT COUNT(*) FROM AllocationEntry WHERE AllocationSnapshotId=6')[0][0], 3)
+        self.assertEqual(self.snapshot_count(), 6)
+        self.assertEqual(len(self.entry_ids(6)), 3)
 
     def test_create_complete_disclosure_with_valid_total(self):
         response = self.new_disclosure(['1', '2', '3', '4', '5'], ['0.2'] * 5,
@@ -154,7 +172,7 @@ class CreateTests(UiTestCase):
         self.assertIn('Disclosure created.', messages(response))
 
     def test_rejected_creates_leave_database_unchanged(self):
-        before = dump(self.db_path)
+        before = self.state()
         cases = [
             (dict(categories=[], weights=[]), 'at least one allocation entry'),
             (dict(categories=['1', '1'], weights=['0.1', '0.1']), 'only once'),
@@ -179,14 +197,14 @@ class CreateTests(UiTestCase):
             response = self.new_disclosure(categories, weights, **kwargs)
             self.assertIn(fragment, ' '.join(messages(response)), fragment)
             self.assertEqual(response.status_code, 422, fragment)
-            self.assertEqual(dump(self.db_path), before, fragment)
+            self.assertEqual(self.state(), before, fragment)
 
     def test_duplicate_disclosure_is_rejected(self):
         self.new_disclosure(['1'], ['0.5'])
-        before = dump(self.db_path)
+        before = self.state()
         response = self.new_disclosure(['1'], ['0.5'])
         self.assertIn('already exists', ' '.join(messages(response)))
-        self.assertEqual(dump(self.db_path), before)
+        self.assertEqual(self.state(), before)
 
     def test_entered_values_are_preserved_after_failure(self):
         response = self.new_disclosure(['1', '2'], ['0.55', '0.125'], source_locator='my-locator',
@@ -207,19 +225,19 @@ class UpdateAndDeleteTests(UiTestCase):
     def test_coherent_multi_entry_update_is_saved(self):
         response = self.batch(2, [(4, 0.350), (5, 0.130), (6, 0.105), (7, 0.040), (8, 0.375)])
         self.assertIn('Saved 5 weight(s) together.', messages(response))
-        self.assertEqual(self.query('SELECT WeightFraction FROM AllocationEntry WHERE Id=4')[0][0], 0.35)
-        self.assertEqual(self.query('SELECT WeightFraction FROM AllocationEntry WHERE Id=8')[0][0], 0.375)
+        self.assertEqual(self.weight(4), 0.35)
+        self.assertEqual(self.weight(8), 0.375)
 
     def test_incoherent_update_is_rejected_and_values_kept(self):
-        before = dump(self.db_path)
+        before = self.state()
         response = self.batch(2, [(4, 0.35), (5, 0.130), (6, 0.105), (7, 0.040), (8, 0.415)])
         self.assertEqual(response.status_code, 422)
         self.assertIn('must add up to 1', ' '.join(messages(response)))
         self.assertIn('value="0.35"', response.get_data(as_text=True))
-        self.assertEqual(dump(self.db_path), before)
+        self.assertEqual(self.state(), before)
 
     def test_invalid_updates_leave_database_unchanged(self):
-        before = dump(self.db_path)
+        before = self.state()
         cases = [
             ([(4, 'abc')], 'must be a number'),
             ([(4, '')], 'Weight is required'),
@@ -235,7 +253,7 @@ class UpdateAndDeleteTests(UiTestCase):
             response = self.batch(2, pairs)
             self.assertIn(fragment, ' '.join(messages(response)), fragment)
             self.assertNotEqual(response.status_code, 500)
-            self.assertEqual(dump(self.db_path), before, fragment)
+            self.assertEqual(self.state(), before, fragment)
 
     def test_missing_or_bad_snapshot_id_is_handled(self):
         for sid in ('', 'abc'):
@@ -245,31 +263,31 @@ class UpdateAndDeleteTests(UiTestCase):
             self.assertIn('missing or invalid', ' '.join(messages(response)))
 
     def test_delete_from_complete_disclosure_is_rejected(self):
-        before = dump(self.db_path)
+        before = self.state()
         response = self.post_follow('/delete_entry', {'entry_id': 4, 'snapshot_id': 2})
         self.assertIn('would make the total 0.69', ' '.join(messages(response)))
-        self.assertEqual(dump(self.db_path), before)
+        self.assertEqual(self.state(), before)
 
     def test_delete_in_partial_disclosure_and_last_entry_rule(self):
         self.new_disclosure(['1', '2', '3'], ['0.4', '0.3', '0.1'])
-        ids = [r[0] for r in self.query('SELECT Id FROM AllocationEntry WHERE AllocationSnapshotId=6 ORDER BY Id')]
+        ids = self.entry_ids(6)
         self.assertIn('Entry deleted.', messages(self.post_follow('/delete_entry', {'entry_id': ids[2], 'snapshot_id': 6})))
         self.assertIn('Entry deleted.', messages(self.post_follow('/delete_entry', {'entry_id': ids[1], 'snapshot_id': 6})))
-        before = dump(self.db_path)
+        before = self.state()
         response = self.post_follow('/delete_entry', {'entry_id': ids[0], 'snapshot_id': 6})
         self.assertIn('must keep at least one entry', ' '.join(messages(response)))
-        self.assertEqual(dump(self.db_path), before)
-        self.assertEqual(self.query('SELECT COUNT(*) FROM AllocationEntry WHERE AllocationSnapshotId=6')[0][0], 1)
+        self.assertEqual(self.state(), before)
+        self.assertEqual(len(self.entry_ids(6)), 1)
 
     def test_delete_bad_input_is_handled(self):
-        before = dump(self.db_path)
+        before = self.state()
         for data, fragment in (({'entry_id': 'abc', 'snapshot_id': 2}, 'missing or invalid'),
                                ({'entry_id': 999, 'snapshot_id': 2}, 'do not belong'),
                                ({'entry_id': 1, 'snapshot_id': 2}, 'do not belong')):
             response = self.post_follow('/delete_entry', data)
             self.assertEqual(response.status_code, 200)
             self.assertIn(fragment, ' '.join(messages(response)))
-        self.assertEqual(dump(self.db_path), before)
+        self.assertEqual(self.state(), before)
 
 
 class PortfolioTests(UiTestCase):
