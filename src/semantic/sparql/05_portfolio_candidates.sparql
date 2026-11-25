@@ -1,0 +1,19 @@
+# M4 Q5: historical candidate pairs only; NOT a validated portfolio exposure total.
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+SELECT ?PortfolioReference ?Ticker ?HoldingWeight ?FundUSAllocation
+       ((ROUND(?HoldingWeight * ?FundUSAllocation * 10000) / 10000) AS ?CandidateWeightedFraction)
+       ?HoldingId ?SnapshotId ?ContextKey ?CoverageStatus ?BasisNote ?SourceDocumentId
+       ?SourceLocator ?HoldingAsOfDate ?AllocationAsOfDate
+WHERE { GRAPH <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data> {
+  ?h a etf:Holding; etf:recordId ?HoldingId; etf:inPortfolio ?portfolio; etf:holdsETF ?fund;
+     etf:weightFraction ?HoldingWeight; etf:holdingAsOfDate ?HoldingAsOfDate .
+  ?portfolio etf:portfolioReference ?PortfolioReference .
+  ?identifier etf:identifiesETF ?fund; etf:identifierScheme "Ticker"; etf:identifierValue ?Ticker .
+  ?s a etf:AllocationSnapshot; etf:describesETF ?fund; etf:hasDimension ?dim;
+     etf:recordId ?SnapshotId; etf:allocationAsOfDate ?AllocationAsOfDate;
+     etf:coverageStatus ?CoverageStatus; etf:basisNote ?BasisNote;
+     etf:supportedBy ?doc; etf:sourceLocator ?SourceLocator .
+  ?dim etf:dimensionName "Geography" . ?doc etf:recordId ?SourceDocumentId .
+  ?geo etf:inSnapshot ?s; etf:usesCategory ?c; etf:weightFraction ?FundUSAllocation .
+  ?c etf:label "United States"; etf:contextKey ?ContextKey .
+} } ORDER BY ?PortfolioReference ?Ticker

@@ -1,5 +1,12 @@
 # CSC501 Data Modeling Project
 
+Milestone 5 development: see [the semantic backend and handoff](milestones/05_semantic/README.md)
+for the graph quickstart, integrated ontology/validation, six SPARQL queries and
+current integration status. To run the graph-backed web UI:
+`python -m pip install -r requirements-semantic.txt` then `python quickstart_semantic.py --serve`
+(details in the [UI contribution](milestones/05_semantic/contributions/shahmeer/README.md)).
+The accepted Milestone 4 application remains available below.
+
 **Extending the Financial Industry Business Ontology to Represent Time-Varying Exchange-Traded Fund Allocations**
 
 University of Victoria, CSC501: Algorithms and Data Models, Fall 2026.

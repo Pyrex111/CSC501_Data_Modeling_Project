@@ -1,0 +1,106 @@
+{
+  "run_date": "2026-11-24",
+  "baseline": "eaa23eff266792b985d2b0cc3e1d0007041643fd",
+  "execution_attribution": "AI executed these checks; student evaluation is separate",
+  "python": "3.12.14",
+  "tests": {
+    "total": 160,
+    "m4": 74,
+    "backend": 26,
+    "ontology": 51,
+    "runtime_integration": 9,
+    "failures": 0,
+    "errors": 0
+  },
+  "data_triples": 356,
+  "ontology_triples": 504,
+  "validation": {
+    "m4_parity_bridge": true,
+    "native_graph_validator": true,
+    "capture_files_checked": true,
+    "owl_reasoner": false
+  },
+  "query_comparison": [
+    {
+      "query": 1,
+      "file": "01_geography.sparql",
+      "sql_rows": 8,
+      "sparql_rows": 8,
+      "full_result_match": true
+    },
+    {
+      "query": 2,
+      "file": "02_financials.sparql",
+      "sql_rows": 2,
+      "sparql_rows": 2,
+      "full_result_match": true
+    },
+    {
+      "query": 3,
+      "file": "03_complete_totals.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 4,
+      "file": "04_observation_capture.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 5,
+      "file": "05_portfolio_candidates.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 6,
+      "file": "06_provenance.sparql",
+      "sql_rows": 17,
+      "sparql_rows": 17,
+      "full_result_match": true
+    }
+  ],
+  "fresh_persistent_setup": "passed",
+  "existing_store_reuse": "passed",
+  "export_native_validation": "356 triples, 0 issue(s)",
+  "crud_demo": [
+    {
+      "operation": "create",
+      "snapshot": 6,
+      "result": "saved"
+    },
+    {
+      "operation": "invalid Complete edit",
+      "result": "rejected; graph unchanged",
+      "message": "AllocationSnapshot 6: complete total is 0.4, expected 1"
+    },
+    {
+      "operation": "coherent batch update",
+      "result": "saved"
+    },
+    {
+      "operation": "invalid Complete deletion",
+      "result": "rejected; graph unchanged",
+      "message": "AllocationSnapshot 6: complete total is 0.6, expected 1"
+    },
+    {
+      "operation": "Partial entry deletion",
+      "result": "saved"
+    },
+    {
+      "operation": "final-entry deletion",
+      "result": "rejected; graph unchanged",
+      "message": "AllocationSnapshot 7: at least one entry is required"
+    }
+  ],
+  "limitations": [
+    "M4 parity bridge retained alongside native graph checks",
+    "No OWL reasoner or semantic UI verification",
+    "Single-process writable store; shared instance required",
+    "Existing record-handle IRI reuse limitation remains documented"
+  ]
+}

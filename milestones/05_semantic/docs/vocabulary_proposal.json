@@ -1,0 +1,474 @@
+{
+  "status": "PROPOSAL: Mason agreement pending",
+  "namespace": "https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#",
+  "resource_pattern": "https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/{Entity}/{Id}",
+  "data_graph": "https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/data",
+  "ontology_graph": "https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/ontology",
+  "entities": {
+    "Customer": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "CustomerNumber",
+        "property": "customerNumber",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "GivenName",
+        "property": "givenName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "FamilyName",
+        "property": "familyName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "Email",
+        "property": "email",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      }
+    ],
+    "ETFProvider": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "LegalName",
+        "property": "legalName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "RegistrationNumber",
+        "property": "registrationNumber",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "RegistrationJurisdiction",
+        "property": "registrationJurisdiction",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "WebsiteUrl",
+        "property": "websiteUrl",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      }
+    ],
+    "AllocationDimension": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "DimensionName",
+        "property": "dimensionName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      }
+    ],
+    "ClassificationScheme": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "SchemeAuthority",
+        "property": "schemeAuthority",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "SchemeName",
+        "property": "schemeName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "Version",
+        "property": "version",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      },
+      {
+        "column": "DefinitionUrl",
+        "property": "definitionUrl",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      }
+    ],
+    "Portfolio": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "CustomerId",
+        "property": "ownedBy",
+        "kind": "object",
+        "range": "Customer",
+        "required_in_application": true
+      },
+      {
+        "column": "PortfolioReference",
+        "property": "portfolioReference",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "PortfolioName",
+        "property": "portfolioName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "BaseCurrency",
+        "property": "baseCurrency",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      }
+    ],
+    "ETF": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "ETFProviderId",
+        "property": "offeredBy",
+        "kind": "object",
+        "range": "ETFProvider",
+        "required_in_application": true
+      },
+      {
+        "column": "FundName",
+        "property": "fundName",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "DomicileCountryCode",
+        "property": "domicileCountryCode",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "BaseCurrency",
+        "property": "baseCurrency",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "InceptionDate",
+        "property": "inceptionDate",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#date",
+        "required_in_application": false
+      }
+    ],
+    "ETFIdentifier": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "ETFId",
+        "property": "identifiesETF",
+        "kind": "object",
+        "range": "ETF",
+        "required_in_application": true
+      },
+      {
+        "column": "IdentifierScheme",
+        "property": "identifierScheme",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "IdentifierValue",
+        "property": "identifierValue",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "ExchangeContext",
+        "property": "exchangeContext",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      }
+    ],
+    "Holding": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "PortfolioId",
+        "property": "inPortfolio",
+        "kind": "object",
+        "range": "Portfolio",
+        "required_in_application": true
+      },
+      {
+        "column": "ETFId",
+        "property": "holdsETF",
+        "kind": "object",
+        "range": "ETF",
+        "required_in_application": true
+      },
+      {
+        "column": "WeightFraction",
+        "property": "weightFraction",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#double",
+        "required_in_application": true
+      },
+      {
+        "column": "HoldingAsOfDate",
+        "property": "holdingAsOfDate",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#date",
+        "required_in_application": true
+      }
+    ],
+    "SourceDocument": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "ETFProviderId",
+        "property": "publishedBy",
+        "kind": "object",
+        "range": "ETFProvider",
+        "required_in_application": true
+      },
+      {
+        "column": "Url",
+        "property": "url",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "RetrievedAt",
+        "property": "retrievedAt",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "required_in_application": true
+      },
+      {
+        "column": "PublishedAt",
+        "property": "publishedAt",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#dateTime",
+        "required_in_application": false
+      },
+      {
+        "column": "CapturedFileRef",
+        "property": "capturedFileRef",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "DocumentTitle",
+        "property": "documentTitle",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      }
+    ],
+    "AllocationCategory": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "AllocationDimensionId",
+        "property": "hasDimension",
+        "kind": "object",
+        "range": "AllocationDimension",
+        "required_in_application": true
+      },
+      {
+        "column": "ClassificationSchemeId",
+        "property": "definedBy",
+        "kind": "object",
+        "range": "ClassificationScheme",
+        "required_in_application": false
+      },
+      {
+        "column": "Label",
+        "property": "label",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "Code",
+        "property": "code",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": false
+      },
+      {
+        "column": "ContextKey",
+        "property": "contextKey",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      }
+    ],
+    "AllocationSnapshot": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "ETFId",
+        "property": "describesETF",
+        "kind": "object",
+        "range": "ETF",
+        "required_in_application": true
+      },
+      {
+        "column": "AllocationDimensionId",
+        "property": "hasDimension",
+        "kind": "object",
+        "range": "AllocationDimension",
+        "required_in_application": true
+      },
+      {
+        "column": "SourceDocumentId",
+        "property": "supportedBy",
+        "kind": "object",
+        "range": "SourceDocument",
+        "required_in_application": true
+      },
+      {
+        "column": "AllocationAsOfDate",
+        "property": "allocationAsOfDate",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#date",
+        "required_in_application": true
+      },
+      {
+        "column": "BasisNote",
+        "property": "basisNote",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "CoverageStatus",
+        "property": "coverageStatus",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      },
+      {
+        "column": "SourceLocator",
+        "property": "sourceLocator",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#string",
+        "required_in_application": true
+      }
+    ],
+    "AllocationEntry": [
+      {
+        "column": "Id",
+        "property": "recordId",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#integer",
+        "required_in_application": true
+      },
+      {
+        "column": "AllocationSnapshotId",
+        "property": "inSnapshot",
+        "kind": "object",
+        "range": "AllocationSnapshot",
+        "required_in_application": true
+      },
+      {
+        "column": "AllocationCategoryId",
+        "property": "usesCategory",
+        "kind": "object",
+        "range": "AllocationCategory",
+        "required_in_application": true
+      },
+      {
+        "column": "WeightFraction",
+        "property": "weightFraction",
+        "kind": "datatype",
+        "range": "http://www.w3.org/2001/XMLSchema#double",
+        "required_in_application": true
+      }
+    ]
+  }
+}

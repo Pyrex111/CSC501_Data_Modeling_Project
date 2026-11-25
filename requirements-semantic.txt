@@ -1,0 +1,3 @@
+# Additive M5 dependencies; accepted M4 environment remains supported.
+-r requirements.txt
+pyoxigraph==0.5.3

@@ -215,6 +215,14 @@ _RULES = (
      lambda m: "A selected category does not belong to this source document and locator."),
     (re.compile(r"AllocationEntry \d+: category/snapshot dimensions disagree"),
      lambda m: "Every category must belong to the selected dimension."),
+    # Milestone 5: graph writes are rejected by the graph validators, whose
+    # messages arrive inside RepositoryError rather than as sqlite3 exceptions.
+    (re.compile(r"[Cc]ategory and snapshot dimensions must agree"),
+     lambda m: "Every category must belong to the selected dimension."),
+    (re.compile(r"UNIQUE constraint failed: AllocationSnapshot\."),
+     lambda m: "That record already exists (same ETF, dimension, date, source and locator)."),
+    (re.compile(r"\w+ \d+: \w+ has missing/wrong-class target"),
+     lambda m: "A selected ETF, source document or category does not exist."),
 )
 
 
