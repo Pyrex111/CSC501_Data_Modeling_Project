@@ -2,9 +2,9 @@
 \begin{table}[t]
 \centering
 \footnotesize
-\caption{Where each accepted constraint is enforced. Four groups cannot be
-axioms: aggregates, closed value sets, filesystem facts, and uniqueness that names
-a parent.}
+\caption{Where each accepted constraint is enforced. Four groups are kept out of
+the ontology on purpose: aggregates, closed value sets, filesystem facts, and
+uniqueness that names a parent.}
 \label{tab:split}
 \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.46\columnwidth}>{\raggedright\arraybackslash}p{0.50\columnwidth}@{}}
 \toprule
@@ -13,12 +13,10 @@ Expressed as OWL/RDFS axioms & Requires an explicit check \\
 domains and ranges of all 54 properties & weights in $[0,1]$ \\
 exactly-one participation, twelve functional properties & \texttt{Complete} total $=1\pm0.005$ (a sum) \\
 at-most-one scheme per category & entry dimension $=$ snapshot dimension \\
-\texttt{owl:hasKey} on four classes & closed sets: Sector/Geography, ISIN/Ticker, Complete/Partial/Unknown \\
+\texttt{owl:hasKey} on four classes & closed sets: Sector/Geography, ISIN/Ticker, status \\
 property chain for dimension agreement & ISIN and ticker lexical shapes \\
-disjointness of snapshot/entry/category & NOT NULL slots (open world reads absence as unknown) \\
-FIBO subsumptions & context key against its scheme edition \\
- & composite keys that name a parent \\
- & capture file present inside the capture root \\
+disjointness of snapshot/entry/category & NOT NULL slots (absence reads as unknown) \\
+FIBO subsumptions & scheme context key; composite keys; capture present \\
 \bottomrule
 \end{tabular}
 \end{table}

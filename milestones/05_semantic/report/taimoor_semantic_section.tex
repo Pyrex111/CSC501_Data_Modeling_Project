@@ -1,29 +1,31 @@
 % Taimoor's AI-assisted M5 report contribution; executed evidence is documented
 % in docs/taimoor_final_review.md and docs/taimoor_query_evidence.json.
 Embedded Oxigraph stores twelve entity types as 356 fully synthetic instance
-triples and loads the ontology into a separate named graph~\cite{oxigraphStore,oxigraphIO}.
-Resource IRIs use \texttt{resource/\{Table\}/\{Id\}} as local record handles;
-business uniqueness is validated separately. Relationships become IRI edges,
-scalars typed literals, and unknown optional values are omitted. Holding and
-allocation dates, classification context and captured-source provenance remain
-distinct. Loading the ontology enables no OWL reasoner.
+triples and loads the ontology into a separate named graph~\cite{pyoxigraph}.
+Resource IRIs are local record handles, \texttt{resource/}\{\texttt{Table}\}\texttt{/}\{\texttt{Id}\}; business
+uniqueness is validated separately. Relationships become IRI edges, scalars typed
+literals, and unknown optional values are omitted. Holding and allocation dates,
+classification context and captured-source provenance stay distinct, and loading
+enables no OWL reasoner.
 
 Six SPARQL SELECT queries reproduce the accepted SQL analyses. Complete result
 multisets match, including duplicate multiplicity and unbound optional values;
-row counts are 8, 2, 5, 5, 5 and 17. Numeric values are rounded to ten decimal
-places for comparison. Q5 lists historical portfolio/disclosure candidates, not
-a validated portfolio exposure total.
+row counts are 8, 2, 5, 5, 5 and 17, with numeric values compared to ten decimal
+places. Q5 lists historical portfolio/disclosure candidates, not a validated
+exposure total.
 
-The following executable projection of Q3 counts and sums typed allocation
-entries within each snapshot. Here \texttt{etf:} denotes the project ontology
-namespace and \texttt{g:data} its data graph; the accompanying query file includes
-both prefix declarations.
+The following executable projection of Q3 counts and sums typed allocation entries
+within each snapshot; \texttt{etf:} denotes the project ontology namespace and
+\texttt{g:data} its data graph, and the query file carries both prefixes.
+Table~\ref{tab:q3} shows the query as shipped and its result on the synthetic seed.
+\begin{table}[t]
+\centering
+\caption{Query of Q3 as shipped, and its result on the fresh seed.}
+\label{tab:q3}
 \lstinputlisting[firstline=4,basicstyle=\ttfamily\scriptsize,
   columns=fullflexible,keepspaces=true,breaklines=true,
-  aboveskip=4pt,belowskip=4pt]{examples/taimoor_snapshot_totals.sparql}
-\noindent The observed synthetic result is:
-\begin{center}
-\small
+  aboveskip=2pt,belowskip=4pt]{examples/taimoor_snapshot_totals.sparql}
+\footnotesize
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Snapshot \texttt{id} & 1 & 2 & 3 & 4 & 5 \\
@@ -32,20 +34,17 @@ Entries \texttt{n} & 3 & 5 & 2 & 3 & 4 \\
 Total fraction & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 \\
 \bottomrule
 \end{tabular}
-\end{center}
-All five seeded snapshots are Complete. Grouping by the snapshot prevents
-mixing disclosure dates, dimensions or blocks; class filtering prevents
-\texttt{weightFraction} from including portfolio holdings. The SELECT reports
-totals; write validation separately applies the prototype $0.005$ tolerance, without
-forcing Partial or Unknown disclosures to total one.
+\end{table}
+All five seeded snapshots are Complete. Grouping by snapshot prevents mixing
+disclosure dates, dimensions or blocks, and class filtering keeps
+\texttt{weightFraction} out of portfolio holdings. The SELECT reports totals; write
+validation applies the prototype $0.005$ tolerance separately, without forcing
+Partial or Unknown disclosures to total one.
 
-Graph-backed CRUD stages each change on a candidate, runs the accepted M4
-parity checks and Mason's native validator with capture-file checks, then
-publishes one atomic SPARQL delta~\cite{sparqlUpdate}. Writers share one process
-lock; rejected operations leave all live quads unchanged. No runtime inference
-or ontology-graph lookup is needed on writes. Quickstart builds or reuses the
-store and optionally starts Flask on the same graph instance. Verification
-passed 189 tests; native-only rejection tests bypass the SQL bridge only inside
-those tests. The six parity comparisons and the displayed query were also
-executed on the same fresh seed. AI-executed checks are recorded separately from
-student evaluation.
+Graph-backed CRUD stages each change on a candidate, runs the M4 parity checks and
+the native validator with capture-file checks, then publishes one atomic SPARQL
+delta~\cite{sparqlUpdate}. Writers share one process lock; rejected
+operations leave all live quads unchanged. Quickstart builds or reuses the store
+and can start Flask on the same instance. Verification passed 189 tests, with
+native-only rejection tests bypassing the SQL bridge inside those tests. The six comparisons and the displayed query ran on the same fresh seed, with
+AI-executed checks recorded separately from student evaluation.

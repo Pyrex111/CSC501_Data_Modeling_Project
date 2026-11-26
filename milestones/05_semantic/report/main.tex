@@ -30,19 +30,17 @@
 \renewcommand{\shortauthors}{Taimoor et al.}
 
 \begin{abstract}
-The accepted Milestone 4 relational model records who holds which
-exchange-traded fund, on which date, and what each provider disclosed about
-sector and geographic allocation, together with the capture it came from. This
-milestone adds the semantic layer over that model. An OWL ontology mirrors all
-twelve relations, aligns seven classes to FIBO, fixes resource identity and
-provenance rules, and separates the rules OWL can state from those an explicit
-validator enforces. An embedded Oxigraph store holds the 356-triple synthetic
-ABox beside the TBox; six SPARQL queries reproduce the accepted SQL analyses,
-and both a relational parity bridge and the native graph validator gate every
-staged write. The Flask interface now runs on the graph, sharing one validated
-instance across search, detail, creation, batch update, deletion and portfolio
-views. The full suite passes 189 automated tests. Code, setup and evaluation
-records: \url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}.
+The accepted Milestone 4 model records who holds which fund,
+on which date, and what each provider disclosed about sector and geography,
+with the capture it came from. This milestone adds a semantic layer: an OWL
+ontology mirrors the twelve relations, aligns seven classes to FIBO, fixes
+identity and provenance rules, and separates what OWL can state from what an
+explicit validator must enforce. An embedded Oxigraph store holds the 356-triple
+synthetic ABox beside the TBox; six SPARQL queries reproduce the accepted SQL
+analyses, and a parity bridge and native validator gate every staged write. The
+Flask interface now runs on the graph, sharing one validated instance across
+search, detail, creation, batch update, deletion and portfolio views. The suite
+passes 189 tests. Code and evaluation records: \url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}.
 \end{abstract}
 
 \keywords{ontology, OWL, RDF, FIBO, ETF, provenance, knowledge graph, data modelling}
@@ -50,18 +48,31 @@ records: \url{https://github.com/Pyrex111/CSC501_Data_Modeling_Project}.
 \maketitle
 
 \section{Introduction}
-Exchange-traded fund allocations are dated disclosures: a sector or geography
-weight only makes sense together with the fund, the classification edition or
-captured source, the as-of date and the document it was read from. Milestone 4
-delivered a relational schema, a fully synthetic dataset and a Flask interface
-that separate customer holdings from provider disclosures and scope categories
-by context. Milestone 5 turns that accepted model into a knowledge graph.
-Section~\ref{sec:ontology} states the OWL ontology and its FIBO boundary;
-Section~\ref{sec:backend} populates the embedded store, runs the six SPARQL
-analyses and keeps SQL/SPARQL parity; Section~\ref{sec:app} moves the existing
-interface onto the graph. All demonstration records are fictional.
+An exchange-traded fund allocation is a dated disclosure: a sector or geography
+weight means little without the fund, the classification edition or captured
+source, the as-of date and the document it came from. Milestone 4 delivered a
+relational schema, a fully synthetic dataset and a Flask interface separating
+customer holdings from provider disclosures and scoping categories by context.
+Milestone 5 turns that model into a knowledge graph: Section~\ref{sec:ontology}
+states the ontology and its FIBO boundary, Section~\ref{sec:backend} populates
+the store, runs the six SPARQL analyses and keeps SQL/SPARQL parity, and
+Section~\ref{sec:app} moves the interface onto the graph. All records are
+fictional.
 
 \input{mason_ontology_section}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{system_architecture_m5_wide.pdf}
+  \caption{M5 flow: Flask UI, business helpers, graph access with validation
+  before publish, and the embedded Oxigraph store holding separate ontology and
+  data graphs.}
+  \Description{Layered architecture: browser forms reach Flask routes, which
+  call business helpers and graph repositories on one shared validated graph;
+  rejected writes preserve the live store; the Oxigraph store keeps separate
+  ontology and data named graphs.}
+  \label{fig:architecture}
+\end{figure*}
 
 \section{Graph Population, SPARQL, and Reproducibility}
 \label{sec:backend}
@@ -69,26 +80,21 @@ interface onto the graph. All demonstration records are fictional.
 
 \section{Graph-Backed Application}
 \label{sec:app}
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{figures/system_architecture_m5.pdf}
-  \caption{M5 layers: Flask UI, business helpers, graph data access with
-  validation before publish, and the embedded Oxigraph store holding separate
-  ontology and data named graphs.}
-  \Description{Layered architecture: browser forms reach Flask routes, which
-  call business helpers and graph repositories on one shared validated graph;
-  rejected writes preserve the live store; the Oxigraph store keeps separate
-  ontology and data named graphs.}
-  \label{fig:architecture}
-\end{figure}
+
 \input{shahmeer_ui_semantic_section}
 
 \subsection{AI Assistance and Evaluation}
-OpenAI ChatGPT/Codex assisted with modeling, code, tests, figures and
-prose~\cite{openaiAssistance}; each author reviewed and edited their own
-contribution. The accepted Milestone 4 evaluation records distinguish human
-review from assistant-executed checks. All demonstration data are synthetic;
-no real customer, fund or source document is used.
+Two assistants were used. OpenAI ChatGPT/Codex~\cite{openaiAssistance} helped
+draft ontology axioms, the validator, its documentation and part of the report
+prose; Anthropic Claude~\cite{claudeAssistance} helped with the Flask routes and
+UI tests, the architecture figure, cross-section consistency checks and this
+revision. What matters is what they did, not which one: the 189 tests, the six
+parity comparisons and the result table in Section~\ref{sec:backend} were
+executed by the assistants on a fresh seed and are labelled AI-executed wherever
+they appear, so none of them reads as a student-run evaluation. Design
+decisions, the acceptance of each output and the final text remain ours: each
+author reads and edits the sections attributed to him, and the Milestone 4
+records keep human review apart from assistant-run checks. All data are synthetic.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
