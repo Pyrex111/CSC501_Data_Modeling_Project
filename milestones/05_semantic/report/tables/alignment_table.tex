@@ -1,0 +1,26 @@
+% FIBO alignment table for Section 2. Owner: Mason Li.
+% Local terms are in the etf namespace; inherited module paths are in
+% milestones/05_semantic/docs/fibo_alignment.md.
+\begin{table}[t]
+\centering
+\scriptsize
+\caption{The reuse boundary. Seven classes specialise FIBO terms; five classes and
+the observation attributes are extensions because FIBO has no equivalent.}
+\label{tab:alignment}
+\begin{tabular}{@{}l@{}}
+\toprule
+\multicolumn{1}{@{}l}{\itshape reused (subsumption claim)}\\
+etf:ETF $\sqsubseteq$ fibo:CollectiveInvestmentVehicle \\
+etf:Portfolio $\sqsubseteq$ fibo:Portfolio \\
+etf:Holding $\sqsubseteq$ fibo:Holding \\
+etf:AllocationSnapshot $\sqsubseteq$ fibo:WeightedBasket \\
+etf:AllocationEntry $\sqsubseteq$ fibo:WeightedBasketConstituent \\
+etf:ClassificationScheme $\sqsubseteq$ fibo:FundClassificationScheme \\
+etf:AllocationCategory $\sqsubseteq$ fibo:FundClassification \\
+\midrule
+\multicolumn{1}{@{}l}{\itshape extensions (no FIBO parent)}\\
+Customer, ETFProvider (publisher role declined), ETFIdentifier, \\
+AllocationDimension, SourceDocument (capture provenance) \\
+\bottomrule
+\end{tabular}
+\end{table}

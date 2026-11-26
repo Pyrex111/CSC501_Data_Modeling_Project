@@ -116,7 +116,7 @@ on.
 | Check | Command | Result |
 | --- | --- | --- |
 | Combined test suite | `python -m unittest discover -s tests` | **151 tests OK** (74 accepted M4 + 26 backend semantic + 51 Mason) |
-| Validator against the real ABox | `python -m dal.models.semantic.graph_validation milestones/05_semantic/data/demo.rdf` | 356 triples, **0 issues** |
+| Validator against the real ABox | `python scripts/validate_graph.py milestones/05_semantic/data/demo.rdf` | 356 triples, **0 issues** |
 | Term coverage | test compares ABox predicates and classes with the TBox | **0 undeclared predicates, 0 undeclared classes** |
 | Ontology loads into the store | `python quickstart_semantic.py --store ... --compare --ontology src/dal/models/semantic/etf_allocations.owl` | ontology accepted; **6/6 SPARQL results match SQL** (`full_result_match: true`) |
 | Hook on a candidate store | test loads the ABox into `pyoxigraph.Store`, validates, then injects a second weight | returns `None`, then raises `ModelIntegrityError` |

@@ -1,46 +1,24 @@
 % UI contribution for M5: Shahmeer (AI-assisted; reviewed by Shahmeer).
-% Merge into the team's exactly-three-page report. Figure label assumed: fig:architecture.
-\subsection{Graph-backed application}
 The M4 Flask interface now runs on the knowledge graph
 (Figure~\ref{fig:architecture}). Users still search disclosures by ticker,
 dimension and date, view source evidence, create disclosures, batch-edit
 weights, delete entries and view dated portfolios, but they never write SPARQL.
-At startup the application opens one shared graph through the integrated
-factory, which loads the ontology into its own named graph and attaches both
-validators. The graph repositories keep the M4 function signatures, result keys
-and error classes, so each route needed only a data-access swap. Routes contain
-neither SQL nor SPARQL; the business layer still checks dates, fractions,
-duplicate categories and empty forms before any write.
+At startup the integrated factory opens one shared graph, loads the ontology into
+its own named graph and attaches both validators. The graph repositories keep the
+M4 function signatures, result keys and error classes, so each route needed only
+a data-access swap. Routes hold neither SQL nor SPARQL; the business layer still checks
+dates, fractions, duplicate categories and empty forms.
 
 Every write is staged on a candidate graph and published as one delta only after
-validation. Rejected edits keep the user's input and show a plain message; the
-business layer now also translates graph-validator messages such as duplicate
-snapshots, dimension mismatches and unknown references. We reran all 26 M4 route
-tests unchanged against a fresh validated graph, and every rejection left the
-complete quad set identical. With three new graph-specific tests, the suite has
-189 passing tests. A script rebuilds a throwaway graph and recaptures the eleven
-screenshots.
+validation. Rejected edits keep the user's input and show a plain message, and the business
+layer translates validator messages such as duplicate snapshots, dimension
+mismatches and unknown references. All 26 M4 route tests were rerun
+unchanged against a fresh validated graph, and every rejection left the complete
+quad set identical; with three new graph-specific tests the suite reaches 189
+passing tests. A script rebuilds a throwaway graph and recaptures the eleven screenshots,
+including the six write and rejection cases.
 
-\noindent\begin{minipage}{\columnwidth}
-Recorded graph writes (screenshots 05--10):
-\begin{center}
-\small
-\begin{tabular}{@{}p{.61\columnwidth}p{.34\columnwidth}@{}}
-\toprule
-\textbf{Operation / proposed state} & \textbf{Result} \\
-\midrule
-Create Partial; total 0.8 & Saved \\
-Repeat the same create & Rejected (duplicate) \\
-Batch update Partial; total 0.8 & Saved \\
-Batch update Complete; total 1.04 & Rejected \\
-Delete from Partial example & Saved; total 0.7 \\
-Delete breaking Complete total & Rejected (0.585) \\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{minipage}
-
-% Architecture figure (full width suggested):
+% Architecture figure (full width):
 % \begin{figure*}[t]
 %   \centering
 %   \includegraphics[width=\textwidth]{figures/system_architecture_m5.pdf}
