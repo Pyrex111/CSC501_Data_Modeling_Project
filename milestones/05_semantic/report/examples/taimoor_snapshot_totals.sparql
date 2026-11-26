@@ -1,0 +1,11 @@
+PREFIX etf: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/ontology#>
+PREFIX g: <https://github.com/Pyrex111/CSC501_Data_Modeling_Project/graph/>
+
+SELECT ?id (COUNT(?entry) AS ?n) (SUM(?w) AS ?total)
+WHERE { GRAPH g:data {
+  ?snapshot a etf:AllocationSnapshot; etf:recordId ?id.
+  ?entry a etf:AllocationEntry; etf:inSnapshot ?snapshot;
+         etf:weightFraction ?w.
+} }
+GROUP BY ?id
+ORDER BY ?id

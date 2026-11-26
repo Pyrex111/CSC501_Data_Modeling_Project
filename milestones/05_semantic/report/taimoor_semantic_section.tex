@@ -1,37 +1,51 @@
-% Taimoor's AI-assisted M5 draft. Merged into the team's three-page report.
-We implemented an embedded Oxigraph backend through a pinned PyOxigraph package,
-with a persistent local store and RDF/XML import/export~\cite{oxigraphStore,oxigraphIO}.
-The accepted, fully synthetic relational dataset populates twelve entity classes
-and 356 instance triples. Each record receives a stable project IRI within the
-demonstration dataset. Relationships become IRI edges, scalar values become typed
-literals, and unknown optional values are omitted. Holding and allocation dates,
-classification context, coverage and source provenance remain explicit.
-The term and resource-identity contract matches Mason's version 1.1.0 ontology,
-loaded into a separate named graph. Loading axioms does not enable OWL reasoning.
+% Taimoor's AI-assisted M5 report contribution; executed evidence is documented
+% in docs/taimoor_final_review.md and docs/taimoor_query_evidence.json.
+Embedded Oxigraph stores twelve entity types as 356 fully synthetic instance
+triples and loads the ontology into a separate named graph~\cite{oxigraphStore,oxigraphIO}.
+Resource IRIs use \texttt{resource/\{Table\}/\{Id\}} as local record handles;
+business uniqueness is validated separately. Relationships become IRI edges,
+scalars typed literals, and unknown optional values are omitted. Holding and
+allocation dates, classification context and captured-source provenance remain
+distinct. Loading the ontology enables no OWL reasoner.
 
-Six standalone SPARQL SELECT queries translate the accepted SQL analyses.
-We compared complete result multisets, including duplicate multiplicity and
-unbound optional values, rather than comparing row counts alone. All six matched,
-with 8, 2, 5, 5, 5 and 17 result rows. Numeric comparisons allow binary-floating
-differences at ten decimal places. The portfolio query remains a diagnostic
-candidate listing; it does not establish compatible observation dates or a
-validated portfolio exposure total.
+Six SPARQL SELECT queries reproduce the accepted SQL analyses. Complete result
+multisets match, including duplicate multiplicity and unbound optional values;
+row counts are 8, 2, 5, 5, 5 and 17. Numeric values are rounded to ten decimal
+places for comparison. Q5 lists historical portfolio/disclosure candidates, not
+a validated portfolio exposure total.
 
-The graph data-access layer supplies search, disclosure details, dated portfolios,
-form lookups and SPARQL-backed creation, editing and deletion~\cite{sparqlUpdate}.
-An operation first changes a candidate graph. Validation precedes publication of
-the exact delta in one transactional update, so rejected edits preserve the live
-graph. Application writers share a process lock. A temporary checker projects
-candidate records into the accepted relational constraints. Startup also binds
-Mason's native graph validator, including retained-file checks, to every proposed
-write. Both checks run before publication; native-only rejection tests isolate
-the graph validator by bypassing the relational checker within those tests.
+The following executable projection of Q3 counts and sums typed allocation
+entries within each snapshot. Here \texttt{etf:} denotes the project ontology
+namespace and \texttt{g:data} its data graph; the accompanying query file includes
+both prefix declarations.
+\lstinputlisting[firstline=4,basicstyle=\ttfamily\scriptsize,
+  columns=fullflexible,keepspaces=true,breaklines=true,
+  aboveskip=4pt,belowskip=4pt]{examples/taimoor_snapshot_totals.sparql}
+\noindent The observed synthetic result is:
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Snapshot \texttt{id} & 1 & 2 & 3 & 4 & 5 \\
+\midrule
+Entries \texttt{n} & 3 & 5 & 2 & 3 & 4 \\
+Total fraction & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+All five seeded snapshots are Complete. Grouping by the snapshot prevents
+mixing disclosure dates, dimensions or blocks; class filtering prevents
+\texttt{weightFraction} from including portfolio holdings. The SELECT reports
+totals; write validation separately applies the prototype $0.005$ tolerance, without
+forcing Partial or Unknown disclosures to total one.
 
-The semantic quickstart builds or reuses its own store, exports RDF/XML and can
-rerun all SQL/SPARQL comparisons without altering the accepted application
-database. Integration verification passed 189 tests: 74 existing Milestone 4 tests,
-26 backend tests, 51 ontology/validation tests, nine runtime integration
-tests, 26 M4 route tests rerun on the graph, and three graph-specific route
-tests. It includes RDF round-tripping, persistence, result compatibility,
-invalid-weight and context rejection, coherent batch changes and unchanged-state
-checks after rejected writes.
+Graph-backed CRUD stages each change on a candidate, runs the accepted M4
+parity checks and Mason's native validator with capture-file checks, then
+publishes one atomic SPARQL delta~\cite{sparqlUpdate}. Writers share one process
+lock; rejected operations leave all live quads unchanged. No runtime inference
+or ontology-graph lookup is needed on writes. Quickstart builds or reuses the
+store and optionally starts Flask on the same graph instance. Verification
+passed 189 tests; native-only rejection tests bypass the SQL bridge only inside
+those tests. The six parity comparisons and the displayed query were also
+executed on the same fresh seed. AI-executed checks are recorded separately from
+student evaluation.
