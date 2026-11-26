@@ -28,7 +28,10 @@ ontology/FIBO/native validation, and Shahmeer owns the UI adaptation.
 The backend and Mason's ontology/native validator are integrated. **Update, 25
 November:** Shahmeer's graph-connected UI, its tests, eleven screenshots and the M5
 architecture figure are added; see [his contribution](contributions/shahmeer/README.md).
-The suite is now 189 tests. The final three-page report and ZIP are still pending. Mason's ontology and FIBO/Protégé work are
+The suite is now **189 passing tests**. The final [three-page report](report/main.pdf)
+and [submission ZIP](submission/5_Semantic_Taimoor_Mason_Shahmeer.zip) are available.
+The [final revision verification](docs/final_revision_verification.md) records the
+compiled-PDF, source-package and diagram checks. Mason's ontology and FIBO/Protégé work are
 documented in [his handoff](README_ONTOLOGY.md). No OWL inference is enabled.
 
 ## Setup and reproduction
@@ -102,8 +105,8 @@ portfolio = repositories.get_customer_portfolio(
 ```
 
 Make `src` importable in the app entry point, as in the accepted M4 application.
-Use the graph modules instead of the SQL modules for M5 routes. The UI adaptation
-is Shahmeer's task; the accepted Flask app is intentionally unchanged in this contribution.
+Use the graph modules instead of the SQL modules for M5 routes. Shahmeer's integrated Flask routes use these graph modules by default; the accepted
+SQLite backend remains selectable for regression.
 Use this factory once at application startup and share the returned instance; it
 attaches `make_backend_validator(capture_root=ROOT)`, validates existing data and
 loads the ontology. Constructing the lower-level `GraphDatabase` without a callback
@@ -127,9 +130,9 @@ candidate graph, validate, and publish the exact delta in one store update.
 | `tests/test_semantic_backend.py` | 26 semantic behavioral/parity checks |
 | `tests/test_semantic_runtime.py` | Nine tests of actual startup, callback invocation and native rollback |
 | [Verification evidence](docs/verification.json) | Observed setup, parity and test results |
-| [Report fragment](report/taimoor_semantic_section.tex) | Accurate draft of graph population/operations/results, pending integration |
+| [Backend report section](report/taimoor_semantic_section.tex) | Integrated graph population, operations and executable SELECT/results |
 
-## Requirements and remaining work
+## Requirements and final deliverables
 
 Manual 5.1: Mason supplied the ontology, meaningful restrictions, FIBO mapping,
 Protégé evaluation and documented OWL-versus-validation limits. Manual 5.2
@@ -144,10 +147,9 @@ The team report must be **exactly three ACM sigconf pages**, including reference
 and the final ZIP must be `5_Semantic_Taimoor_Mason_Shahmeer.zip` with sources and PDF.
 The repository link belongs in the report title footnote and abstract.
 
-The current repository has no project-wide LICENSE. Team license selection is
-still needed for reuse documentation; this contribution does not invent consent
-to license the other members' existing work. Third-party dependencies retain
-their own licenses.
+The current repository has no project-wide LICENSE. The [repository access and reuse policy](../../README.md#license-and-access)
+permits course evaluation and asks other users to contact the authors about reuse.
+Third-party dependencies retain their own licenses.
 
 ## AI assistance and evidence
 

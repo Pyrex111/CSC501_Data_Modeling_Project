@@ -17,7 +17,7 @@ three-page team report. This is an AI-assisted contribution owned by Mason Li.
 | [tests/test_semantic_ontology.py](../../../../tests/test_semantic_ontology.py) | 51 ontology/model tests: axiom and property counts, domains/ranges, inverses, keys, disjointness, and validator accept/reject cases against synthetic counter-examples. |
 | [README_ONTOLOGY.md](../../README_ONTOLOGY.md) | Technical readme: scope, resource-identity rules, Protégé inspection readings and known limits. |
 | [docs/](../../docs/) | `namespace_and_identity.md`, `ontology_mapping.md`, `fibo_alignment.md`, `backend_alignment.md`, plus the Protégé inspection screenshots under `docs/figures/`. |
-| [report/mason_ontology_section.tex](../report/mason_ontology_section.tex) | Ontology section for the team report; `report/main.tex` assembles the ontology, backend and UI sections into the three-page paper. |
+| [report/mason_ontology_section.tex](../../report/mason_ontology_section.tex) | Ontology section for the team report; `report/main.tex` assembles the ontology, backend and UI sections into the three-page paper. |
 
 ## How to run
 
@@ -42,7 +42,7 @@ place of `python`.
   the TBox.
 - The six SPARQL analyses reproduce the accepted SQL results (8, 2, 5, 5, 5, 17
   rows); that parity check is owned by the backend contribution.
-- The compiled team report is [report/main.pdf](../report/main.pdf): exactly three
+- The compiled team report is [report/main.pdf](../../report/main.pdf): exactly three
   ACM `sigconf` double-column pages.
 
 ## Findings while integrating

@@ -2,7 +2,7 @@
 
 Ontology, identity policy, FIBO alignment, explicit graph validation, backend hook,
 and model tests for the accepted Milestone 4 model. Owner: **Mason Li**. AI
-assistance is disclosed in the report appendix and the contribution notes, as course
+assistance is disclosed in report Section 4.1 and the contribution notes, as course
 policy requires (category D).
 
 This package is the part of the milestone that does not depend on the other two
@@ -10,10 +10,10 @@ work-streams, and it is now aligned with the accepted graph backend
 (`milestone5/taimoor-semantic-backend`, `f03f150`). Milestone 4 is untouched and
 still runs; nothing here changes the twelve-table schema or the Flask application.
 
-**Deliberately not included: the report section and the three-page assembly.** The
-paper needs Taimoor's SPARQL statements and Shahmeer's application section, and a
-half-finished three-page PDF should not be committed. Report sources stay local
-until the paper is complete.
+**Final integration:** the complete three-page [report](report/main.pdf) and
+[submission ZIP](submission/5_Semantic_Taimoor_Mason_Shahmeer.zip) are now available.
+The historical ontology-only handoff below describes its original scope; current
+setup instructions and the 189-test suite are in [README.md](README.md).
 
 **This file is `README_ONTOLOGY.md`, not `README.md`.** The backend owner already
 maintains `milestones/05_semantic/README.md`; overwriting it would delete his setup
@@ -77,16 +77,16 @@ re-apply the `rdflib` line if it changed in the meantime. Do not overwrite
    and `--rules` prints them without needing a data file.
 6. **Model tests and backend integration.** 51 tests in this package; on the branch
    the repository suite is 151 (74 accepted M4 + 26 backend + 51 here), all passing.
-   The validator reports **0 issues on the backend's real 356-triple ABox**, and the
+   The validator reports **0 issues on the backend's synthetic 356-triple ABox**, and the
    ABox uses **no undeclared class or predicate**.
 
 ## Verify it yourself
 
 ```bash
-pip install -r requirements.txt        # adds rdflib>=7.0
-python -m unittest discover -s tests   # 151 on the branch; 51 standalone
-python -m dal.models.semantic.graph_validation milestones/05_semantic/data/demo.rdf
-python -m dal.models.semantic.graph_validation --rules
+python -m pip install -r requirements-semantic.txt
+python -m unittest discover -s tests   # 189 in the integrated application
+python scripts/validate_graph.py milestones/05_semantic/data/demo.rdf
+python scripts/validate_graph.py --rules
 python quickstart_semantic.py --compare \
     --ontology src/dal/models/semantic/etf_allocations.owl --store /tmp/m5check
 ```
@@ -179,9 +179,11 @@ dimension and one context key. They are deliberately not called "allocation",
    Commons collection properties, and refused twice — the investment-policy classes
    (observation is not intent) and the publisher role (one relation plays two
    roles). The refusals are argued, not glossed.
-4. OWL states shape; it cannot state aggregates, closed sets, filesystem facts, or
-   per-parent uniqueness. The four dimension triggers become a property chain *and*
-   an explicit check, which is the clearest evidence for keeping both layers.
+4. OWL states shape and can express closed literal ranges and parent-scoped keys.
+   This implementation keeps value lists and parent-scoped duplicate rejection in
+   explicit validation; OWL keys infer identity rather than reject duplicate rows.
+   Aggregated totals and filesystem facts also need explicit checks. The four
+   dimension triggers become a property chain *and* an explicit check.
 5. The graph and the database agree byte-for-byte on context keys, and a test
    enforces that agreement rather than asserting it in prose.
 6. The same rule set runs on the CLI, on a candidate store through the hook, and

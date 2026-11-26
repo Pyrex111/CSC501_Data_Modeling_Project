@@ -1,8 +1,10 @@
 # CSC501 Data Modeling Project
 
-Milestone 5 development: see [the semantic backend and handoff](milestones/05_semantic/README.md)
-for the graph quickstart, integrated ontology/validation, six SPARQL queries and
-current integration status. To run the graph-backed web UI:
+Milestone 5 is complete: [three-page report](milestones/05_semantic/report/main.pdf),
+[submission ZIP](milestones/05_semantic/submission/5_Semantic_Taimoor_Mason_Shahmeer.zip)
+and [semantic setup and reproduction guide](milestones/05_semantic/README.md).
+It includes the integrated ontology/validation, six SPARQL queries and graph-backed
+interface, with 189 passing tests. To run the graph-backed web UI:
 `python -m pip install -r requirements-semantic.txt` then `python quickstart_semantic.py --serve`
 (details in the [UI contribution](milestones/05_semantic/contributions/shahmeer/README.md)).
 The accepted Milestone 4 application remains available below.
@@ -15,7 +17,7 @@ Team: Taimoor Shahzad, Mason Li, and M. Shahmeer Ather Kakwan.
 
 ## Project scope
 
-We model dated sector and geographic allocation percentages published by ETF providers. The conceptual model separates a customer's dated ETF holding from a provider's dated allocation disclosure, and connects that disclosure to its entries, category meanings and captured source. FIBO and prior GFRO work inform the design. Milestone 4 includes a relational schema, data-access layer, **fully synthetic** demonstration dataset, Flask interface and three-page report. Knowledge-graph implementation and evaluation follow in later project stages.
+We model dated sector and geographic allocation percentages published by ETF providers. The conceptual model separates a customer's dated ETF holding from a provider's dated allocation disclosure, and connects that disclosure to its entries, category meanings and captured source. FIBO and prior GFRO work inform the design. Milestone 4 includes a relational schema, data-access layer, **fully synthetic** demonstration dataset, Flask interface and three-page report. Milestone 5 maps all twelve relations into an OWL ontology, stores RDF in embedded Oxigraph, and runs the interface and six analyses through SPARQL.
 
 ## Start here
 
