@@ -18,6 +18,16 @@ quad set identical; with three new graph-specific tests the suite reaches 189
 passing tests. A script rebuilds a throwaway graph and recaptures the eleven screenshots,
 including the six write and rejection cases.
 
+\paragraph{Evaluation and limits.}
+A two-entry Complete snapshot (0.3, 0.7) rejects an edit to (0.1, 0.7), but
+accepts the atomic batch (0.4, 0.6). Deleting a Partial entry succeeds; deleting
+its final entry fails. Rejections preserve all quads, including the TBox, rather
+than merely producing an error message. SQL parity verifies representation on
+the seed, not real provider facts. The 0.005 tolerance is provisional, not measured
+rounding error; synthetic captures exercise provenance, not independent financial
+verification. One writable process is supported; no scalability or performance
+claim follows from this demonstration.
+
 % Architecture figure (full width):
 % \begin{figure*}[t]
 %   \centering

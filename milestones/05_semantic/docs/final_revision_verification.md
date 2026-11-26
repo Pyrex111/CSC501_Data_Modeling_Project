@@ -35,3 +35,14 @@ Reproduction: install `requirements-semantic.txt`, run the test command above an
 `report/README.md`, then run `python scripts/package_m5_submission.py`.
 
 All demonstration identities, documents and observations are synthetic.
+
+## Expanded three-page revision
+
+Taimoor identified excessive unused space on the earlier third page. Added a
+six-query coverage table, interpretation of context/date/provenance semantics and
+concrete accepted/rejected CRUD examples with the limits of synthetic evaluation.
+Removed excess canvas margins from the vector architecture figure. All three
+rendered pages were inspected; both final-page columns now reach the normal
+bottom text area. This does not change application code or the 189-test evidence.
+Taimoor separately confirmed that human review is complete; see
+`human_review_confirmation.md`.

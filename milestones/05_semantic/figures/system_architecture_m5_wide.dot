@@ -8,6 +8,8 @@
 //   dot -Tpng -Gdpi=300 milestones/05_semantic/figures/system_architecture_m5_wide.dot \
 //        -o milestones/05_semantic/figures/system_architecture_m5_wide.png
 digraph ETFArchitectureM5Wide {
+  margin=0;
+  pad=0.06;
   rankdir=LR;
   nodesep=0.18;
   ranksep=0.22;

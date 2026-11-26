@@ -47,3 +47,9 @@ packages the sources and executable query, and adds a SHA-256 manifest. The wide
 diagram shows routes calling business helpers and graph access separately.
 Final assistant-executed verification is recorded in
 [final_revision_verification.md](../docs/final_revision_verification.md).
+
+The expanded final revision includes a six-query coverage table, query
+interpretation and concrete CRUD evaluation. Inspect all three rendered pages
+after any rebuild: exactly three PDF pages alone does not establish that the
+space is used adequately. The final page has substantive content in both columns
+to the normal bottom text area.
