@@ -47,12 +47,12 @@ business-key template nor a permanent external identifier, so it says nothing
 about which records denote the same record. Business identity is stated separately:
 customers, providers, dimensions and identifiers carry \texttt{owl:hasKey} over
 the columns that already separate two records, with an explicit duplicate check
-beside the axioms. Composite keys that name a parent---a portfolio under a
-customer, a snapshot under a fund---stay with the check alone, because a
-\texttt{hasKey} over an object property asserts individual equality across
-parents, which is stronger than per-parent uniqueness.
+beside the axioms. Keys naming a parent---a portfolio under a customer, a
+snapshot under a fund---are expressible as well: an OWL~2 key may mix an
+object property with data properties. Keeping those in the check is an
+implementation choice, not an OWL limitation.
 
-The category is the one class whose identity is not a single column: the schema
+The category is a class whose identity is not a single column: the schema
 keys it by (dimension, context key, label), and the context key is a prefix plus
 a JSON list---either the classification authority, name and version, or---when
 the edition is unpublished---the source URL, retrieval time, locator and
