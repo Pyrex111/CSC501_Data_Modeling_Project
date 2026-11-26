@@ -1,0 +1,87 @@
+{
+  "baseline": "12ccab6a1c9e982a8f446ac4f5fe36e8e7d4ca76",
+  "execution_attribution": "AI executed these checks; no student execution or final team approval is implied",
+  "query_file": "milestones/05_semantic/report/examples/taimoor_snapshot_totals.sparql",
+  "query_sha256": "ac349f5d12c963bbbd664d220df53be93f0ad8d8b0e893fe45c909d41a7a02cb",
+  "data_triples": 356,
+  "ontology_triples": 504,
+  "query_result": [
+    {
+      "id": 1,
+      "n": 3,
+      "total": 1.0
+    },
+    {
+      "id": 2,
+      "n": 5,
+      "total": 1.0
+    },
+    {
+      "id": 3,
+      "n": 2,
+      "total": 1.0
+    },
+    {
+      "id": 4,
+      "n": 3,
+      "total": 1.0
+    },
+    {
+      "id": 5,
+      "n": 4,
+      "total": 1.0
+    }
+  ],
+  "sql_projection_matches": true,
+  "select_leaves_graph_unchanged": true,
+  "all_six_query_comparisons": [
+    {
+      "query": 1,
+      "file": "01_geography.sparql",
+      "sql_rows": 8,
+      "sparql_rows": 8,
+      "full_result_match": true
+    },
+    {
+      "query": 2,
+      "file": "02_financials.sparql",
+      "sql_rows": 2,
+      "sparql_rows": 2,
+      "full_result_match": true
+    },
+    {
+      "query": 3,
+      "file": "03_complete_totals.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 4,
+      "file": "04_observation_capture.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 5,
+      "file": "05_portfolio_candidates.sparql",
+      "sql_rows": 5,
+      "sparql_rows": 5,
+      "full_result_match": true
+    },
+    {
+      "query": 6,
+      "file": "06_provenance.sparql",
+      "sql_rows": 17,
+      "sparql_rows": 17,
+      "full_result_match": true
+    }
+  ],
+  "resource_iri_example": "https://github.com/Pyrex111/CSC501_Data_Modeling_Project/resource/AllocationSnapshot/1",
+  "all_seed_snapshots_complete": true,
+  "total_entries": 17,
+  "holding_records_excluded": 5,
+  "runtime_validation": "M4 parity bridge plus Mason native validator with capture_root=ROOT; no OWL reasoner",
+  "full_suite_reference": "189 tests passed during review of this unchanged application/backend baseline; report-only changes do not add tests"
+}
