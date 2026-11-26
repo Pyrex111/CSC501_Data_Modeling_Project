@@ -16,6 +16,7 @@ retained: Taimoor Shahzad, M. Shahmeer Ather Kakwan, Mason Li.
 | Ontology alignment and rule-split tables | [tables/](tables/) |
 | Bibliography, including the AI tool citation | [references.bib](references.bib) |
 | M5 layer diagram | [system_architecture_m5.pdf](../figures/system_architecture_m5.pdf) |
+| Wide call diagram used in the report | [system_architecture_m5_wide.pdf](../figures/system_architecture_m5_wide.pdf) |
 | Full-resolution UI captures | [../docs/screenshots/](../docs/screenshots/) |
 | Self-contained submission ZIP | [../submission/5_Semantic_Taimoor_Mason_Shahmeer.zip](../submission/5_Semantic_Taimoor_Mason_Shahmeer.zip) |
 
@@ -37,3 +38,12 @@ suite, ontology file, graph validator, backend hook, SPARQL queries and seed dat
 live at the repository root and under `src/`, `tests/` and
 `milestones/05_semantic/`. All demonstration records are synthetic; no real
 customer, fund or source document is used.
+
+## Final submission rebuild
+
+After compiling the report, run `python scripts/package_m5_submission.py` from
+the repository root. It requires exactly three PDF pages and eleven screenshots,
+packages the sources and executable query, and adds a SHA-256 manifest. The wide
+diagram shows routes calling business helpers and graph access separately.
+Final assistant-executed verification is recorded in
+[final_revision_verification.md](../docs/final_revision_verification.md).

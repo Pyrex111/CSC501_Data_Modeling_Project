@@ -1,7 +1,7 @@
 % CSC501 Milestone 5: three-page semantic-layer report.
 % Build: pdflatex main && bibtex main && pdflatex main && pdflatex main
 \documentclass[sigconf,nonacm]{acmart}
-\microtypesetup{expansion=false} % this build machine has no scalable CM fonts
+\microtypesetup{expansion=false} % Disable expansion for consistent report layout
 \usepackage{xurl}
 \settopmatter{printacmref=false,printfolios=true}
 \setcopyright{none}
@@ -64,9 +64,9 @@ fictional.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{system_architecture_m5_wide.pdf}
-  \caption{M5 flow: Flask UI, business helpers, graph access with validation
-  before publish, and the embedded Oxigraph store holding separate ontology and
-  data graphs.}
+  \caption{M5 calls: Flask routes invoke business helpers and graph access
+  separately. Graph access reads Oxigraph and publishes validated writes;
+  ontology and instance data occupy separate named graphs.}
   \Description{Layered architecture: browser forms reach Flask routes, which
   call business helpers and graph repositories on one shared validated graph;
   rejected writes preserve the live store; the Oxigraph store keeps separate
@@ -84,17 +84,15 @@ fictional.
 \input{shahmeer_ui_semantic_section}
 
 \subsection{AI Assistance and Evaluation}
-Two assistants were used. OpenAI ChatGPT/Codex~\cite{openaiAssistance} helped
-draft ontology axioms, the validator, its documentation and part of the report
-prose; Anthropic Claude~\cite{claudeAssistance} helped with the Flask routes and
-UI tests, the architecture figure, cross-section consistency checks and this
-revision. What matters is what they did, not which one: the 189 tests, the six
-parity comparisons and the result table in Section~\ref{sec:backend} were
-executed by the assistants on a fresh seed and are labelled AI-executed wherever
-they appear, so none of them reads as a student-run evaluation. Design
-decisions, the acceptance of each output and the final text remain ours: each
-author reads and edits the sections attributed to him, and the Milestone 4
-records keep human review apart from assistant-run checks. All data are synthetic.
+OpenAI ChatGPT/Codex~\cite{openaiAssistance} assisted with the ontology,
+RDF/SPARQL backend, validation, tests, documentation and report revisions.
+Anthropic Claude~\cite{claudeAssistance} assisted with the UI routes and tests,
+original figures and report assembly. Codex assisted with the final key
+explanation, call diagram and package checks. The 189 tests, six parity
+comparisons and displayed result were assistant-executed, not student-run
+experiments. Human design review and AI assistance are recorded separately in
+the repository; the authors remain responsible for critical review and the
+final submission. All demonstration data are synthetic.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}

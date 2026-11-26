@@ -2,7 +2,7 @@
 % in docs/taimoor_final_review.md and docs/taimoor_query_evidence.json.
 Embedded Oxigraph stores twelve entity types as 356 fully synthetic instance
 triples and loads the ontology into a separate named graph~\cite{pyoxigraph}.
-Resource IRIs are local record handles, \texttt{resource/}\{\texttt{Table}\}\texttt{/}\{\texttt{Id}\}; business
+Resource IRIs are local record handles formed from the table name and record ID; business
 uniqueness is validated separately. Relationships become IRI edges, scalars typed
 literals, and unknown optional values are omitted. Holding and allocation dates,
 classification context and captured-source provenance stay distinct, and loading
